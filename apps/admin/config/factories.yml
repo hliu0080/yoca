@@ -42,6 +42,3 @@ all:
         param:
           host:     mail.yocausa.org
           port:     2525
-#         encryption: ssl
-#          username: service@yocausa.org
-#          password: 28408109Bb@
