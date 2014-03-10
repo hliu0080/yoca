@@ -1,0 +1,14 @@
+#OS junk files
+*.DS_Store
+
+# Eclipse Files
+*.settings
+.project
+.buildpath
+
+# Cache and log folders
+cache
+log
+
+# Sensative Data
+config/databases.yml

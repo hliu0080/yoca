@@ -1,0 +1,11 @@
+all:
+  is_secure: true
+
+new:
+  is_secure: false
+  
+create:
+  is_secure: false
+  
+confirm:
+  is_secure: false

@@ -1,0 +1,47 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/05-Factories
+
+prod:
+  logger:
+    class:   sfNoLogger
+    param:
+      level:   err
+      loggers: ~
+  mailer:
+    param:
+      delivery_strategy: realtime
+
+qa:
+  mailer:
+    param:
+      delivery_strategy: realtime
+
+dev:
+  mailer:
+    param:
+      delivery_strategy: single_address
+      delivery_address:  dev@yocausa.org  
+
+all:
+  routing:
+    class: sfPatternRouting
+    param:
+      generate_shortest_url:            true
+      extra_parameters_as_query_string: true
+
+  view_cache_manager:
+    class: sfViewCacheManager
+    param:
+      cache_key_use_vary_headers: true
+      cache_key_use_host_name:    true
+          
+  mailer:
+    param:
+      transport:
+        class: Swift_SmtpTransport
+        param:
+          host:     mail.yocausa.org
+          port:     2525
+#         encryption: ssl
+#          username: service@yocausa.org
+#          password: 28408109Bb@

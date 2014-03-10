@@ -1,0 +1,17 @@
+.signup{
+  	margin: -10px 20px 20px;
+  	float: left;
+}
+
+.passreset{
+	margin: -10px 20px 20px;
+	float: right;
+}
+
+.login{
+	background-image: none !important;
+}
+
+.footer{
+	width:504px !important;	
+}

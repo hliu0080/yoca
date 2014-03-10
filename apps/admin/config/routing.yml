@@ -1,0 +1,60 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+login:
+  url: /auth/login
+  params: { module: auth, action: login }
+
+logout:
+  url: /auth/logout
+  params: { module: auth, action: logout }
+  
+my_profile:
+  url: /user/edit
+  params: { module: user, action: edit }
+
+my_account:
+  url: /user/reset_pass
+  params: { module: user, action: resetPass }
+  
+become_a_mentee:
+  url: /user/becomeMentee
+  params: { module: user, action: becomeMentee }
+  
+become_a_mentor:
+  url: /user/becomeMentor
+  params: { module: user, action: becomeMentor }
+  
+mentorship_program:
+  url: /event/index
+  params: { module: event, action: index }
+
+mentor_manage_event:
+  url: /event/mentorMyEvents
+  params: { module: event, action: mentorMyEvents }
+
+mentor_list_event:
+  url: /event/list/:type/:start/:limit
+  param: { module: event, action: list, start: 0, limit: 25 }
+
+manage_users:
+  url: /user/list
+  param: { module: user, action: list }
+
+manage_events:
+  url: /event/index
+  param: { module: event, action: index }
+  
+# default rules
+homepage:
+  url:   /
+  param: { module: user, action: index }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*
