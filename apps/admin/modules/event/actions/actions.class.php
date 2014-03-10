@@ -83,10 +83,14 @@ class eventActions extends sfActions
   	$this->mentor = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
   	
   	$this->form = new EventForm(array(), array('industry'=> $this->mentor->get('industry_id'), 'neighborhood' => $this->mentor->get('neighborhood')));
+  	
+  	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }
   
   public function executeMenteeMyEvents(sfWebRequest $request){
   	$this->events = Doctrine_Core::getTable('Event')->findMenteeEvents($this->getUser()->getAttribute('userid'));
+  	
+  	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }
   
 

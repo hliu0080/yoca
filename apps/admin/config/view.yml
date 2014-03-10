@@ -16,7 +16,7 @@ default:
 
   stylesheets:    [yoca.css]
 
-  javascripts:    [libs/modernizr.js, libs/selectivizr.js, navigation.js, bootstrap/bootstrap.js]
+  javascripts:    [libs/modernizr.js, libs/selectivizr.js, navigation.js, bootstrap/bootstrap.js, plugins/dataTables/jquery.datatables.min.js]
 
   has_layout:     true
   layout:         layout

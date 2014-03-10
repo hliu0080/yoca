@@ -37,13 +37,13 @@ mentor_list_event:
   url: /event/list/:type/:start/:limit
   param: { module: event, action: list, start: 0, limit: 25 }
 
-manage_users:
-  url: /user/list
-  param: { module: user, action: list }
-
 manage_events:
   url: /event/index
   param: { module: event, action: index }
+
+manage_users:
+  url: /user/list/:type
+  param: { module: user, action: list, type: Mentee }
   
 # default rules
 homepage:

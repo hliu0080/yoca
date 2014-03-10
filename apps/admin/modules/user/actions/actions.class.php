@@ -27,8 +27,11 @@ class userActions extends sfActions
   }
 
   public function executeList(sfWebRequest $request){
+  	$this->forward404Unless($this->type = $request->getParameter('type'));
+  	
   	$this->users = Doctrine_Core::getTable('YocaUser')
   	->createQuery('a')
+  	->addWhere("type = ?", $this->type)
   	->execute();
   	
   	$this->getUser()->setAttribute('cur_page', 'manage_users');
@@ -36,6 +39,8 @@ class userActions extends sfActions
   
   public function executeShow(sfWebRequest $request)
   {
+  	$this->type = $request->getParameter('type');
+  	
   	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
   	$this->forward404Unless($this->yoca_user);
   }

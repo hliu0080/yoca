@@ -20,37 +20,46 @@
 								</a>
 							</li>
 							<?php foreach($sections as $s):?>
-								<?php if(preg_replace('/\s+/', "_", strtolower($s)) == 'mentorship_program'):?>
-								<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active dropdown"':'class="dropdown"'?> >
-									<a class="dropdown-toggle" data-toggle="dropdown" href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>">
-										<div><?php print $s?></div>
-										<span class="caret"></span>
-									</a>
-									<ul class="dropdown-menu pull-right">
-										<?php if($sf_user->getAttribute('usertype') == 'Member'):?>
-											<li><a href="<?php print url_for('@become_a_mentee')?>">Become a Mentee</a></li>
-											<li><a href="<?php print url_for('@become_a_mentor')?>">Become a Mentor</a></li>
-										<?php elseif($sf_user->getAttribute('usertype') == 'Admin'):?>
-											<li><a href="<?php print url_for('@mentor_list_event?type=upcoming')?>">Upcoming Events</a></li>
-											<li><a href="<?php print url_for('@mentor_list_event?type=past')?>">Past Events</a></li>
-											<li><a href="<?php print url_for('@mentor_list_event?type=pending')?>">Pending Events</a></li>
-										<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
-											<li><a href="<?php print url_for('@mentor_list_event?type=upcoming')?>">Upcoming Events</a></li>
-											<li><a href="<?php print url_for('@mentor_list_event?type=past')?>">Past Events</a></li>
-											<li><a href="<?php print url_for('event/mentorMyEvents')?>">My Events</a></li>
-										<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
-											<li><a href="<?php print url_for('@mentor_list_event?type=upcoming')?>">Upcoming Events</a></li>
-											<li><a href="<?php print url_for('@mentor_list_event?type=past')?>">Past Events</a></li>
-											<li><a href="<?php print url_for('event/menteeMyEvents')?>">My Events</a></li>
-										<?php endif?>
-									</ul>
-								</li>
-								<?php else:?>
-									<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active"':''?>>
-										<a href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>">
-											<?php print $s?>
+								<?php if(preg_replace('/\s+/', "_", strtolower($s)) == 'mentorship_program' || preg_replace('/\s+/', "_", strtolower($s)) == 'manage_events'):?>
+									<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active dropdown"':'class="dropdown"'?> >
+										<a class="dropdown-toggle" data-toggle="dropdown" href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>">
+											<div><?php print $s?></div>
+											<span class="caret"></span>
 										</a>
+										<ul class="dropdown-menu pull-right">
+											<?php if($sf_user->getAttribute('usertype') == 'Member'):?>
+												<li><a href="<?php print url_for('@become_a_mentee')?>">Become a Mentee</a></li>
+												<li><a href="<?php print url_for('@become_a_mentor')?>">Become a Mentor</a></li>
+											<?php elseif($sf_user->getAttribute('usertype') == 'Admin'):?>
+												<li><a href="<?php print url_for('@mentor_list_event?type=upcoming')?>">Upcoming Events</a></li>
+												<li><a href="<?php print url_for('@mentor_list_event?type=past')?>">Past Events</a></li>
+												<li><a href="<?php print url_for('@mentor_list_event?type=pending')?>">Pending Events</a></li>
+											<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
+												<li><a href="<?php print url_for('@mentor_list_event?type=upcoming')?>">Upcoming Events</a></li>
+												<li><a href="<?php print url_for('@mentor_list_event?type=past')?>">Past Events</a></li>
+												<li><a href="<?php print url_for('event/mentorMyEvents')?>">My Events</a></li>
+											<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
+												<li><a href="<?php print url_for('@mentor_list_event?type=upcoming')?>">Upcoming Events</a></li>
+												<li><a href="<?php print url_for('@mentor_list_event?type=past')?>">Past Events</a></li>
+												<li><a href="<?php print url_for('event/menteeMyEvents')?>">My Events</a></li>
+											<?php endif?>
+										</ul>
 									</li>
+								<?php elseif(preg_replace('/\s+/', "_", strtolower($s)) == 'manage_users'):?>
+									<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active dropdown"':'class="dropdown"'?>>
+										<a class="dropdown-toggle" data-toggle="dropdown" href="">
+											<div><?php print $s?></div>
+											<span class="caret"></span>
+										</a>
+										<ul class="dropdown-menu pull-right">
+											<li><a href="<?php print url_for('@manage_users?type=Member')?>">Manage Members</a></li>
+											<li><a href="<?php print url_for('@manage_users?type=Mentee')?>">Manage Mentees</a></li>
+											<li><a href="<?php print url_for('@manage_users?type=Mentor')?>">Manage Mentors</a></li>
+											<li><a href="<?php print url_for('@manage_users?type=Admin')?>">Manage Admins</a></li>
+										</ul>
+									</li>
+								<?php else:?>
+									<li><a href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>"><?php print $s?></a></li>
 								<?php endif?>
 							<?php endforeach;?>
 						</ul>

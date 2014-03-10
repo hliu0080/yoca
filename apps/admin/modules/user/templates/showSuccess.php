@@ -7,10 +7,10 @@
 
 	<div class="content">
 		<div class="page-header">
-			<h1>View User</h1>
+			<h1>View <?php print $type?></h1>
 		</div>
 		<div class="page-container">
-			<a href="<?php print url_for('user/list')?>">Back to Manage Users</a>	
+			<a href="<?php print url_for("@manage_users?type=$type")?>">Back to List</a>	
 		
 			<table>
 			  <tbody>
