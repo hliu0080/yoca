@@ -7,8 +7,8 @@
 .buildpath
 
 # Cache and log folders
-cache
-log
+/cache
+/log
 
 # Sensative Data
 config/databases.yml
