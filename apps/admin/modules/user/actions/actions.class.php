@@ -28,10 +28,27 @@ class userActions extends sfActions
 
   public function executeList(sfWebRequest $request){
   	$this->forward404Unless($this->type = $request->getParameter('type'));
+  	$this->start = $request->getParameter('start');
+  	$this->limit = $request->getParameter('limit');
+
+  	$this->total = Doctrine_Core::getTable('YocaUser')
+  	->createQuery('a')
+  	->addWhere("type = ?", $this->type)
+  	->count();
+
+  	$this->pages = ceil($this->total / $this->limit);
+  	
+  	$this->page = min($pages, filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, array(
+  			'options' => array(
+  					'default'   => 1,
+  					'min_range' => 1,
+  			),
+  	)));
   	
   	$this->users = Doctrine_Core::getTable('YocaUser')
   	->createQuery('a')
   	->addWhere("type = ?", $this->type)
+  	->limit($this->limit)
   	->execute();
   	
   	$this->getUser()->setAttribute('cur_page', 'manage_users');

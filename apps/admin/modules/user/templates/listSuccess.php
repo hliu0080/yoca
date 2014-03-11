@@ -14,7 +14,7 @@
 			<table class="datatable table table-striped table-bordered" id="<?php print strtolower($type).'_usertable'?>">
 			  <thead>
 			    <tr>
-			      <th>Id</th>
+			      <th>ID</th>
 			      <th>Username</th>
 			      <th>Name</th>
 			      <?php if($type == 'Mentor'):?>

@@ -11,4 +11,4 @@
 /log
 
 # Sensative Data
-config/databases.yml
+/config/databases.yml

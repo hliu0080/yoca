@@ -42,8 +42,8 @@ manage_events:
   param: { module: event, action: index }
 
 manage_users:
-  url: /user/list/:type
-  param: { module: user, action: list, type: Mentee }
+  url: /user/list/:type/:start/:/limit
+  param: { module: user, action: list, type: Mentee, start:0, limit:5 }
   
 # default rules
 homepage:
