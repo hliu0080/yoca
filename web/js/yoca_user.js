@@ -1,10 +1,6 @@
 $(document).ready(function() {
 	$('#mentor_usertable').dataTable( {
-		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-		"bLengthChange": false,
-		"sPaginationType": "two_button",
-		"oLanguage": {
-		},
+//		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 		"aoColumnDefs": [
 		    { "bSortable": false, "aTargets": [ 8 ] }
 		]
@@ -13,28 +9,28 @@ $(document).ready(function() {
 	
 	
 	$('#mentee_usertable').dataTable( {
-		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+		"sDom": "<'row'<'span6'><'span6'f>r>t<'row'<'span6'><'span6'p>>",
 		"bLengthChange": false,
-		"oLanguage": {
-		},
+		"bInfo": false,
+		"bPaginate": false,
 		"aoColumnDefs": [
 		    { "bSortable": false, "aTargets": [ 6 ] }
 		]
 	});
 	$('#member_usertable').dataTable( {
-		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+		"sDom": "<'row'<'span6'><'span6'f>r>t<'row'<'span6'><'span6'p>>",
 		"bLengthChange": false,
-		"oLanguage": {
-		},
+		"bInfo": false,
+		"bPaginate": false,
 		"aoColumnDefs": [
 		    { "bSortable": false, "aTargets": [ 0 ] }
 		]
 	});
 	$('#admin_usertable').dataTable( {
-		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+		"sDom": "<'row'<'span6'><'span6'f>r>t<'row'<'span6'><'span6'p>>",
 		"bLengthChange": false,
-		"oLanguage": {
-		},
+		"bInfo": false,
+		"bPaginate": false,
 		"aoColumnDefs": [
 		    { "bSortable": false, "aTargets": [ 4 ] }
 		]
@@ -45,27 +41,27 @@ $(document).ready(function() {
 });
 
 /* Default class modification */
-//$.extend( $.fn.dataTableExt.oStdClasses, {
-//	"sWrapper": "dataTables_wrapper form-inline"
-//} );
+$.extend( $.fn.dataTableExt.oStdClasses, {
+	"sWrapper": "dataTables_wrapper form-inline"
+} );
 
 /* API method to get paging information */
-$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
-{
-	return {
-		"iStart":         oSettings._iDisplayStart,
-		"iEnd":           oSettings.fnDisplayEnd(),
-		"iLength":        oSettings._iDisplayLength,
-		"iTotal":         oSettings.fnRecordsTotal(),
-		"iFilteredTotal": oSettings.fnRecordsDisplay(),
-		"iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-		"iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-	};
-}
+//$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+//{
+//	return {
+//		"iStart":         oSettings._iDisplayStart,
+//		"iEnd":           oSettings.fnDisplayEnd(),
+//		"iLength":        oSettings._iDisplayLength,
+//		"iTotal":         oSettings.fnRecordsTotal(),
+//		"iFilteredTotal": oSettings.fnRecordsDisplay(),
+//		"iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
+//		"iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+//	};
+//}
 
 /* Bootstrap style pagination control */
 //$.extend( $.fn.dataTableExt.oPagination, {
-//	"bootstrap": {
+//	"yoca": {
 //		"fnInit": function( oSettings, nPaging, fnDraw ) {
 //			var oLang = oSettings.oLanguage.oPaginate;
 //			var fnClickHandler = function ( e ) {
@@ -138,4 +134,4 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 //			}
 //		}
 //	}
-//});
+});
