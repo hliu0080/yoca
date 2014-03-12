@@ -5,6 +5,8 @@
 all:
   mail:
     service: service@yocausa.org
+  records:
+    num: 7
   dashboard:
     member:                 [ Mentorship Program, My Profile ]
     mentee:                 [ Mentorship Program, My Profile ]

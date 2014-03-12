@@ -27,7 +27,7 @@ class userActions extends sfActions
   }
 
   public function executeList(sfWebRequest $request){
-  	$limit = 5;
+  	$limit = sfConfig::get('app_records_num');
   	$this->forward404Unless($this->type = $request->getParameter('type'));
   	
   	$this->total = Doctrine_Core::getTable('YocaUser')
@@ -35,11 +35,12 @@ class userActions extends sfActions
   	->addWhere("type = ?", $this->type)
   	->count();
   	
-  	$this->pages = ceil($this->total / $limit);
   	$this->page = $request->getParameter('page');
+  	$this->pages = ceil($this->total / $limit);
+  	$this->forward404Unless($this->page <= $this->pages);
+  	
   	$this->prev = $this->page - 1;
   	$this->next = $this->page + 1;
-  	 
   	$start = ($this->page - 1) * $limit;
   	
   	$this->users = Doctrine_Core::getTable('YocaUser')
@@ -50,6 +51,33 @@ class userActions extends sfActions
   	->execute();
 
   	$this->getUser()->setAttribute('cur_page', 'manage_users');
+  }
+  
+  public function executeSearch(sfWebRequest $request){
+  	$limit = sfConfig::get('app_records_num');
+	$this->type = $request->getPostParameter('type');
+	$this->keyword = $request->getPostParameter('keyword');
+  		
+  	$this->total = Doctrine_Core::getTable('YocaUser')
+  	->createQuery('a')
+  	->addWhere("type = ?", $this->type)
+  	->addWhere('username like ?', '%'.$this->keyword.'%')
+  	->count();
+  	
+  	$this->page = 1;
+  	$this->pages = ceil($this->total / $limit);
+  	$this->prev = $this->page - 1;
+  	$this->next = $this->page + 1;
+  	
+  	$this->users = Doctrine_Core::getTable('YocaUser')
+  	->createQuery('a')
+  	->addWhere("type = ?", $this->type)
+  	->addWhere('username like ?', '%'.$this->keyword.'%')
+  	->limit($limit)
+  	->execute();
+  	
+  	$this->getUser()->setAttribute('cur_page', 'manage_users');
+  	$this->setTemplate('list');
   }
   
   public function executeShow(sfWebRequest $request)

@@ -1,3 +1,13 @@
+<div style="float:right">
+	<form style="background: none !important" action="<?php print url_for('search_users')?>" method="post">
+			<div class="controls">
+				<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" />
+				<input type="hidden" value="<?php print $type?>" name="type" />
+				<input class="btn btn-flat" type="submit" value="Search" />
+			</div>
+	</form>
+</div>
+
 <table class="datatable table table-striped table-bordered" id="<?php print strtolower($type).'_usertable'?>">
   <thead>
     <tr>
@@ -56,18 +66,9 @@
   </tbody>
 </table>
 <div class="row">
-	<div class="span6">
-		<div class="dataTables_info"><?php print "Page $page, total $pages"?></div>
-	</div>
-	<div class="span6">
-		<div class="dataTables_paginate pagination">
-			<ul>
-				<li class="<?php print $prev>0?'':'disabled'?>"><a href="<?php print $prev>0?url_for('@manage_users?type='.$type.'&page='.$prev):'#'?>"><span class="awe-caret-left"></span>Prev</a></li>
-				<?php for($i=1; $i<=intval($pages); $i++):?>
-					<li class="<?php print $i==$page?'active':''?>"><a href="<?php print url_for('@manage_users?type='.$type.'&page='.$i)?>"><?php print $i?></a></li>
-				<?php endfor?>
-				<li class="<?php print $next>$pages?'disabled':''?>"><a href="<?php print $next>$pages?'':url_for('@manage_users?type='.$type.'&page='.$next)?>"><span class="awe-caret-right"></span>Next</a></li>
-			</ul>
-		</div>
+	<div class="dataTables_paginate">
+		<a class="btn btn-small btn-flat <?php print $prev>0?'':'disabled'?>" href="<?php print $prev>0?url_for('@manage_users?type='.$type.'&page='.$prev):'#'?>"><span class="awe-caret-left"></span></a>
+		<?php print "$page of $pages"?>
+		<a class="btn btn-small btn-flat <?php print $next>$pages?'disabled':''?>" href="<?php print $next>$pages?'':url_for('@manage_users?type='.$type.'&page='.$next)?>"><span class="awe-caret-right"></span></a>
 	</div>
 </div>

@@ -12,7 +12,7 @@
 		<div class="page-container">
 			<h3><?php print $type?>s</h3>
 			<div class="dataTables_wrapper form-inline">
-				<?php include_partial('user/list', array('users'=>$users, 'type'=>$type, 'total'=>$total, 'page'=>$page, 'pages'=>$pages, 'prev'=>$prev, 'next'=>$next))?>
+				<?php include_partial('user/list', array('users'=>$users, 'type'=>$type, 'total'=>$total, 'page'=>$page, 'pages'=>$pages, 'prev'=>$prev, 'next'=>$next, 'keyword'=>$keyword))?>
 			</div>
 		</div>
 	</div>

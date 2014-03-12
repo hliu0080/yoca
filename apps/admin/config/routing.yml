@@ -44,6 +44,12 @@ manage_events:
 manage_users:
   url: /user/list/:type/:page
   param: { module: user, action: list, type: Mentee, page: 1 }
+
+search_users:
+  url: /user/search
+  params: { module: user, action: search }
+
+
   
 # default rules
 homepage:

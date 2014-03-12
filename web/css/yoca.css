@@ -15,3 +15,7 @@
 .footer{
 	width:504px !important;	
 }
+
+ul.pager li.disabled a span{
+	background-color: #fff !important;
+}
