@@ -21,39 +21,69 @@ class userActions extends sfActions
 		$this->sections = sfConfig::get("app_dashboard_$usertype");
 	}
 	
+	/**
+	 * Index page of Manage Users
+	 * @param sfWebRequest $request
+	 */
   public function executeIndex(sfWebRequest $request)
   {
   	$this->getUser()->setAttribute('cur_page', 'home');
   }
 
+  /**
+   * List users 
+   * @param sfWebRequest $request
+   */
   public function executeList(sfWebRequest $request){
   	$limit = sfConfig::get('app_records_num');
   	$this->type = $request->getParameter('type');
-  	$this->keyword = '';
+  	$this->keyword = $request->getParameter('keyword');
   	
-  	$this->total = Doctrine_Core::getTable('YocaUser')
-  	->createQuery('a')
-  	->addWhere("type = ?", $this->type)
-  	->count();
+  	if($this->keyword){
+  		$this->total = Doctrine_Core::getTable('YocaUser')
+  		->createQuery('a')
+  		->addWhere("type = ?", $this->type)
+  		->addWhere('username like ?', '%'.$this->keyword.'%')
+  		->count();
+  	}else{
+	  	$this->total = Doctrine_Core::getTable('YocaUser')
+	  	->createQuery('a')
+	  	->addWhere("type = ?", $this->type)
+	  	->count();
+  	}
   	
   	$this->page = $request->getParameter('page');
   	$this->pages = ceil($this->total / $limit);
-  	$this->forward404Unless($this->page <= $this->pages);
+  	$this->forward404if($this->total && $this->page>$this->pages);
   	
   	$this->prev = $this->page - 1;
   	$this->next = $this->page + 1;
   	$start = ($this->page - 1) * $limit;
   	
-  	$this->users = Doctrine_Core::getTable('YocaUser')
-  	->createQuery('a')
-  	->addWhere("type = ?", $this->type)
-  	->limit($limit)
-  	->offset($start)
-  	->execute();
+  	if($this->keyword){
+	  	$this->users = Doctrine_Core::getTable('YocaUser')
+	  	->createQuery('a')
+	  	->addWhere("type = ?", $this->type)
+	  	->addWhere('username like ?', '%'.$this->keyword.'%')
+	  	->limit($limit)
+	  	->offset($start)
+	  	->execute();
+  	}else{
+  		$this->users = Doctrine_Core::getTable('YocaUser')
+  		->createQuery('a')
+  		->addWhere("type = ?", $this->type)
+  		->limit($limit)
+  		->offset($start)
+  		->execute();
+  	}
 
   	$this->getUser()->setAttribute('cur_page', 'manage_users');
   }
   
+  /**
+   * Search users by ID, username or name
+   * @param sfWebRequest $request
+   */
   public function executeSearch(sfWebRequest $request){
   	$limit = sfConfig::get('app_records_num');
 	$this->type = $request->getPostParameter('type');
@@ -81,14 +111,24 @@ class userActions extends sfActions
   	$this->setTemplate('list');
   }
   
+  /**
+   * Show user details
+   * @param sfWebRequest $request
+   */
   public function executeShow(sfWebRequest $request)
   {
   	$this->type = $request->getParameter('type');
+  	$this->page = $request->getParameter('page');
+  	$this->keyword = $request->getParameter('keyword');
   	
   	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
   	$this->forward404Unless($this->yoca_user);
   }
   
+  /**
+   * Admin activate mentor
+   * @param sfWebRequest $request
+   */
   public function executeActivate(sfWebRequest $request){
   	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
   	$this->forward404Unless($this->yoca_user);
@@ -240,8 +280,6 @@ class userActions extends sfActions
       		case 'Admin':
       			$this->redirect('user/edit');
       			break;
-      		
-      			
       	}
       }
     }

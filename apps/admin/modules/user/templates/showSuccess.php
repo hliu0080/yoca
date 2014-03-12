@@ -10,12 +10,12 @@
 			<h1>View <?php print $type?></h1>
 		</div>
 		<div class="page-container">
-			<a href="<?php print url_for("@manage_users?type=$type")?>">Back to List</a>	
+			<a href="<?php print url_for("@manage_users?type=$type&page=$page&keyword=$keyword")?>">Back to List</a>	
 		
-			<table>
+			<table class="table table-bordered detail_table">
 			  <tbody>
 			    <tr>
-			      <th>Id:</th>
+			      <th>ID:</th>
 			      <td><?php echo $yoca_user->getId() ?></td>
 			    </tr>
 			    <tr>
@@ -60,7 +60,7 @@
 			    </tr>
 			    <tr>
 			      <th>Work Experience:</th>
-			      <td><?php echo $yoca_user->getWork() ?></td>
+			      <td><?php echo sfConfig::get('app_profile_mentor_work_experience')[$yoca_user->get('work')] ?></td>
 			    </tr>
 			    <tr>
 			      <th>Employer:</th>
@@ -96,7 +96,7 @@
 			    </tr>
 			    <tr>
 			      <th>Status:</th>
-			      <td><?php echo $yoca_user->getIsActive()?'Confirmed':'Pending' ?></td>
+			      <td><?php echo $yoca_user->getIsActive()?'Confirmed':'<span class="label label-warning">Pending</span>' ?></td>
 			    </tr>
 			  </tbody>
 			</table>

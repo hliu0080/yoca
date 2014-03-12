@@ -1,5 +1,2 @@
 newSuccess: 
   layout:         login_layout
-  
-listSuccess:
-  javascripts:    [yoca_user.js]

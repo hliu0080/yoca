@@ -42,12 +42,16 @@ manage_events:
   param: { module: event, action: index }
 
 manage_users:
-  url: /user/list/:type/:page
-  param: { module: user, action: list, type: Mentee, page: 1 }
+  url: /user/list/:type/:page/:keyword
+  param: { module: user, action: list, type: Mentee, page: 1, keyword:'' }
 
 search_users:
   url: /user/search
   params: { module: user, action: search }
+  
+show_user:
+  url: /user/show/:id/:type/:page/:keyword
+  param: { module: user, action: show, type: Mentee, page: 1, keyword:'' }  
 
 
   

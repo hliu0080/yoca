@@ -19,3 +19,23 @@
 ul.pager li.disabled a span{
 	background-color: #fff !important;
 }
+
+a.search_remove, a.search_remove:hover{
+	position:relative;
+	left:-25px;
+	top:1px;
+	color:#878d96;
+	text-decoration:none;
+}
+
+table.detail_table tr th{
+	width:30%;
+}
+
+table.detail_table tr:hover td{
+	background: none !important;
+}
+
+table.detail_table tr:hover th{
+	background-color:#e6e9eb;
+}
