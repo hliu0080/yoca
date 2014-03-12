@@ -28,7 +28,8 @@ class userActions extends sfActions
 
   public function executeList(sfWebRequest $request){
   	$limit = sfConfig::get('app_records_num');
-  	$this->forward404Unless($this->type = $request->getParameter('type'));
+  	$this->type = $request->getParameter('type');
+  	$this->keyword = '';
   	
   	$this->total = Doctrine_Core::getTable('YocaUser')
   	->createQuery('a')
