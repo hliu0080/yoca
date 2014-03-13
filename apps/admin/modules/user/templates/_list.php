@@ -1,11 +1,11 @@
-<div style="float:right">
+<div class="pull-right">
 	<form style="background: none !important" action="<?php print url_for('search_users')?>" method="post">
-			<div class="controls">
-				<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" placeholder="ID, Username, Name"/>
-				<a href="<?php print url_for('@manage_users?type='.$type)?>" class="search_remove"><span class="awe-remove"></span></a>
-				<input type="hidden" value="<?php print $type?>" name="type" />
-				<input class="btn btn-flat" type="submit" value="Search" />
-			</div>
+		<div class="controls">
+			<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" placeholder="ID, Username, Name"/>
+			<a href="<?php print url_for('@manage_users?type='.$type)?>" class="search_remove"><span class="awe-remove"></span></a>
+			<input type="hidden" value="<?php print $type?>" name="type" />
+			<input class="btn btn-flat" type="submit" value="Search" />
+		</div>
 	</form>
 </div>
 
@@ -65,13 +65,12 @@
 			</td>
 	    </tr>
 	    <?php endforeach; ?>
-  	<?php else:?>
-  		<tr><td colspan="9">No records found</td></tr>
   	<?php endif?>
   </tbody>
 </table>
 <div class="row">
-	<div class="dataTables_paginate">
+	<div class="span6"><?php print "$total " .(($total>1)?'records':'record'). " found"?></div>
+	<div class="span6 text-right">
 		<a class="btn btn-small btn-flat <?php print $prev>0?'':'disabled'?>" href="<?php print $prev>0?url_for('@manage_users?type='.$type.'&page='.$prev.'&keyword='.$keyword):'#'?>"><span class="awe-caret-left"></span></a>
 		<?php print $total?"$page of $pages":""?>
 		<a class="btn btn-small btn-flat <?php print $next>$pages?'disabled':''?>" href="<?php print $next>$pages?'#':url_for('@manage_users?type='.$type.'&page='.$next.'&keyword='.$keyword)?>"><span class="awe-caret-right"></span></a>
