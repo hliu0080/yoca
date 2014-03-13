@@ -137,10 +137,29 @@ class userActions extends sfActions
   	$this->yoca_user->save();
   	
   	//Send confirmation email to mentor
-  	$body = "Mentor confirmed for {$this->yoca_user->getUsername()}";
+  	$body = "Event confirmed for {$this->yoca_user->getUsername()}";
   	$mailer = sfContext::getInstance()->getMailer();
   	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->yoca_user->getUsername(), 'Event Confirmed', $body);
   	
+  	$this->redirect('user/list');
+  }
+  
+  /**
+   * Admin activate mentor
+   * @param sfWebRequest $request
+   */
+  public function executeDeactivate(sfWebRequest $request){
+  	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
+  	$this->forward404Unless($this->yoca_user);
+  	 
+  	$this->yoca_user->set('is_active', 0);
+  	$this->yoca_user->save();
+  	 
+  	//Send confirmation email to mentor
+//   	$body = "Event confirmed for {$this->yoca_user->getUsername()}";
+//   	$mailer = sfContext::getInstance()->getMailer();
+//   	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->yoca_user->getUsername(), 'Event Confirmed', $body);
+  	 
   	$this->redirect('user/list');
   }
 
