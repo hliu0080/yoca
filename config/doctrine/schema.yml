@@ -71,7 +71,7 @@ Event:
       primary: false
       notnull: false
       autoincrement: false
-    udpated_at:
+    updated_at:
       type: timestamp(25)
       fixed: false
       unsigned: false

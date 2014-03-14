@@ -39,3 +39,8 @@ table.detail_table tr:hover td{
 table.detail_table tr:hover th{
 	background-color:#e6e9eb;
 }
+
+/* TODO: set width of datetime selector only */
+select{
+	width: 80px;
+}

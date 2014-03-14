@@ -10,59 +10,78 @@
 			<h1>View Event</h1>
 		</div>
 		<div class="page-container">
-			<?php if($sf_user->getAttribute('usertype') != 'Admin'):?>
-				<a href="<?php print url_for('@mentor_manage_event')?>">Back to My Events</a>
-			<?php else:?>	
-				<a href="<?php print url_for('event/list?type=pending')?>">Back to Manage Events</a>
-			<?php endif?>
+			<div class="row">
+				<div class="span12">
+					<?php print $sf_user->getAttribute('usertype')=='Admin'?link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword)):link_to('Back to list', 'mentor_manage_event')?>
+				</div>
+			</div>
 		
-			<table>
+			<table class="table table-bordered detail_table">
 			  <tbody>
 			    <tr>
-			      <th>Id:</th>
+			      <th>ID</th>
 			      <td><?php echo $event->getId() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Industry:</th>
+			      <th>Industry</th>
 			      <td><?php echo $event->getYocaIndustry()->getName() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Mentorid:</th>
+			      <th>Mentor ID</th>
 			      <td><?php echo $event->getMentorid() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Capacity:</th>
+			      <th>Capacity</th>
 			      <td><?php echo $event->getCapacity() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Booked:</th>
+			      <th>Booked</th>
 			      <td><?php echo $event->getBooked() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Datetime:</th>
+			      <th>Time</th>
 			      <td><?php echo date("m/d/Y H:i", strtotime($event->getDatetime())) ?></td>
 			    </tr>
 			    <tr>
-			      <th>Neighborhood:</th>
+			      <th>Neighborhood</th>
 			      <td><?php echo $event->getNeighborhood() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Address:</th>
+			      <th>Address</th>
 			      <td><?php echo $event->getAddress() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Status:</th>
-			      <td><?php echo $event->getStatus()==0?'Pending':'Confirmed' ?></td>
+			      <th>Created At</th>
+			      <td><?php echo $event->getCreatedAt() ?></td>
+			    </tr>
+			    <tr>
+			      <th>Updated At</th>
+			      <td><?php echo $event->getUpdatedAt() ?></td>
+			    </tr>
+			    <tr>
+			      <th>Status</th>
+			      <!-- TODO: -->
+			      <!-- 0 - pending, 1 - confirmed, 2 - cancelled, 3 - deleted -->
+			      <td><?php echo $event->getStatus()?'Confirmed':'<span class="label label-warning">Pending</span>' ?></td>
 			    </tr>
 			  </tbody>
 			</table>
-		
-			<hr />
-		
-			<a href="<?php echo url_for('event/edit?id='.$event->getId()) ?>">Edit</a>
-			<?php if($event->getStatus()==0):?>
-			<?php echo link_to('Delete', 'event/delete?id='.$event->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
-			<?php endif?>
+
+			<div class="row">
+				<div class="span6">
+					<?php if($sf_user->getAttribute('usertype') != 'Admin'):?>
+						<a href="<?php print url_for('@mentor_manage_event')?>">Back to list</a>
+					<?php else:?>	
+						<?php print $sf_user->getAttribute('usertype')=='Admin'?link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword)):link_to('Back to list', 'mentor_manage_event')?>
+					<?php endif?>
+				</div>
+				<div class="span6">
+					<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-success btn-wuxia'>Edit</a>
+					<?php if($event->getStatus()==0):?>
+						<?php echo link_to('Delete', 'event/delete?id='.$event->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia')) ?>
+					<?php endif?>
+				</div>
+			</div>
 		</div>
 	</div>
 

@@ -37,26 +37,12 @@ class userActions extends sfActions
   public function executeList(sfWebRequest $request){
   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
   	
-  	$limit = sfConfig::get('app_records_num');
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
   	$this->page = $request->getParameter('page');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_records_num');
   	
-  	$start = ($this->page - 1) * $limit;
-  	
-  	$query = Doctrine_Core::getTable('YocaUser')
-  	->createQuery('a')
-	->where("type = ?", $this->type);
-  	if($this->keyword){
-  		$query->addWhere('username like ? or id like ? or firstname like ? or lastname like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
-  	}
-  	
-  	$this->total = $query->count();
-  	
-  	$this->pages = ceil($this->total / $limit);
-  	$this->forward404if($this->total && $this->page>$this->pages);
-  	
-  	$this->users = $query->limit($limit)->offset($start)->execute();
+  	$this->fetchUsers();
   	
   	$this->getUser()->setAttribute('cur_page', 'manage_users');
   }
@@ -68,11 +54,18 @@ class userActions extends sfActions
   public function executeSearch(sfWebRequest $request){
   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
   	
-  	$limit = sfConfig::get('app_records_num');
 	$this->type = $request->getPostParameter('type');
 	$this->keyword = $request->getPostParameter('keyword');
   	$this->page = 1;
+  	$this->start = 0;
   	
+	$this->fetchUsers();
+  	
+  	$this->getUser()->setAttribute('cur_page', 'manage_users');
+  	$this->setTemplate('list');
+  }
+  
+  protected function fetchUsers(){
   	$query = Doctrine_Core::getTable('YocaUser')
   	->createQuery('a')
   	->where("type = ?", $this->type);
@@ -81,14 +74,10 @@ class userActions extends sfActions
   	}
   	 
   	$this->total = $query->count();
-  	 
-  	$this->pages = ceil($this->total / $limit);
+  	$this->pages = ceil($this->total / sfConfig::get('app_records_num'));
   	$this->forward404if($this->total && $this->page>$this->pages);
   	 
-  	$this->users = $query->limit($limit)->execute();
-  	 
-  	$this->getUser()->setAttribute('cur_page', 'manage_users');
-  	$this->setTemplate('list');
+  	$this->users = $query->limit(sfConfig::get('app_records_num'))->offset($this->start)->execute();
   }
   
   /**
@@ -108,47 +97,28 @@ class userActions extends sfActions
   }
   
   /**
-   * Admin activate mentor
+   * Activate/de-activate mentor
    * @param sfWebRequest $request
    */
-  public function executeActivate(sfWebRequest $request){
+  public function executeSetActive(sfWebRequest $request){
   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
   	
-  	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
-  	$this->forward404Unless($this->yoca_user);
-  	
-  	$this->yoca_user->set('is_active', 1);
-  	$this->yoca_user->save();
-  	
-  	//Send confirmation email to mentor
-  	$body = "Mentor confirmed for {$this->yoca_user->getUsername()}";
-  	$mailer = sfContext::getInstance()->getMailer();
-  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->yoca_user->getUsername(), 'Mentor Confirmed', $body);
-  	
-  	$type = $request->getParameter('type');
-  	$page = $request->getParameter('page');
-  	$keyword = $request->getParameter('keyword');
-  	$this->redirect("user/list?type=$type&page=$page&keyword=$keyword");
-  }
-  
-  /**
-   * Admin activate mentor
-   * @param sfWebRequest $request
-   */
-  public function executeDeactivate(sfWebRequest $request){
-  	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
-  	
+  	$is_active = $request->getParameter('is_active');
+  	$this->forward404If(is_null($is_active));
+  	 
   	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
   	$this->forward404Unless($this->yoca_user);
   	 
-  	$this->yoca_user->set('is_active', 0);
+  	$this->yoca_user->set('is_active', $is_active);
   	$this->yoca_user->save();
   	 
-  	//Send confirmation email to mentor
-//   	$body = "Event confirmed for {$this->yoca_user->getUsername()}";
-//   	$mailer = sfContext::getInstance()->getMailer();
-//   	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->yoca_user->getUsername(), 'Event Confirmed', $body);
-  	
+  	if($is_active){
+	  	//Send confirmation email to mentor
+	  	$body = "Mentor confirmed for {$this->yoca_user->getUsername()}";
+	  	$mailer = sfContext::getInstance()->getMailer();
+	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->yoca_user->getUsername(), 'Mentor Confirmed', $body);
+  	}
+  	 
   	$type = $request->getParameter('type');
   	$page = $request->getParameter('page');
   	$keyword = $request->getParameter('keyword');

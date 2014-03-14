@@ -36,31 +36,55 @@ mentor_manage_event:
 manage_events:
   url: /event/list/:type/:page/:keyword
   param: { module: event, action: list, type: upcoming, page: 1, keyword: '' }
+  requirements:
+    method: [get]
 
 search_events:
   url: /event/search
   params: { module: event, action: search }
+  requirements:
+    method: [post]
+    
+show_event:
+  url: /event/show/:id/:type/:page/:keyword
+  param: { module: event, action: show, type: upcoming, page: 1, keyword: '' }
+  requirements:
+    id: \d+
+    page: \d+
+
+set_event_active:
+  url: /event/setActive/:id/:is_active/:type/:page/:keyword
+  param: { module: event, action: setActive, type: upcoming, page: 1, keyword: '' }
+  requirements:
+    id: \d+
+    is_active: \d+
 
 manage_users:
   url: /user/list/:type/:page/:keyword
   param: { module: user, action: list, type: Mentee, page: 1, keyword: '' }
+  requirements:
+    method: [get]
 
 search_users:
   url: /user/search
   params: { module: user, action: search }
+  requirements:
+    method: [post]
   
 show_user:
   url: /user/show/:id/:type/:page/:keyword
-  param: { module: user, action: show, type: Mentee, page: 1, keyword: '' }  
-  
-activate_user:
-  url: /user/activate/:id/:type/:page/:keyword
-  param: { module: user, action: activate, type: Mentee, page: 1, keyword: '' }
+  param: { module: user, action: show, type: Mentee, page: 1, keyword: '' }
+  requirements:
+    id: \d+
+    page: \d+
 
-deactivate_user:
-  url: /user/deactivate/:id/:type/:page/:keyword
-  param: { module: user, action: deactivate, type: Mentee, page: 1, keyword: '' }
-  
+set_user_active:
+  url: /user/setActive/:id/:is_active/:type/:page/:keyword
+  param: { module: user, action: setActive, type: Mentee, page: 1, keyword: '' }
+  requirements:
+    id: \d+
+    is_active: \d+
+
 # default rules
 homepage:
   url:   /

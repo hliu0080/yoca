@@ -16,8 +16,8 @@ class EventForm extends BaseEventForm
   		'industry' => new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry')),
   		'capacity' => new sfWidgetFormInputText(),
   		'datetime' => new sfWidgetFormDateTime(array(
-  				'date' => array('years' => array('2014' => '2014'), 'can_be_empty' => false),
-  				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false)
+  				'date' => array('years' => array('2014' => '2014'), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
+  				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false, 'format_without_seconds'=>'%hour% : %minute%')
   		)),
   		'neighborhood' => new sfWidgetFormInputText(),
   		'address' => new sfWidgetFormInputText(),
@@ -31,7 +31,13 @@ class EventForm extends BaseEventForm
   		'neighborhood' => new sfValidatorString(array('max_length' => 45)),
   		'address' => new sfValidatorString(array('max_length' => 255)),
   	);
-  	$labels = array();
+  	$labels = array(
+  		'industry' => '* Industry',
+  		'capacity' => '* Capacity',
+  		'datetime' => '* Date & Time',
+  		'neighborhood' => '* Neighborhood',
+  		'address' => '* Address',
+  	);
   	
   	$this->setWidgets($widgets);
   	$this->setValidators($validators);
@@ -43,5 +49,14 @@ class EventForm extends BaseEventForm
   	));
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat('newEvent[%s]');
+  	
+  	$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());
+  	$this->widgetSchema->addFormFormatter('custom', $formatter);
+  	$this->widgetSchema->setFormFormatterName('custom');
+  	 
+  	foreach ($this->getWidgetSchema()->getFields() as $field)
+  	{
+  		$field->setAttribute('class', 'input-xlarge');
+  	}
   }
 }

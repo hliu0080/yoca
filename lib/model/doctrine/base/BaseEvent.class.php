@@ -17,7 +17,7 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @property string $address
  * @property string $status
  * @property timestamp $created_at
- * @property timestamp $udpated_at
+ * @property timestamp $updated_at
  * @property YocaIndustry $YocaIndustry
  * @property Doctrine_Collection $Registration
  * 
@@ -31,7 +31,7 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method string              getAddress()      Returns the current record's "address" value
  * @method string              getStatus()       Returns the current record's "status" value
  * @method timestamp           getCreatedAt()    Returns the current record's "created_at" value
- * @method timestamp           getUdpatedAt()    Returns the current record's "udpated_at" value
+ * @method timestamp           getUpdatedAt()    Returns the current record's "updated_at" value
  * @method YocaIndustry        getYocaIndustry() Returns the current record's "YocaIndustry" value
  * @method Doctrine_Collection getRegistration() Returns the current record's "Registration" collection
  * @method Event               setId()           Sets the current record's "id" value
@@ -44,7 +44,7 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method Event               setAddress()      Sets the current record's "address" value
  * @method Event               setStatus()       Sets the current record's "status" value
  * @method Event               setCreatedAt()    Sets the current record's "created_at" value
- * @method Event               setUdpatedAt()    Sets the current record's "udpated_at" value
+ * @method Event               setUpdatedAt()    Sets the current record's "updated_at" value
  * @method Event               setYocaIndustry() Sets the current record's "YocaIndustry" value
  * @method Event               setRegistration() Sets the current record's "Registration" collection
  * 
@@ -147,7 +147,7 @@ abstract class BaseEvent extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 25,
              ));
-        $this->hasColumn('udpated_at', 'timestamp', 25, array(
+        $this->hasColumn('updated_at', 'timestamp', 25, array(
              'type' => 'timestamp',
              'fixed' => 0,
              'unsigned' => false,

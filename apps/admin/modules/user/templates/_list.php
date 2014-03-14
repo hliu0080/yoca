@@ -60,7 +60,7 @@
     		<td class="toolbar">
 				<div class="btn-group">
 		    		<?php print link_to('View', 'user/show?id='.$user->get('id').'&type='.$type.'&page='.$page.'&keyword='.$keyword, array('class'=>'btn btn-small'))?>
-		    		<?php print $user->get('is_active')?'':link_to('Activate', 'user/activate?id='.$user->get('id').'&type='.$type.'&page='.$page.'&keyword='.$keyword, array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+		    		<?php print $user->get('is_active')?'':link_to('Activate', '@set_user_active?id='.$user->get('id').'&is_active=1&type='.$type.'&page='.$page.'&keyword='.$keyword, array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 				</div>
 			</td>
 	    </tr>

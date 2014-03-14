@@ -10,11 +10,11 @@
 			<h1>Edit Event</h1>
 		</div>
 		<div class="page-container">
-			<?php if($sf_user->getAttribute('usertype') != 'Admin'):?>
-				<a href="<?php print url_for('@mentor_manage_event')?>">Back to My Events</a>
-			<?php else:?>	
-				<a href="<?php print url_for('event/list?type=pending')?>">Back to Manage Events</a>
-			<?php endif?>
+			<div class="row">
+				<div class="span12">
+					<?php print $sf_user->getAttribute('usertype')=='Admin'?link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword)):link_to('Back to list', 'mentor_manage_event')?>
+				</div>
+			</div>
 		
 			<?php include_partial('form', array('form' => $form)) ?>
 		</div>

@@ -67,5 +67,5 @@
 			<?php endif?>
 		</div>
   	</fieldset>
-<?php endif; ?>
+<?php endif ?>
 </form>
