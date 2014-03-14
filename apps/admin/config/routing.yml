@@ -33,17 +33,17 @@ mentor_manage_event:
   url: /event/mentorMyEvents
   params: { module: event, action: mentorMyEvents }
 
-mentor_list_event:
-  url: /event/list/:type/:start/:limit
-  param: { module: event, action: list, start: 0, limit: 25 }
-
 manage_events:
-  url: /event/index
-  param: { module: event, action: index }
+  url: /event/list/:type/:page/:keyword
+  param: { module: event, action: list, type: upcoming, page: 1, keyword: '' }
+
+search_events:
+  url: /event/search
+  params: { module: event, action: search }
 
 manage_users:
   url: /user/list/:type/:page/:keyword
-  param: { module: user, action: list, type: Mentee, page: 1, keyword:'' }
+  param: { module: user, action: list, type: Mentee, page: 1, keyword: '' }
 
 search_users:
   url: /user/search
@@ -51,9 +51,15 @@ search_users:
   
 show_user:
   url: /user/show/:id/:type/:page/:keyword
-  param: { module: user, action: show, type: Mentee, page: 1, keyword:'' }  
+  param: { module: user, action: show, type: Mentee, page: 1, keyword: '' }  
+  
+activate_user:
+  url: /user/activate/:id/:type/:page/:keyword
+  param: { module: user, action: activate, type: Mentee, page: 1, keyword: '' }
 
-
+deactivate_user:
+  url: /user/deactivate/:id/:type/:page/:keyword
+  param: { module: user, action: deactivate, type: Mentee, page: 1, keyword: '' }
   
 # default rules
 homepage:

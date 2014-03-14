@@ -7,12 +7,11 @@
 
 	<div class="content">
 		<div class="page-header">
-			<h1>Manage Users</h1>
+			<h1><?php print $type?>s</h1>
 		</div>
 		<div class="page-container">
-			<h3><?php print $type?>s</h3>
 			<div>
-				<?php include_partial('user/list', array('users'=>$users, 'type'=>$type, 'total'=>$total, 'page'=>$page, 'pages'=>$pages, 'prev'=>$prev, 'next'=>$next, 'keyword'=>$keyword))?>
+				<?php include_partial('user/list', array('users'=>$users, 'type'=>$type, 'total'=>$total, 'page'=>$page, 'pages'=>$pages, 'keyword'=>$keyword))?>
 			</div>
 		</div>
 	</div>

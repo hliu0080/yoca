@@ -34,25 +34,39 @@ class eventActions extends sfActions
   }
   
   public function executeList(sfWebRequest $request){
-  	$this->forward404Unless($type = $request->getParameter('type'));
+  	$limit = sfConfig::get('app_records_num');
+  	$this->type = $request->getParameter('type');
+  	$this->keyword = $request->getParameter('keyword');
+  	$this->page = $request->getParameter('page');
+  	 
+  	$start = ($this->page - 1) * $limit;
   	
-  	if($type == 'pending'){
-  		$this->events = Doctrine_Core::getTable('Event')
-  		->createQuery('a')
-  		->where('status = ?', 0)
-  		->execute();
-  	}else{
-	  	if($type == 'upcoming')
-	  		$cond = ">";
-	  	if($type == 'past')
-	  		$cond = "<";
-	  	
-		$this->events = Doctrine_Core::getTable('Event')
-	  	      ->createQuery('a')
-	  	      ->where("datetime $cond ?", date('Y-m-d H:i:s'))
-	  	      ->andWhere('status = ?', 1)
-	  	      ->execute();
+  	if($this->type == 'pending'){
+  		$status = 0;
+  		$cond = ">";
+  	}elseif($this->type == 'upcoming'){
+  		$status = 1;
+  		$cond = ">";
+  	}elseif($this->type == 'past'){
+  		$status = 0;
+  		$cond = "<";
   	}
+  	
+  	$query = Doctrine_Core::getTable('Event')
+  		->createQuery('a')
+  		->where('status = ?', $status)
+  		->andWhere("datetime $cond ?", date('Y-m-d H:i:s'));
+
+  	if($this->keyword){
+  		$query->addWhere('id like ?', '%'.$this->keyword.'%');
+  	}
+  	
+  	$this->total = $query->count();
+  	
+  	$this->pages = ceil($this->total / $limit);
+  	$this->forward404if($this->total && $this->page>$this->pages);
+  	
+  	$this->events = $query->limit($limit)->offset($start)->execute();
   	
   	if($this->getUser()->getAttribute('usertype') == 'Admin'){
   		$this->getUser()->setAttribute('cur_page', 'manage_events');

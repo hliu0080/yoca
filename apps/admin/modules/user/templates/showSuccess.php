@@ -136,8 +136,8 @@
 				</div>
 				<div class="span6">
 					<?php if($type == 'Mentor'):?>
-						<?php print $yoca_user->getIsActive()?'':link_to('Activate Mentor', 'user/activate?id='.$yoca_user->getId(), array('confirm' => 'Are you sure?', 'class'=>'btn btn-success btn-wuxia'))?>
-						<?php print !$yoca_user->getIsActive()?'':link_to('Deactivate Mentor', 'user/deactivate?id='.$yoca_user->getId(), array('confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia'))?>
+						<?php print $yoca_user->getIsActive()?'':link_to('Activate Mentor', url_for("@activate_user?id={$yoca_user->getId()}&type=$type&page=$page&keyword=$keyword"), array('confirm' => 'Are you sure?', 'class'=>'btn btn-success btn-wuxia'))?>
+						<?php print !$yoca_user->getIsActive()?'':link_to('Deactivate Mentor', url_for("@deactivate_user?id={$yoca_user->getId()}&type=$type&page=$page&keyword=$keyword"), array('confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia'))?>
 					<?php endif?>
 				</div>
 			</div>

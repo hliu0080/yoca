@@ -59,8 +59,8 @@
 	    	<?php endif?>
     		<td class="toolbar">
 				<div class="btn-group">
-		    		<?php print link_to('View', 'user/show?id='.$user->get('id').'&type='.$type, array('class'=>'btn btn-small'))?>
-		    		<?php print $user->get('is_active')?'':link_to('Activate', 'user/activate?id='.$user->get('id'), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+		    		<?php print link_to('View', 'user/show?id='.$user->get('id').'&type='.$type.'&page='.$page.'&keyword='.$keyword, array('class'=>'btn btn-small'))?>
+		    		<?php print $user->get('is_active')?'':link_to('Activate', 'user/activate?id='.$user->get('id').'&type='.$type.'&page='.$page.'&keyword='.$keyword, array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 				</div>
 			</td>
 	    </tr>
@@ -71,8 +71,8 @@
 <div class="row">
 	<div class="span6"><?php print "$total " .(($total>1)?'records':'record'). " found"?></div>
 	<div class="span6 text-right">
-		<a class="btn btn-small btn-flat <?php print $prev>0?'':'disabled'?>" href="<?php print $prev>0?url_for('@manage_users?type='.$type.'&page='.$prev.'&keyword='.$keyword):'#'?>"><span class="awe-caret-left"></span></a>
+		<a class="btn btn-small btn-flat <?php print $page-1>0?'':'disabled'?>" href="<?php print $page-1>0?url_for('@manage_users?type='.$type.'&page='.($page-1).'&keyword='.$keyword):'#'?>"><span class="awe-caret-left"></span></a>
 		<?php print $total?"$page of $pages":""?>
-		<a class="btn btn-small btn-flat <?php print $next>$pages?'disabled':''?>" href="<?php print $next>$pages?'#':url_for('@manage_users?type='.$type.'&page='.$next.'&keyword='.$keyword)?>"><span class="awe-caret-right"></span></a>
+		<a class="btn btn-small btn-flat <?php print $page+1>$pages?'disabled':''?>" href="<?php print $page+1>$pages?'#':url_for('@manage_users?type='.$type.'&page='.($page+1).'&keyword='.$keyword)?>"><span class="awe-caret-right"></span></a>
 	</div>
 </div>
