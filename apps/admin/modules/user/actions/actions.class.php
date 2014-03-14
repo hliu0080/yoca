@@ -48,7 +48,7 @@ class userActions extends sfActions
   	->createQuery('a')
 	->where("type = ?", $this->type);
   	if($this->keyword){
-  		$query->addWhere('username like ?', '%'.$this->keyword.'%');
+  		$query->addWhere('username like ? or id like ? or firstname like ? or lastname like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
   	}
   	
   	$this->total = $query->count();
@@ -71,23 +71,22 @@ class userActions extends sfActions
   	$limit = sfConfig::get('app_records_num');
 	$this->type = $request->getPostParameter('type');
 	$this->keyword = $request->getPostParameter('keyword');
-  		
-  	$this->total = Doctrine_Core::getTable('YocaUser')
-  	->createQuery('a')
-  	->addWhere("type = ?", $this->type)
-  	->addWhere('username like ?', '%'.$this->keyword.'%')
-  	->count();
-  	
   	$this->page = 1;
-  	$this->pages = ceil($this->total / $limit);
   	
-  	$this->users = Doctrine_Core::getTable('YocaUser')
+  	$query = Doctrine_Core::getTable('YocaUser')
   	->createQuery('a')
-  	->addWhere("type = ?", $this->type)
-  	->addWhere('username like ?', '%'.$this->keyword.'%')
-  	->limit($limit)
-  	->execute();
-  	
+  	->where("type = ?", $this->type);
+  	if($this->keyword){
+  		$query->addWhere('username like ? or id like ? or firstname like ? or lastname like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
+  	}
+  	 
+  	$this->total = $query->count();
+  	 
+  	$this->pages = ceil($this->total / $limit);
+  	$this->forward404if($this->total && $this->page>$this->pages);
+  	 
+  	$this->users = $query->limit($limit)->execute();
+  	 
   	$this->getUser()->setAttribute('cur_page', 'manage_users');
   	$this->setTemplate('list');
   }
