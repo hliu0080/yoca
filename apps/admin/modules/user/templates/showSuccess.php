@@ -133,9 +133,9 @@
 				<div class="span6">
 					<?php print link_to('Back to list', 'manage_users', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 				</div>
-				<div class="span6">
-					<?php if($type == 'Mentor'):?>
-						<?php print $yoca_user->getIsActive()?link_to('Deactivate Mentor', 'set_user_active', array('id'=>$yoca_user->getId(), 'is_active'=>0, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia')):link_to('Activate Mentor', 'set_user_active', array('id'=>$yoca_user->getId(), 'is_active'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-success btn-wuxia'))?>
+				<div class="span6 text-right">
+					<?php if($type != 'Admin'):?>
+						<?php print $yoca_user->getIsActive()?link_to("Deactivate $type", 'set_user_active', array('id'=>$yoca_user->getId(), 'is_active'=>0, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia')):link_to("Activate $type", 'set_user_active', array('id'=>$yoca_user->getId(), 'is_active'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-success btn-wuxia'))?>
 					<?php endif?>
 				</div>
 			</div>
