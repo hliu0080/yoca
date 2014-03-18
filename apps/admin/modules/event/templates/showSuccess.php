@@ -76,7 +76,19 @@
 					<?php endif?>
 				</div>
 				<div class="span6">
-					<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-success btn-wuxia'>Edit</a>
+					<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
+						<?php if($event->getStatus() == 0):?>	
+							<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-success btn-wuxia'>Edit</a>
+						<?php elseif($event->getStatus() == 1):?>
+							<a href="" class='btn btn-danger btn-wuxia'>Cancel</a>
+						<?php endif?>
+						
+					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
+					
+					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
+					
+					<?php endif?>
+					
 					<?php if($event->getStatus()==0):?>
 						<?php echo link_to('Delete', 'event/delete?id='.$event->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia')) ?>
 					<?php endif?>

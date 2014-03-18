@@ -17,7 +17,8 @@ all:
     education:              { Bachelor: Bachelor, Master: Master, MBA/EMBA: MBA/EMBA, PhD/JD/LLM/MD: PhD/JD/LLM/MD }
     mentee_work_experience: { 1: "Internship (less than 6 months)", 2: "Internship (7-12 months)", 3: "Internship (more than 1 year)", 4: "Full-time (less than 1 year)", 5: "Full-time (1 to less than 2 years)", 6: "Full-time (2 to less than 3 years)", 7: "Full-time (more than 3 years)", 8: "No experience" }
     mentor_work_experience: { 1: "Less than 1 year", 2: "1-3 years", 3: "3-5 years", 4: "5+ years" }
-    oh_preference:          { all: Inform me on all upcoming office hour events, selected: Only inform me on the industries I am interested in }
+    oh_preference:          { 0: "Inform me on all upcoming office hour events", 1: "Only inform me on the industries I am interested in" }
   registration:
-    status:                 { 1: "Registered", 2: "Cancelled by mentee", 3: "Cancelled by system", 4: "Pending survey", 5: "Finished" }  
-  
+    status:                 { 1: "Registered", 2: "Cancelled By Mentee", 3: "Cancelled By System", 4: "Pending Survey", 5: "Finished" }  
+  event:
+    status:                 { 0: "Pending", 1: "Confirmed", 2: "Cancelled By System", 3: "Deleted"}

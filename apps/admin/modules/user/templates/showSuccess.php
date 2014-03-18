@@ -114,15 +114,15 @@
 					      	<td><?php echo $yoca_user->getOrganization() ?></td>
 					    </tr>
 					<?php endif?>
-					<tr>
-						<th>Created At</th>
-						<td><?php echo $yoca_user->getCreatedAt()?></td>
-					</tr>
-					<tr>
-						<th>Updated At</th>
-						<td><?php echo $yoca_user->getUpdatedAt()?></td>
-					</tr>
 			    <?php endif?>
+				<tr>
+					<th>Created At</th>
+					<td><?php echo $yoca_user->getCreatedAt()?></td>
+				</tr>
+				<tr>
+					<th>Updated At</th>
+					<td><?php echo $yoca_user->getUpdatedAt()?></td>
+				</tr>
 			    <tr>
 			      <th>Status</th>
 			      <td><?php echo $yoca_user->getIsActive()?'Confirmed':'<span class="label label-warning">Pending</span>' ?></td>

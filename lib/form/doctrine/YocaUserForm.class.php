@@ -49,7 +49,7 @@ class YocaUserForm extends BaseYocaUserForm
   		$widgets['phone'] = new sfWidgetFormInputText();
   		$widgets['wechat'] = new sfWidgetFormInputText();
   		$widgets['education'] = new sfWidgetFormChoice(array(
-  				'choices' => sfConfig::get('app_profile_education')
+  				'choices' => array('' => "Choose Education") + sfConfig::get('app_profile_education')
   		));
   		
   		$validators['firstname'] = new sfValidatorString(array('max_length' => 45));
@@ -77,7 +77,9 @@ class YocaUserForm extends BaseYocaUserForm
   				$widgets['employer'] = new sfWidgetFormInputText();
   				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription'));
   				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true, 'expanded' => true));
+  				$widgets['industry'] = new sfWidgetFormInputText();
   				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
+  				$widgets['expectation'] = new sfWidgetFormInputText();
   				$widgets['oh_preference'] = new sfWidgetFormChoice(array(
   						'expanded' => true,
   						'choices' => sfConfig::get('app_profile_oh_preference')
@@ -93,7 +95,9 @@ class YocaUserForm extends BaseYocaUserForm
   				$validators['employer'] = new sfValidatorString(array('max_length' => 45));
   				$validators['description'] = new sfValidatorString(array('max_length' => 45));
   				$validators['industry_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true, 'expanded' => true));
+  				$validators['industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
   				$validators['expectation_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
+  				$validators['expectation'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
   				$validators['oh_preference'] = new sfValidatorChoice(array(
   						'choices' => array_keys(sfConfig::get('app_profile_oh_preference'))
   				));
@@ -105,10 +109,12 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['major'] = 'Other Major';
   				$labels['work'] = '* Work Experience';
   				$labels['employer'] = '* Current/Recent Employer';
-  				$labels['description'] = '* I am a';
-  				$labels['industry_id'] = '* Industries I am interested in';
-  				$labels['expectation_id'] = '* I hope to get information on';
-  				$labels['oh_preference'] = '* I would like YOCA to';
+  				$labels['oh_preference'] = '* Office Hour Preference';
+  				$labels['industry_id'] = '* Industries you are interested in';
+  				$labels['industry'] = 'Other industries if not listed above';
+  				$labels['description'] = '* Which of the following category best describes you?';
+  				$labels['expectation_id'] = '* What do you hope to get out of this program?';
+  				$labels['expectation'] = 'Other expectations if not listed above';
   				break;
   			case 'becomeMentee':
   				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool'));
@@ -125,7 +131,9 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => sfConfig::get('app_profile_oh_preference')
   				));
   				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true, 'expanded' => true));
+  				$widgets['industry'] = new sfWidgetFormInputText();
   				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
+  				$widgets['expectation'] = new sfWidgetFormInputText();
   				
   				$validators['school_id'] = new sfValidatorString(array('max_length' => 45));
   				$validators['school'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
@@ -140,7 +148,9 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array_keys(sfConfig::get('app_profile_oh_preference'))
   				));
   				$validators['industry_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true));
+  				$validators['industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
   				$validators['expectation_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true));
+  				$validators['expectation'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
   				
   				$labels['education'] = '* Education';
   				$labels['school_id'] = '* School';
@@ -151,8 +161,11 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['employer'] = '* Current/Recent Employer';
   				$labels['oh_preference'] = '* Office Hour Preference';
   				$labels['industry_id'] = '* Industries you are interested in';
+  				$labels['industry'] = 'Other industries if not listed above';
   				$labels['description'] = '* Which of the following category best describes you?';
   				$labels['expectation_id'] = '* What do you hope to get out of this program?';
+  				$labels['expectation'] = 'Other expectations if not listed above';
+  				$labels['eula'] = 'Important Instruction: We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.';
   				
   				$widgets['eula'] = new sfWidgetFormInputCheckbox();
   				$validators['eula'] = new sfValidatorString(array('max_length' => 45));
@@ -178,7 +191,7 @@ class YocaUserForm extends BaseYocaUserForm
   				));
   				$validators['employer'] = new sfValidatorString(array('max_length' => 45));
   				$validators['industry_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry'));
-  				$validators['industry'] = new sfValidatorString(array('max_length' => 45));
+  				$validators['industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
   				$validators['school'] = new sfValidatorString(array('max_length' => 45));
   				$validators['age'] = new sfValidatorChoice(array(
   						'choices' => array_keys(sfConfig::get('app_profile_age'))
@@ -190,11 +203,11 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['school'] = '* School';
   				$labels['work'] = '* Work Experience';
   				$labels['employer'] = '* Current/Recent Employer';
-  				$labels['industry_id'] = "* Industry I Work In";
-  				$labels['industry'] = "Other Industry";
+  				$labels['industry_id'] = "* Industry I work in";
+  				$labels['industry'] = "Other industry if not listed above";
   				$labels['age'] = "* Age Group";
   				$labels['neighborhood'] = "* Neighborhood";
-  				$labels['organization'] = "Other Organizations I Belong To";
+  				$labels['organization'] = "Other organizations I belong to";
   				break;
   			case 'Admin':
   				break;
