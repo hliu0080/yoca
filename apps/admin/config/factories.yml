@@ -20,7 +20,12 @@ dev:
   mailer:
     param:
       delivery_strategy: single_address
-      delivery_address:  dev@yocausa.org  
+      delivery_address:  dev@yocausa.org
+      transport:
+        class: Swift_SmtpTransport
+        param:
+          host:     mail.mynuonuo.com
+          port:     25
 
 all:
   routing:
