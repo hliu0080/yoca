@@ -20,28 +20,27 @@ dev:
   mailer:
     param:
       delivery_strategy: single_address
-      delivery_address:  dev@yocausa.org
+      delivery_address:  [EMAIL ADDRESS]
       transport:
         class: Swift_SmtpTransport
         param:
-          host:     mail.mynuonuo.com
-          port:     26
-          username: contact@mynuonuo.com
-          password: 28408109Bb@
+          host:     [MAIL SERVER HOSTNAME]
+          port:     [MAIL SERVER PORT]
+          username: [EMAIL ADDRESS]
+          password: [PASSWORD]
 
 local:
   mailer:
     param:
       delivery_strategy: single_address
-      delivery_address:  dev@yocausa.org
+      delivery_address:  [EMAIL ADDRESS]
       transport:
         class: Swift_SmtpTransport
         param:
-          host:     mail.mynuonuo.com
-          port:     26
-          username: contact@mynuonuo.com
-          password: 28408109Bb@
-
+          host:     [MAIL SERVER HOSTNAME]
+          port:     [MAIL SERVER PORT]
+          username: [EMAIL ADDRESS]
+          password: [PASSWORD]
 all:
   routing:
     class: sfPatternRouting
@@ -58,5 +57,7 @@ all:
       transport:
         class: Swift_SmtpTransport
         param:
-          host:     mail.yocausa.org
-          port:     2525
+          host:     [MAIL SERVER HOSTNAME]
+          port:     [MAIL SERVER PORT]
+          username: [EMAIL ADDRESS]
+          password: [PASSWORD]

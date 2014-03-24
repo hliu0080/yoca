@@ -18,5 +18,5 @@ Options +FollowSymLinks +ExecCGI
   RewriteCond %{REQUEST_FILENAME} !-f
 
   # no, so we redirect to our front web controller
-  RewriteRule ^(.*)$ admin_dev.php [QSA,L]
+  RewriteRule ^(.*)$ admin_local.php [QSA,L]
 </IfModule>

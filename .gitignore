@@ -12,3 +12,4 @@
 
 # Sensative Data
 /config/databases.yml
+/apps/admin/config/factories.yml
