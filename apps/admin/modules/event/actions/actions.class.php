@@ -75,13 +75,13 @@ class eventActions extends sfActions
   
   protected function fetchEvents(){
   	if($this->type == 'pending'){
-  		$status = 0;
+  		$status = array(0);
   		$cond = ">";
   	}elseif($this->type == 'upcoming'){
-  		$status = 1;
+  		$status = array(1, 2);
   		$cond = ">";
   	}elseif($this->type == 'past'){
-  		$status = 0;
+  		$status = array(1, 2);
   		$cond = "<";
   	}else{
   		$this->forward404();
@@ -89,7 +89,7 @@ class eventActions extends sfActions
   	 
   	$query = Doctrine_Core::getTable('Event')
   	->createQuery('a')
-  	->where('status = ?', $status)
+  	->whereIn('status', $status)
   	->andWhere("datetime $cond ?", date('Y-m-d H:i:s'));
   	if($this->keyword){
   		$query->addWhere('industry like ? or mentorid like ? or neighborhood like ? or address like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
