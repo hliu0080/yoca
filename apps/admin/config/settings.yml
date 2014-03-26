@@ -21,6 +21,14 @@ test:
     web_debug:              false
     no_script_name:         false
     etag:                   false
+    
+local:
+  .settings:
+    error_reporting:        <?php echo (E_ALL | E_STRICT)."\n" ?>
+    web_debug:              true
+    cache:                  false
+    no_script_name:         false
+    etag:                   false
 
 all:
   .settings:

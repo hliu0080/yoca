@@ -52,9 +52,9 @@ show_event:
     id: \d+
     page: \d+
 
-set_event_active:
-  url: /event/setActive/:id/:is_active/:type/:page/:keyword
-  param: { module: event, action: setActive, type: upcoming, page: 1, keyword: '' }
+set_event_status:
+  url: /event/setStatus/:id/:status/:type/:page/:keyword
+  param: { module: event, action: setStatus, type: upcoming, page: 1, keyword: '' }
   requirements:
     id: \d+
     is_active: \d+
@@ -84,6 +84,12 @@ set_user_active:
   requirements:
     id: \d+
     is_active: \d+
+    
+register_event:
+  url: /register/register/:eventId/:type/:page/:keyword
+  param: { module: register, action: register, type: upcoming, page: 1, keyword: '' }
+  requirements:
+    eventId: \d+
 
 # default rules
 homepage:

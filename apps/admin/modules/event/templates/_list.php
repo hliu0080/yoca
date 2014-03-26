@@ -36,10 +36,13 @@
 	      	<td><?php echo date("m/d/Y H:i", strtotime($event->getDatetime())) ?></td>
 	      	<td><?php echo $event->getNeighborhood() ?></td>
 	      	<td><?php echo $event->getAddress() ?></td>
+	      	
 	      	<!-- Status -->
 	      	<td>
-	      	<?php if($type == 'upcoming'):?>
-	      		<?php if($event->getStatus() == 1):?>
+	      	<?php if($event->getStatus() == 0):?>
+	      		Pending
+	      	<?php elseif($event->getStatus() == 1):?>
+	      		<?php if($type == 'upcoming'):?>
 	      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
 	      				Registration Closed
 	      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
@@ -47,56 +50,61 @@
 	      			<?php else:?>
 	      				Full
 	      			<?php endif?>
-	      		<?php elseif($event->getStatus() == 2):?>
-	      			Cancelled
+	      		<?php elseif($type == 'past'):?>
+	      			<?php if($sf_user->getAttribute('usertype' == 'Mentee')):?>
+	      				<!-- TODO: -->
+	      				<?php print ("registered && not finished")?"Pending Survey":"Finished"?>
+	      			<?php else:?>
+		      			Closed
+	      			<?php endif?>
 	      		<?php endif?>
-	      	<?php elseif($type == 'past'):?>
-	      		<?php if($event->getStatus() == 2):?>
-	      			Cancelled
-	      		<?php else:?>
-	      			Closed
-	      		<?php endif?>
-	      	<?php elseif($type == 'pending'):?>
-	      		<span class="label label-warning">Pending</span>
+	      	<?php elseif($event->getStatus() == 2):?>
+	      		Cancelled
 	      	<?php endif?>
 	      	</td>
-<!-- 	    status:
-	      		upcoming - full, available, registration closed, cancelled
-	      		past - closed, cancelled
-	      		pending - pending
-	      	actions:
-	      		upcoming
-	      			mentee - notify, register, cancel
-	      			mentor - 
-	      			admin - cancel
-	     		past - 
-	     		pending
-	     			mentor - delete
-	     			admin - confirm, delete  -->
-	      	
+
 	      	<!-- Actions -->
 	      	<td class="toolbar">
 	      		<div class="btn-group">
 		      		<?php print link_to('View', 'show_event', array('id'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
-			      	<?php if($type == 'upcoming'):?>
-			      		<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-			      			<?php if(count(RegistrationTable::getMenteeRegistrations($event->getId(), $sf_user->getAttribute('userid'))) > 0):?>
-					      		<?php print link_to('Cancel', 'register/cancel?eventId='.$event->getId())?>
-					      	<?php elseif($event->getCapacity()>$event->getBooked()):?>
-					      		<?php print link_to('Register', 'register/register?eventId='.$event->getId())?>
-					      	<?php else:?>
-					      		<?php print link_to('Notify me when available', 'register/notify?eventId='.$event->getId())?>
-					      	<?php endif?>
+			      	<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
+			      		<?php if($type == 'upcoming'):?>
+				      		<?php if($event->getStatus() == 1):?>
+				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
+				      				<?php $reg = RegistrationTable::getMenteeRegistrations($event->getId(), $sf_user->getAttribute('userid'), 1)?>
+					      			<?php if(count($reg) > 0):?>
+					      				Cancel
+					      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
+					      				<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
+					      			<?php elseif($event->getCapacity() <= $event->getBooked()):?>
+					      				Notify Me When Available
+					      			<?php endif?>
+					      		<?php endif?>
+				      		<?php endif?>
+			      		<?php elseif($type == 'past'):?>
+			      			<?php if($event->getStatus() == 1):?>
+			      				<?php if(count($reg) > 0 && "pending survey"):?>
+			      					Survey
+			      				<?php endif?>
+			      			<?php endif?>
 			      		<?php endif?>
-			      	<?php elseif($type == 'past'):?>
-			      		<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-			      			Survey
-			      		<?php endif?>
-			      	<?php elseif($type == 'pending'):?>
-			      		<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
-			      			<?php print link_to('Confirm', 'set_event_active', array('id'=>$event->getId(), 'is_active'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+			      	<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
+			      	
+			      	<?php elseif($sf_user->getAttribute('usertype') == 'Admin'):?>
+			      		<?php if($type == 'pending'):?>
+			      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
+			      				<?php print link_to('Confirm', 'set_event_status', array('id'=>$event->getId(), 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+			      			<?php endif?>
+			      			<?php print link_to('Delete', 'set_event_status', array('id'=>$event->getId(), 'status'=>3, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+			      		<?php elseif($type == 'upcoming'):?>
+			      			<?php if($event->getStatus() == 1):?>
+			      				<?php print link_to('Cancel', 'set_event_status', array('id'=>$event->getId(), 'status'=>2, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+							<?php endif?>
 			      		<?php endif?>
 			      	<?php endif?>
+			      	
+			      	
+
 		      	</div>
 	      	</td>
 	    </tr>

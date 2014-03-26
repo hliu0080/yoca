@@ -101,20 +101,20 @@ class eventActions extends sfActions
   	$this->events = $query->limit(sfConfig::get('app_records_num'))->offset($this->start)->execute();
   }
   
-  public function executeSetActive(sfWebRequest $request){
+  public function executeSetStatus(sfWebRequest $request){
   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
   	
-  	$is_active = $request->getParameter('is_active');
-  	$this->forward404If(is_null($is_active));
+  	$status = $request->getParameter('status');
+  	$this->forward404If(is_null($status));
   	
   	$this->event = Doctrine_Core::getTable('Event')->find(array($request->getParameter('id')));
   	$mentor = Doctrine_Core::getTable('YocaUser')->findOneBy('id', $this->event->get('mentorid'));
   	$this->forward404Unless($mentor);
   	 
-  	$this->event->set('status', $is_active);
+  	$this->event->set('status', $status);
   	$this->event->save();
   	
-  	if($is_active){
+  	if($status){
 	  	//Send confirmation email to mentor
 	  	$body = "Event confirmed for Event ID {$request->getParameter('id')}";
 	  	$mailer = sfContext::getInstance()->getMailer();

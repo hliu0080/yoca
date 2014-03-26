@@ -17,10 +17,11 @@ class RegistrationTable extends Doctrine_Table
         return Doctrine_Core::getTable('Registration');
     }
     
-	public static function getMenteeRegistrations($eventId, $menteeId){
+	public static function getMenteeRegistrations($eventId, $menteeId, $status){
 		return self::getInstance()
 		->createQuery()
-		->where('mentee_id = ? and event_id = ?', array($menteeId, $eventId))
+		->where('mentee_id = ? and event_id = ? and status = ?', array($menteeId, $eventId, $status))
+		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
 		->execute();
 	} 
 }

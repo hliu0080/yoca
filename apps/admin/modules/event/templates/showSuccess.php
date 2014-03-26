@@ -7,7 +7,7 @@
 
 	<div class="content">
 		<div class="page-header">
-			<h1>View Event</h1>
+			<h1><?php print ucfirst($type)?> Event</h1>
 		</div>
 		<div class="page-container">
 			<div class="row">
@@ -62,7 +62,15 @@
 			      <th>Status</th>
 			      <!-- TODO: -->
 			      <!-- 0 - pending, 1 - confirmed, 2 - cancelled, 3 - deleted -->
-			      <td><?php echo $event->getStatus()?'Confirmed':'<span class="label label-warning">Pending</span>' ?></td>
+			      <td>
+			      	<?php if($event->getStatus() == 0):?>
+			      		Pending
+			      	<?php elseif($event->getStatus() == 1):?>
+			      		<?php print $type=='past'?'Closed':'Confirmed'?>
+			      	<?php elseif($event->getStatus() == 2):?>
+			      		Cancelled
+			      	<?php endif?>
+			      </td>
 			    </tr>
 			  </tbody>
 			</table>
@@ -77,20 +85,23 @@
 				</div>
 				<div class="span6">
 					<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
-						<?php if($event->getStatus() == 0):?>	
-							<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-success btn-wuxia'>Edit</a>
-						<?php elseif($event->getStatus() == 1):?>
-							<a href="" class='btn btn-danger btn-wuxia'>Cancel</a>
-						<?php endif?>
-						
+						<?php if($type == 'pending'):?>
+							<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-wuxia'>Edit</a>
+			      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
+			      				<a href="<?php echo url_for('event/confirm?id='.$event->getId())?>" class='btn btn-wuxia'>Confirm</a>
+			      			<?php endif?>
+			      			<?php echo link_to('Delete', 'event/delete?id='.$event->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      		<?php elseif($type == 'upcoming'):?>
+			      			<?php if($event->getStatus() == 1):?>
+			      				<?php echo link_to('Cancel', 'event/cancel?id='.$event->getId(), array('method' => 'cancel', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      			<?php endif?>
+			      		<?php elseif($type == 'past'):?>
+			      		
+			      		<?php endif?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
 					
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
 					
-					<?php endif?>
-					
-					<?php if($event->getStatus()==0):?>
-						<?php echo link_to('Delete', 'event/delete?id='.$event->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class'=>'btn btn-danger btn-wuxia')) ?>
 					<?php endif?>
 				</div>
 			</div>

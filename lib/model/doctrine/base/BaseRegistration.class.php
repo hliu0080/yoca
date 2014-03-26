@@ -11,21 +11,27 @@ Doctrine_Manager::getInstance()->bindComponent('Registration', 'doctrine');
  * @property integer $event_id
  * @property integer $mentee_id
  * @property integer $status
+ * @property timestamp $create_at
+ * @property timestamp $updated_at
  * @property Event $Event
  * @property YocaUser $YocaUser
  * 
- * @method integer      getId()        Returns the current record's "id" value
- * @method integer      getEventId()   Returns the current record's "event_id" value
- * @method integer      getMenteeId()  Returns the current record's "mentee_id" value
- * @method integer      getStatus()    Returns the current record's "status" value
- * @method Event        getEvent()     Returns the current record's "Event" value
- * @method YocaUser     getYocaUser()  Returns the current record's "YocaUser" value
- * @method Registration setId()        Sets the current record's "id" value
- * @method Registration setEventId()   Sets the current record's "event_id" value
- * @method Registration setMenteeId()  Sets the current record's "mentee_id" value
- * @method Registration setStatus()    Sets the current record's "status" value
- * @method Registration setEvent()     Sets the current record's "Event" value
- * @method Registration setYocaUser()  Sets the current record's "YocaUser" value
+ * @method integer      getId()         Returns the current record's "id" value
+ * @method integer      getEventId()    Returns the current record's "event_id" value
+ * @method integer      getMenteeId()   Returns the current record's "mentee_id" value
+ * @method integer      getStatus()     Returns the current record's "status" value
+ * @method timestamp    getCreateAt()   Returns the current record's "create_at" value
+ * @method timestamp    getUpdatedAt()  Returns the current record's "updated_at" value
+ * @method Event        getEvent()      Returns the current record's "Event" value
+ * @method YocaUser     getYocaUser()   Returns the current record's "YocaUser" value
+ * @method Registration setId()         Sets the current record's "id" value
+ * @method Registration setEventId()    Sets the current record's "event_id" value
+ * @method Registration setMenteeId()   Sets the current record's "mentee_id" value
+ * @method Registration setStatus()     Sets the current record's "status" value
+ * @method Registration setCreateAt()   Sets the current record's "create_at" value
+ * @method Registration setUpdatedAt()  Sets the current record's "updated_at" value
+ * @method Registration setEvent()      Sets the current record's "Event" value
+ * @method Registration setYocaUser()   Sets the current record's "YocaUser" value
  * 
  * @package    yoca
  * @subpackage model
@@ -71,6 +77,24 @@ abstract class BaseRegistration extends sfDoctrineRecord
              'notnull' => false,
              'autoincrement' => false,
              'length' => 4,
+             ));
+        $this->hasColumn('create_at', 'timestamp', 25, array(
+             'type' => 'timestamp',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             'length' => 25,
+             ));
+        $this->hasColumn('updated_at', 'timestamp', 25, array(
+             'type' => 'timestamp',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             'length' => 25,
              ));
     }
 

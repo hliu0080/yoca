@@ -15,17 +15,21 @@ abstract class BaseRegistrationForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'        => new sfWidgetFormInputHidden(),
-      'event_id'  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Event'), 'add_empty' => true)),
-      'mentee_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'add_empty' => true)),
-      'status'    => new sfWidgetFormInputText(),
+      'id'         => new sfWidgetFormInputHidden(),
+      'event_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Event'), 'add_empty' => true)),
+      'mentee_id'  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'add_empty' => true)),
+      'status'     => new sfWidgetFormInputText(),
+      'create_at'  => new sfWidgetFormDateTime(),
+      'updated_at' => new sfWidgetFormDateTime(),
     ));
 
     $this->setValidators(array(
-      'id'        => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'event_id'  => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Event'), 'required' => false)),
-      'mentee_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'required' => false)),
-      'status'    => new sfValidatorInteger(array('required' => false)),
+      'id'         => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
+      'event_id'   => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Event'), 'required' => false)),
+      'mentee_id'  => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'required' => false)),
+      'status'     => new sfValidatorInteger(array('required' => false)),
+      'create_at'  => new sfValidatorDateTime(array('required' => false)),
+      'updated_at' => new sfValidatorDateTime(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('registration[%s]');
