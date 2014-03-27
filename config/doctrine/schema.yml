@@ -163,7 +163,7 @@ Registration:
       primary: false
       notnull: false
       autoincrement: false
-    create_at:
+    created_at:
       type: timestamp(25)
       fixed: false
       unsigned: false

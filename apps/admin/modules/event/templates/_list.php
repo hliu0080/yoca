@@ -71,7 +71,7 @@
 			      		<?php if($type == 'upcoming'):?>
 				      		<?php if($event->getStatus() == 1):?>
 				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
-				      				<?php $reg = RegistrationTable::getMenteeRegistrations($event->getId(), $sf_user->getAttribute('userid'), 1)?>
+				      				<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 					      			<?php if(count($reg) > 0):?>
 					      				Cancel
 					      			<?php elseif($event->getCapacity() > $event->getBooked()):?>

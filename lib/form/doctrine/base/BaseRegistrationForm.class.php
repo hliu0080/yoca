@@ -19,7 +19,7 @@ abstract class BaseRegistrationForm extends BaseFormDoctrine
       'event_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Event'), 'add_empty' => true)),
       'mentee_id'  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'add_empty' => true)),
       'status'     => new sfWidgetFormInputText(),
-      'create_at'  => new sfWidgetFormDateTime(),
+      'created_at' => new sfWidgetFormDateTime(),
       'updated_at' => new sfWidgetFormDateTime(),
     ));
 
@@ -28,7 +28,7 @@ abstract class BaseRegistrationForm extends BaseFormDoctrine
       'event_id'   => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Event'), 'required' => false)),
       'mentee_id'  => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'required' => false)),
       'status'     => new sfValidatorInteger(array('required' => false)),
-      'create_at'  => new sfValidatorDateTime(array('required' => false)),
+      'created_at' => new sfValidatorDateTime(array('required' => false)),
       'updated_at' => new sfValidatorDateTime(array('required' => false)),
     ));
 

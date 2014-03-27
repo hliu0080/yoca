@@ -17,11 +17,25 @@ class RegistrationTable extends Doctrine_Table
         return Doctrine_Core::getTable('Registration');
     }
     
-	public static function getMenteeRegistrations($eventId, $menteeId, $status){
-		return self::getInstance()
-		->createQuery()
-		->where('mentee_id = ? and event_id = ? and status = ?', array($menteeId, $eventId, $status))
+	public function getMenteeRegs($eventId, $menteeId, $status){
+		return $this->createQuery('r')
+		->where('r.mentee_id = ? and r.event_id = ? and r.status = ?', array($menteeId, $eventId, $status))
 		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
 		->execute();
 	} 
+	
+	public function getRegsByIdAndStatus($eventId, $status){
+		return $this->createQuery('r')
+		->where('r.event_id = ? and r.status = ?', array($eventId, $status))
+		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
+		->execute();
+	}
+	
+	public function setRegStatus($eventIdArray, $status){
+		$this->createQuery('r')
+		->update()
+		->set('r.status', $status)
+		->whereIn('r.id', $eventIdArray)
+		->execute();
+	}
 }

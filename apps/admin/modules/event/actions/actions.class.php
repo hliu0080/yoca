@@ -101,26 +101,68 @@ class eventActions extends sfActions
   	$this->events = $query->limit(sfConfig::get('app_records_num'))->offset($this->start)->execute();
   }
   
+  /**
+   * Cancel($status - 2), delete($status - 3) or confirm($status - 1) event
+   * @param sfWebRequest $request
+   */
   public function executeSetStatus(sfWebRequest $request){
   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
   	
   	$status = $request->getParameter('status');
-  	$this->forward404If(is_null($status));
+  	$id = $request->getParameter('id');
+  	$this->forward404If(is_null($status) || is_null($id));
   	
-  	$this->event = Doctrine_Core::getTable('Event')->find(array($request->getParameter('id')));
+  	$this->event = Doctrine_Core::getTable('Event')->find(array($id));
   	$mentor = Doctrine_Core::getTable('YocaUser')->findOneBy('id', $this->event->get('mentorid'));
   	$this->forward404Unless($mentor);
   	 
-  	$this->event->set('status', $status);
-  	$this->event->save();
-  	
-  	if($status){
+  	//Confirm event
+  	if($status == 1){
 	  	//Send confirmation email to mentor
-	  	$body = "Event confirmed for Event ID {$request->getParameter('id')}";
+	  	$body = "Event confirmed for Event ID $id";
 	  	$mailer = sfContext::getInstance()->getMailer();
 	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Confirmed', $body);
   	}
+  	
+  	//Cancel event
+  	if($status == 2){
+  		//Get all registrations for this event
+  		$regs = Doctrine_Core::getTable('Registration')->getRegsByIdAndStatus($id, 1);
+  		
+  		$eventIdArray = $usernameArray = array();
+  		foreach($regs as $reg){
+  			$eventIdArray[] = $reg['id'];
 
+	  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg['mentee_id']);
+	  		$usernameArray[] = $username;
+  		}
+  		
+  		//Send email to registered mentees, and mentor
+  		$body = "Event cancelled for Event ID $id";
+  		$mailer = sfContext::getInstance()->getMailer();
+  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $usernameArray, 'Event Cancelled', $body);
+		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Cancelled', $body);
+
+  		//Set registration status to 3 - cancelled by system
+  		Doctrine_Core::getTable('Registration')->setRegStatus($eventIdArray, 3);
+  		
+  		//TODO: set mentee register counter - 1
+  		
+  		//TODO: remove event notify record
+  	}
+  	
+  	//Delete event
+  	if($status == 3){
+  		//Send cancellation email to mentor
+  		$body = "Event cancelled for Event ID $id";
+  		$mailer = sfContext::getInstance()->getMailer();
+  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Cancelled', $body);
+  	}
+
+  	$this->event->set('status', $status);
+  	$this->event->save();
+  	
+  	//TODO: add redirect to showSuccess
   	$type = $request->getParameter('type');
   	$page = $request->getParameter('page');
   	$keyword = $request->getParameter('keyword');

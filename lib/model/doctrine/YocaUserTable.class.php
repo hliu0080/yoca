@@ -16,4 +16,9 @@ class YocaUserTable extends Doctrine_Table
     {
         return Doctrine_Core::getTable('YocaUser');
     }
+    
+    public function getUsernameById($id){
+    	$user = $this->findOneBy('id', $id, Doctrine::HYDRATE_ARRAY_SHALLOW);
+    	return $user['username'];
+    }
 }
