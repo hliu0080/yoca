@@ -95,11 +95,15 @@
 			      			<?php if($event->getStatus() == 1):?>
 			      				<?php echo link_to('Cancel', 'event/cancel?id='.$event->getId(), array('method' => 'cancel', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
 			      			<?php endif?>
-			      		<?php elseif($type == 'past'):?>
-			      		
 			      		<?php endif?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
-					
+						<?php if($type == 'upcoming'):?>
+							<?php echo link_to('Register', 'register/register?id='.$event->getId(), array('method' => 'register', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+						<?php elseif($type == 'past'):?>
+						
+						<?php endif?>
+						
+						
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
 					
 					<?php endif?>
