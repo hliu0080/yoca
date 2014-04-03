@@ -26,4 +26,28 @@ class EventNotifyTable extends Doctrine_Table
     	
     	return $notify>0? true:false;
     }
+    
+    public function getNotify($eventId, $status){
+    	return $this->createQuery('n')
+    	->where('n.event_id = ? and n.status = ?', array($eventId, $status))
+    	->execute();
+    }
+    
+    /**
+     * Send emails to singedup users and mark status as 'notified'
+     */
+    public function notify($eventId){
+    	$mentees = $this->getNotify($eventId, 'signedup');
+    	
+    	$menteeUsernames = array();
+    	foreach($mentees as $mentee){
+    		$menteeUsernames[] = $mentee->getMenteeUsername();
+    		$mentee->setStatus('notified');
+    		$mentee->save();
+    	}
+    	
+    	$mailer = sfContext::getInstance()->getMailer();
+    	$body = "Event $eventId just becomes available again. Please register.";
+    	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $menteeUsernames, "Event $eventId is available now!", $body);
+    }
 }

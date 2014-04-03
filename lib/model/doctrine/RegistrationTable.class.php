@@ -24,18 +24,18 @@ class RegistrationTable extends Doctrine_Table
 		->execute();
 	} 
 	
-	public function getRegsByIdAndStatus($eventId, $status){
+	public function getRegsForEvent($eventId, $status){
 		return $this->createQuery('r')
 		->where('r.event_id = ? and r.status = ?', array($eventId, $status))
 		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
 		->execute();
 	}
 	
-	public function setRegStatus($eventIdArray, $status){
+	public function setRegStatus($regIdArray, $status){
 		$this->createQuery('r')
 		->update()
 		->set('r.status', $status)
-		->whereIn('r.id', $eventIdArray)
+		->whereIn('r.id', $regIdArray)
 		->execute();
 	}
 }

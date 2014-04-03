@@ -127,11 +127,11 @@ class eventActions extends sfActions
   	//Cancel event
   	if($status == 2){
   		//Get all registrations for this event
-  		$regs = Doctrine_Core::getTable('Registration')->getRegsByIdAndStatus($id, 1);
+  		$regs = Doctrine_Core::getTable('Registration')->getRegsForEvent($id, 1);
   		
-  		$eventIdArray = $usernameArray = array();
+  		$regIdArray = $usernameArray = array();
   		foreach($regs as $reg){
-  			$eventIdArray[] = $reg['id'];
+  			$regIdArray[] = $reg['id'];
 
 	  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg['mentee_id']);
 	  		$usernameArray[] = $username;
@@ -144,7 +144,7 @@ class eventActions extends sfActions
 		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Cancelled', $body);
 
   		//Set registration status to 3 - cancelled by system
-  		Doctrine_Core::getTable('Registration')->setRegStatus($eventIdArray, 3);
+  		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
   		
   		//TODO: set mentee register counter - 1
   		

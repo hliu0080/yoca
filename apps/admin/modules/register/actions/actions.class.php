@@ -53,9 +53,58 @@ class registerActions extends sfActions
 	  	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
 	}
 	
-	
+	/**
+	 * Cancel registration
+	 * @param sfWebRequest $request
+	 */
   public function executeCancel(sfWebRequest $request){
-  	
+  		$eventId = $request->getParameter('eventId');
+  		$type = $request->getParameter('type');
+  		$page = $request->getParameter('page');
+  		$keyword = $request->getParameter('keyword');
+  		
+  		//mark booked to booked-1 for event
+  		$event = Doctrine_Core::getTable('Event')->find($eventId);
+  		
+  		if($event){
+			$event->setBooked($event->getBooked()-1);
+			$event->save();
+			
+	  		//get regId from eventId and userid, mark registration status to 2
+	  		$reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($eventId, $this->getUser()->getAttribute('userid'), 1);
+	  		$regIdArray = array();
+	  		foreach($reg as $r){
+	  			$regIdArray[] = $r['id'];
+	   		}
+	  		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 2);
+	  		
+	  		//send comfirmation emails to mentee and mentor
+	  		$mailer = sfContext::getInstance()->getMailer();
+	  		$mentee = Doctrine_Core::getTable('YocaUser')->find($reg[0]['mentee_id']);
+	  		$body = "Event ID: $eventId\n";
+	  		$body .= "Username: {$mentee->getUsername()}\n";
+	  		$body .= "Event Detail: {$event->getIndustry()}, {$event->getMentorId()}, {$event->getCapacity()}, {$event->getBooked()}, {$event->getDatetime()}, {$event->getNeighborhood()}, {$event->getAddress()}\n";
+	  		$mailer = sfContext::getInstance()->getMailer();
+	  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentee->getUsername(), "Office Hour Registration Cancelled", $body);
+	  		
+			$mentor = Doctrine_Core::getTable('YocaUser')->find($event->getMentorId());
+	  		$body = "Event ID: $eventId\n";
+	  		$body .= "Username: {$mentor->getUsername()}\n";
+	  		$body .= "Event Detail: {$event->getIndustry()}, {$event->getMentorId()}, {$event->getCapacity()}, {$event->getBooked()}, {$event->getDatetime()}, {$event->getNeighborhood()}, {$event->getAddress()}\n";
+	  		$body .= "Mentee Detail: {$mentee->getFirstName()} {$mentee->getLastName()}, {$mentee->getEducation()}, {$mentee->getSchool()}, {$mentee->getMajor()}, {$mentee->getWork()}, {$mentee->getEmployer()}, {$mentee->getExpectation()}\n";
+	  		$mailer = sfContext::getInstance()->getMailer();
+	  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), "Mentee cancelled your upcoming office hour", $body);
+	  		
+	  		//notify signedup users
+	  		Doctrine_Core::getTable('EventNotify')->notify($eventId);
+	  		
+  		}else{
+  			//TODO: error handling - event not found 
+  		}
+  		
+  		$this->getUser()->setFlash('cancel', 'Cancel successful.');
+  		$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
+  		
   }
 	
 	

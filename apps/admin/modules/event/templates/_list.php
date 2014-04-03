@@ -1,6 +1,7 @@
 <div class="pull-left">
 	<?php print $sf_user->hasFlash('notify')?$sf_user->getFlash('notify'):''?>
 	<?php print $sf_user->hasFlash('register')?$sf_user->getFlash('register'):''?>
+	<?php print $sf_user->hasFlash('cancel')?$sf_user->getFlash('cancel'):''?>
 </div>
 
 
