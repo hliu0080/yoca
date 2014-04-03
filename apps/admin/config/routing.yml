@@ -38,6 +38,10 @@ manage_events:
   param: { module: event, action: list, type: upcoming, page: 1, keyword: '' }
   requirements:
     method: [get]
+    
+signup_event_notify:
+  url: /event/signUpNotify/:eventId/:type/:page/:keyword    
+  param: { module: event, action: signUpNotify, type: upcoming, page: 1, keyword: '' }
 
 search_events:
   url: /event/search
@@ -88,6 +92,12 @@ set_user_active:
 register_event:
   url: /register/register/:eventId/:type/:page/:keyword
   param: { module: register, action: register, type: upcoming, page: 1, keyword: '' }
+  requirements:
+    eventId: \d+
+    
+cancel_register:
+  url: /register/cancel/:eventId/:type/:page/:keyword
+  param: { module: register, action: cancel, type: upcoming, page: 1, keyword: '' }
   requirements:
     eventId: \d+
 

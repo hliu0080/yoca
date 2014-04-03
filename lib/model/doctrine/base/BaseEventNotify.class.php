@@ -10,22 +10,25 @@ Doctrine_Manager::getInstance()->bindComponent('EventNotify', 'doctrine');
  * @property integer $id
  * @property integer $event_id
  * @property integer $mentee_id
- * @property integer $status
+ * @property string $mentee_username
+ * @property string $status
  * @property timestamp $created_at
  * @property timestamp $updated_at
  * 
- * @method integer     getId()         Returns the current record's "id" value
- * @method integer     getEventId()    Returns the current record's "event_id" value
- * @method integer     getMenteeId()   Returns the current record's "mentee_id" value
- * @method integer     getStatus()     Returns the current record's "status" value
- * @method timestamp   getCreatedAt()  Returns the current record's "created_at" value
- * @method timestamp   getUpdatedAt()  Returns the current record's "updated_at" value
- * @method EventNotify setId()         Sets the current record's "id" value
- * @method EventNotify setEventId()    Sets the current record's "event_id" value
- * @method EventNotify setMenteeId()   Sets the current record's "mentee_id" value
- * @method EventNotify setStatus()     Sets the current record's "status" value
- * @method EventNotify setCreatedAt()  Sets the current record's "created_at" value
- * @method EventNotify setUpdatedAt()  Sets the current record's "updated_at" value
+ * @method integer     getId()              Returns the current record's "id" value
+ * @method integer     getEventId()         Returns the current record's "event_id" value
+ * @method integer     getMenteeId()        Returns the current record's "mentee_id" value
+ * @method string      getMenteeUsername()  Returns the current record's "mentee_username" value
+ * @method string      getStatus()          Returns the current record's "status" value
+ * @method timestamp   getCreatedAt()       Returns the current record's "created_at" value
+ * @method timestamp   getUpdatedAt()       Returns the current record's "updated_at" value
+ * @method EventNotify setId()              Sets the current record's "id" value
+ * @method EventNotify setEventId()         Sets the current record's "event_id" value
+ * @method EventNotify setMenteeId()        Sets the current record's "mentee_id" value
+ * @method EventNotify setMenteeUsername()  Sets the current record's "mentee_username" value
+ * @method EventNotify setStatus()          Sets the current record's "status" value
+ * @method EventNotify setCreatedAt()       Sets the current record's "created_at" value
+ * @method EventNotify setUpdatedAt()       Sets the current record's "updated_at" value
  * 
  * @package    yoca
  * @subpackage model
@@ -63,14 +66,23 @@ abstract class BaseEventNotify extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 4,
              ));
-        $this->hasColumn('status', 'integer', 4, array(
-             'type' => 'integer',
+        $this->hasColumn('mentee_username', 'string', 25, array(
+             'type' => 'string',
              'fixed' => 0,
              'unsigned' => false,
              'primary' => false,
              'notnull' => false,
              'autoincrement' => false,
-             'length' => 4,
+             'length' => 25,
+             ));
+        $this->hasColumn('status', 'string', 10, array(
+             'type' => 'string',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             'length' => 10,
              ));
         $this->hasColumn('created_at', 'timestamp', 25, array(
              'type' => 'timestamp',

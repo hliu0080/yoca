@@ -111,8 +111,15 @@ EventNotify:
       primary: false
       notnull: false
       autoincrement: false
+    mentee_username:
+      type: string(25)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
     status:
-      type: integer(4)
+      type: string(10)
       fixed: false
       unsigned: false
       primary: false

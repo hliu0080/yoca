@@ -16,4 +16,14 @@ class EventNotifyTable extends Doctrine_Table
     {
         return Doctrine_Core::getTable('EventNotify');
     }
+    
+    public function isSignedUp($eventId, $menteeId, $status){
+    	$notify = $this->createQuery('n')
+    	->select('count(n.id)')
+    	->where('n.event_id = ? and n.mentee_id = ?', array($eventId, $menteeId))
+    	->setHydrationMode(Doctrine::HYDRATE_SINGLE_SCALAR)
+    	->execute();
+    	
+    	return $notify>0? true:false;
+    }
 }

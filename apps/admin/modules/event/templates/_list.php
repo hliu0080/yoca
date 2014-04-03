@@ -1,3 +1,9 @@
+<div class="pull-left">
+	<?php print $sf_user->hasFlash('notify')?$sf_user->getFlash('notify'):''?>
+	<?php print $sf_user->hasFlash('register')?$sf_user->getFlash('register'):''?>
+</div>
+
+
 <div class="pull-right">
 	<form style="background: none !important" action="<?php print url_for('search_events')?>" method="post">
 		<div class="controls">
@@ -8,6 +14,7 @@
 		</div>
 	</form>
 </div>
+
 
 <table class="table table-striped table-bordered" id="<?php print strtolower($type).'_eventtable'?>">
   <thead>
@@ -39,6 +46,7 @@
 	      	
 	      	<!-- Status -->
 	      	<td>
+      					<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 	      	<?php if($event->getStatus() == 0):?>
 	      		Pending
 	      	<?php elseif($event->getStatus() == 1):?>
@@ -47,8 +55,14 @@
 	      				Registration Closed
 	      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
 	      				Available
+      					<?php if(count($reg)>0):?>
+      						/ Registered
+      					<?php endif?>
 	      			<?php else:?>
 	      				Full
+      					<?php if(count($reg)>0):?>
+      						/ Registered
+      					<?php endif?>
 	      			<?php endif?>
 	      		<?php elseif($type == 'past'):?>
 	      			<?php if($sf_user->getAttribute('usertype' == 'Mentee')):?>
@@ -71,13 +85,12 @@
 			      		<?php if($type == 'upcoming'):?>
 				      		<?php if($event->getStatus() == 1):?>
 				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
-				      				<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 					      			<?php if(count($reg) > 0):?>
-					      				Cancel
+					      				<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 					      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
-					      				<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
+					      				<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 					      			<?php elseif($event->getCapacity() <= $event->getBooked()):?>
-					      				Notify Me When Available
+					      				<?php print link_to('Notify Me When Available', 'signup_event_notify', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 					      			<?php endif?>
 					      		<?php endif?>
 				      		<?php endif?>

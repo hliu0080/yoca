@@ -11,6 +11,10 @@
 class registerActions extends sfActions
 {
 	public function executeRegister(sfWebRequest $request){
+		$type = $request->getParameter('type');
+	  	$page = $request->getParameter('page');
+	  	$keyword = $request->getParameter('keyword');
+	  	
 		//check if event full
 		$event = Doctrine_Core::getTable('Event')->find($request->getParameter('eventId'));
 		$this->forward404Unless($event && $event->getCapacity()!=$event->getBooked());
@@ -20,6 +24,7 @@ class registerActions extends sfActions
 		$reg->setEventId($request->getParameter('eventId'));
 		$reg->setMenteeId($this->getUser()->getAttribute('userid'));
 		$reg->setStatus(1);
+		$reg->setCreatedAt(date("Y-m-d H:i:s"));
 		$reg->save();
 		
 		$mentee = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
@@ -44,8 +49,14 @@ class registerActions extends sfActions
 		$event->setBooked($event->getBooked()+1);
 		$event->save();
 		
-		$this->redirect('event/list?type=upcoming');
+	  	$this->getUser()->setFlash('register', 'Register successful.');
+	  	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
 	}
+	
+	
+  public function executeCancel(sfWebRequest $request){
+  	
+  }
 	
 	
   public function executeIndex(sfWebRequest $request)

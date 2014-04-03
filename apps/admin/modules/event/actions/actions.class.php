@@ -245,6 +245,30 @@ class eventActions extends sfActions
 
     $this->redirect('@mentor_manage_event');
   }
+  
+  /**
+   * Sign up for event notification
+   * @param sfWebRequest $request
+   */
+  public function executeSignUpNotify(sfWebRequest $request){
+  	$eventId = $request->getParameter('eventId');
+  	$type = $request->getParameter('type');
+  	$page = $request->getParameter('page');
+  	$keyword = $request->getParameter('keyword');
+  	
+  	if(!Doctrine_Core::getTable('EventNotify')->isSignedUp($eventId, $this->getUser()->getAttribute('userid'))){
+	  	$notify = new EventNotify();
+	  	$notify->setEventId($eventId);
+	  	$notify->setMenteeId($this->getUser()->getAttribute('userid'));
+	  	$notify->setMenteeUsername($this->getUser()->getAttribute('username'));
+	  	$notify->setStatus('signedup');
+	  	$notify->setCreatedAt(date("Y-m-d H:i:s"));
+	  	$notify->save();
+  	}
+  	
+  	$this->getUser()->setFlash('notify', 'Sign up successful. We will send an email to ' . $this->getUser()->getAttribute('username') . ' once this event becomes available again.');
+  	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
+  }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
   {
