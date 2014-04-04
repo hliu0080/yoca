@@ -12,7 +12,7 @@
 		<div class="page-container">
 			<div class="row">
 				<div class="span12">
-					<?php print $sf_user->getAttribute('usertype')=='Admin'?link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword)):link_to('Back to list', 'mentor_manage_event')?>
+					<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 				</div>
 			</div>
 		
@@ -63,10 +63,32 @@
 			      <!-- TODO: -->
 			      <!-- 0 - pending, 1 - confirmed, 2 - cancelled, 3 - deleted -->
 			      <td>
+			      	<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 			      	<?php if($event->getStatus() == 0):?>
 			      		Pending
 			      	<?php elseif($event->getStatus() == 1):?>
-			      		<?php print $type=='past'?'Closed':'Confirmed'?>
+			      		<?php if($type == 'upcoming'):?>
+			      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
+			      				Registration Closed
+			      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
+			      				Available
+		      					<?php if(count($reg)>0):?>
+		      						/ Registered
+		      					<?php endif?>
+			      			<?php else:?>
+			      				Full
+		      					<?php if(count($reg)>0):?>
+		      						/ Registered
+		      					<?php endif?>
+			      			<?php endif?>
+			      		<?php elseif($type == 'past'):?>
+			      			<?php if($sf_user->getAttribute('usertype' == 'Mentee')):?>
+			      				<!-- TODO: -->
+			      				<?php print ("registered && not finished")?"Pending Survey":"Finished"?>
+			      			<?php else:?>
+				      			Closed
+			      			<?php endif?>
+			      		<?php endif?>
 			      	<?php elseif($event->getStatus() == 2):?>
 			      		Cancelled
 			      	<?php endif?>
@@ -77,28 +99,33 @@
 
 			<div class="row">
 				<div class="span6">
-					<?php if($sf_user->getAttribute('usertype') != 'Admin'):?>
-						<a href="<?php print url_for('@mentor_manage_event')?>">Back to list</a>
-					<?php else:?>	
-						<?php print $sf_user->getAttribute('usertype')=='Admin'?link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword)):link_to('Back to list', 'mentor_manage_event')?>
-					<?php endif?>
+					<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 				</div>
 				<div class="span6">
 					<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
 						<?php if($type == 'pending'):?>
 							<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-wuxia'>Edit</a>
 			      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
-			      				<a href="<?php echo url_for('event/confirm?id='.$event->getId())?>" class='btn btn-wuxia'>Confirm</a>
+			      				<?php echo link_to('Confirm', 'set_event_status', array('id'=>$event->getId(), 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
 			      			<?php endif?>
-			      			<?php echo link_to('Delete', 'event/delete?id='.$event->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      			<?php echo link_to('Delete', 'set_event_status', array('id'=>$event->getId(), 'status'=>3, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
 			      		<?php elseif($type == 'upcoming'):?>
 			      			<?php if($event->getStatus() == 1):?>
-			      				<?php echo link_to('Cancel', 'event/cancel?id='.$event->getId(), array('method' => 'cancel', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      				<?php echo link_to('Cancel', 'set_event_status', array('id'=>$event->getId(), 'status'=>2, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
 			      			<?php endif?>
 			      		<?php endif?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
 						<?php if($type == 'upcoming'):?>
-							<?php echo link_to('Register', 'register/register?id='.$event->getId(), array('method' => 'register', 'confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+							<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
+							<?php if(strtotime($event->getDatetime())>time()+60*60*24 && $event->getStatus()==1):?>
+					      		<?php if(count($reg) > 0):?>
+					      			<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
+					      		<?php elseif($event->getCapacity() > $event->getBooked()):?>
+					      			<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
+					      		<?php elseif($event->getCapacity() <= $event->getBooked()):?>
+					      			<?php print link_to('Notify Me When Available', 'signup_event_notify', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
+					      		<?php endif?>
+					      	<?php endif?>
 						<?php elseif($type == 'past'):?>
 						
 						<?php endif?>

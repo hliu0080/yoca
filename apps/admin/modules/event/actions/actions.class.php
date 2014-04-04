@@ -146,9 +146,10 @@ class eventActions extends sfActions
   		//Set registration status to 3 - cancelled by system
   		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
   		
-  		//TODO: set mentee register counter - 1
+  		//mark event notify records status to "cancelled"
+  		Doctrine_Core::getTable('EventNotify')->cancel($id);
   		
-  		//TODO: remove event notify record
+  		//TODO: set mentee register counter - 1
   	}
   	
   	//Delete event
@@ -166,6 +167,7 @@ class eventActions extends sfActions
   	$type = $request->getParameter('type');
   	$page = $request->getParameter('page');
   	$keyword = $request->getParameter('keyword');
+  	$this->getUser()->setFlash('cancel', 'Cancel successful.');
   	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
   }
   

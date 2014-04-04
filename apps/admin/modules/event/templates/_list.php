@@ -47,7 +47,7 @@
 	      	
 	      	<!-- Status -->
 	      	<td>
-      					<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
+			<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 	      	<?php if($event->getStatus() == 0):?>
 	      		Pending
 	      	<?php elseif($event->getStatus() == 1):?>

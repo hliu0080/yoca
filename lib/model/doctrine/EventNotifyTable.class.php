@@ -27,27 +27,46 @@ class EventNotifyTable extends Doctrine_Table
     	return $notify>0? true:false;
     }
     
-    public function getNotify($eventId, $status){
+    /**
+     * get notify records by eventId and status
+     * @param unknown $eventId
+     * @param unknown $status
+     * @return Ambigous <Doctrine_Collection, mixed, PDOStatement, Doctrine_Adapter_Statement, Doctrine_Connection_Statement, unknown, number>
+     */
+    public function getNotify($eventId, $statusArray){
     	return $this->createQuery('n')
-    	->where('n.event_id = ? and n.status = ?', array($eventId, $status))
+    	->where('n.event_id = ? and n.status in ?', array($eventId, $statusArray))
     	->execute();
     }
     
-    /**
-     * Send emails to singedup users and mark status as 'notified'
-     */
+	/**
+	 * Send emails to singedup users and mark status as 'notified'
+	 * @param unknown $eventId
+	 */
     public function notify($eventId){
-    	$mentees = $this->getNotify($eventId, 'signedup');
+    	$notifies = $this->getNotify($eventId, array('signedup'));
     	
     	$menteeUsernames = array();
-    	foreach($mentees as $mentee){
-    		$menteeUsernames[] = $mentee->getMenteeUsername();
-    		$mentee->setStatus('notified');
-    		$mentee->save();
+    	foreach($notifies as $notify){
+    		$menteeUsernames[] = $notify->getMenteeUsername();
+    		$notify->setStatus('notified');
+    		$notify->save();
     	}
     	
     	$mailer = sfContext::getInstance()->getMailer();
     	$body = "Event $eventId just becomes available again. Please register.";
     	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $menteeUsernames, "Event $eventId is available now!", $body);
+    }
+    
+    /**
+     * Set notify status to "cancelled" for an event
+     * @param unknown $eventId
+     */
+    public function cancel($id){
+    	$notifies = $this->getNotify($id, array('signedup', 'notified'));
+    	foreach($notifies as $notify){
+    		$notify->setStatus('cancelled');
+    		$notify->save();
+    	}
     }
 }
