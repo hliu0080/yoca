@@ -20,7 +20,7 @@ class EventTable extends Doctrine_Table
     public function findMentorEvents($mentorId){
     	return self::getInstance()->createQuery('e')
 		->leftJoin('e.YocaIndustry i')
-    	->where('e.mentorid = ?', $mentorId)
+    	->where('e.mentorid = ? and e.status <> 3', $mentorId)
     	->execute();
     }
     

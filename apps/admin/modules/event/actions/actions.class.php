@@ -181,7 +181,16 @@ class eventActions extends sfActions
   }
   
   public function executeMenteeMyEvents(sfWebRequest $request){
+  	$this->type = $request->getParameter('type');
+  	$this->keyword = $request->getParameter('keyword');
+  	$this->page = $request->getParameter('page');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_records_num');
+  	
   	$this->events = Doctrine_Core::getTable('Event')->findMenteeEvents($this->getUser()->getAttribute('userid'));
+  	
+  	$this->total = count($this->events);
+  	$this->pages = ceil($this->total / sfConfig::get('app_records_num'));
+  	$this->forward404if($this->total && $this->page>$this->pages);
   	
   	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }

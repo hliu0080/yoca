@@ -72,6 +72,14 @@
 	      			<?php else:?>
 		      			Closed
 	      			<?php endif?>
+	      		<?php elseif($type == 'my'):?>
+	      			<?php if(strtotime($event->getDatetime()) > time()):?>
+	      				Registered
+	      			<?php elseif('registration status pending survey'):?>
+	      				Pending Survey
+	      			<?php else:?>
+						Complete
+	      			<?php endif?>
 	      		<?php endif?>
 	      	<?php elseif($event->getStatus() == 2):?>
 	      		Cancelled

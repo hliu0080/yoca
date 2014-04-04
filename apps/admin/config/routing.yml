@@ -30,8 +30,12 @@ mentorship_program:
   params: { module: event, action: index }
 
 mentor_manage_event:
-  url: /event/mentorMyEvents
-  params: { module: event, action: mentorMyEvents }
+  url: /event/mentorMyEvents/:type/:page/:keyword
+  params: { module: event, action: mentorMyEvents, type: my, page: 1, keyword: '' }
+  
+mentee_manage_event:
+  url: /event/menteeMyEvents/:type/:page/:keyword
+  params: { module: event, action: menteeMyEvents, type: my, page: 1, keyword: '' }
 
 manage_events:
   url: /event/list/:type/:page/:keyword
