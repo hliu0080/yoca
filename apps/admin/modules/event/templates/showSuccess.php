@@ -12,7 +12,13 @@
 		<div class="page-container">
 			<div class="row">
 				<div class="span12">
-					<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
+						<?php print link_to('Back to list', 'mentee_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
+						<?php print link_to('Back to list', 'mentor_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php else:?>
+						<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php endif?>
 				</div>
 			</div>
 		
@@ -99,7 +105,13 @@
 
 			<div class="row">
 				<div class="span6">
-					<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
+						<?php print link_to('Back to list', 'mentee_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
+						<?php print link_to('Back to list', 'mentor_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php else:?>
+						<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+					<?php endif?>
 				</div>
 				<div class="span6">
 					<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
@@ -115,7 +127,7 @@
 			      			<?php endif?>
 			      		<?php endif?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
-						<?php if($type == 'upcoming'):?>
+						<?php if($type == 'upcoming' || $type == 'my'):?>
 							<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 							<?php if(strtotime($event->getDatetime())>time()+60*60*24 && $event->getStatus()==1):?>
 					      		<?php if(count($reg) > 0):?>

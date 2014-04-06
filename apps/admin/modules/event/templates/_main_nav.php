@@ -37,11 +37,11 @@
 											<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
 												<li><a href="<?php print url_for('@manage_events?type=upcoming')?>">Upcoming Events</a></li>
 												<li><a href="<?php print url_for('@manage_events?type=past')?>">Past Events</a></li>
-												<li><a href="<?php print url_for('@mentee_manage_event?type=my')?>">My Events</a></li>
+												<li><a href="<?php print url_for('@mentor_manage_event?type=my')?>">My Events</a></li>
 											<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
 												<li><a href="<?php print url_for('@manage_events?type=upcoming')?>">Upcoming Events</a></li>
 												<li><a href="<?php print url_for('@manage_events?type=past')?>">Past Events</a></li>
-												<li><a href="<?php print url_for('@mentor_manage_event?type=my')?>">My Events</a></li>
+												<li><a href="<?php print url_for('@mentee_manage_event?type=my')?>">My Events</a></li>
 											<?php endif?>
 										</ul>
 									</li>

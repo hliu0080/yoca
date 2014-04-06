@@ -91,7 +91,7 @@
 	      		<div class="btn-group">
 		      		<?php print link_to('View', 'show_event', array('id'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
 			      	<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-			      		<?php if($type == 'upcoming'):?>
+			      		<?php if($type == 'upcoming' || $type == 'my'):?>
 				      		<?php if($event->getStatus() == 1):?>
 				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
 					      			<?php if(count($reg) > 0):?>
