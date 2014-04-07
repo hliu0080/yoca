@@ -11,6 +11,7 @@ class myUser extends sfBasicSecurityUser
 				$this->setAttribute('username', $username);
 				$this->setAttribute('userid', $user->get('id'));
 				$this->setAttribute('usertype', $user->get('type'));
+				$this->setAttribute('userregcounter', count(Doctrine_Core::getTable('Registration')->getMenteeMonthRegs($user->get('id'), 1, 1)));
 			} else{
 				throw new Exception('Invalid password');
 			}	

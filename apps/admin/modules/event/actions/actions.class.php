@@ -41,7 +41,7 @@ class eventActions extends sfActions
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
   	$this->page = $request->getParameter('page');
-  	$this->start = ($this->page - 1) * sfConfig::get('app_records_num');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_const_record_num');
   	
   	$this->fetchEvents();
   	
@@ -95,10 +95,10 @@ class eventActions extends sfActions
   		$query->addWhere('industry like ? or mentorid like ? or neighborhood like ? or address like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
   	}
   	$this->total = $query->count();
-  	$this->pages = ceil($this->total / sfConfig::get('app_records_num'));
+  	$this->pages = ceil($this->total / sfConfig::get('app_const_record_num'));
   	$this->forward404if($this->total && $this->page>$this->pages);
   	 
-  	$this->events = $query->limit(sfConfig::get('app_records_num'))->offset($this->start)->execute();
+  	$this->events = $query->limit(sfConfig::get('app_const_record_num'))->offset($this->start)->execute();
   }
   
   /**
@@ -184,12 +184,12 @@ class eventActions extends sfActions
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
   	$this->page = $request->getParameter('page');
-  	$this->start = ($this->page - 1) * sfConfig::get('app_records_num');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_const_record_num');
   	
   	$this->events = Doctrine_Core::getTable('Event')->findMenteeEvents($this->getUser()->getAttribute('userid'));
   	
   	$this->total = count($this->events);
-  	$this->pages = ceil($this->total / sfConfig::get('app_records_num'));
+  	$this->pages = ceil($this->total / sfConfig::get('app_const_record_num'));
   	$this->forward404if($this->total && $this->page>$this->pages);
   	
   	$this->getUser()->setAttribute('cur_page', 'mentorship_program');

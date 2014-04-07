@@ -40,7 +40,7 @@ class userActions extends sfActions
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
   	$this->page = $request->getParameter('page');
-  	$this->start = ($this->page - 1) * sfConfig::get('app_records_num');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_const_record_num');
   	
   	$this->fetchUsers();
   	
@@ -74,10 +74,10 @@ class userActions extends sfActions
   	}
   	 
   	$this->total = $query->count();
-  	$this->pages = ceil($this->total / sfConfig::get('app_records_num'));
+  	$this->pages = ceil($this->total / sfConfig::get('app_const_record_num'));
   	$this->forward404if($this->total && $this->page>$this->pages);
   	 
-  	$this->users = $query->limit(sfConfig::get('app_records_num'))->offset($this->start)->execute();
+  	$this->users = $query->limit(sfConfig::get('app_const_record_num'))->offset($this->start)->execute();
   }
   
   /**

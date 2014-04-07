@@ -15,6 +15,11 @@ class registerActions extends sfActions
 	  	$page = $request->getParameter('page');
 	  	$keyword = $request->getParameter('keyword');
 	  	
+	  	//check and bump up current userregcounter
+	  	$counter = $this->getUser()->getAttribute('userregcounter');
+	  	$this->forward404If($counter >= sfConfig::get('userregcounter'));
+	  	$this->getUser()->setAttribute('userregcounter', $counter+1);
+	  	
 		//check if event full
 		$event = Doctrine_Core::getTable('Event')->find($request->getParameter('eventId'));
 		$this->forward404Unless($event && $event->getCapacity()!=$event->getBooked());
@@ -63,10 +68,10 @@ class registerActions extends sfActions
   		$page = $request->getParameter('page');
   		$keyword = $request->getParameter('keyword');
   		
-  		//mark booked to booked-1 for event
   		$event = Doctrine_Core::getTable('Event')->find($eventId);
   		
   		if($event){
+	  		//mark booked to booked-1 for event
 			$event->setBooked($event->getBooked()-1);
 			$event->save();
 			
@@ -97,6 +102,11 @@ class registerActions extends sfActions
 	  		
 	  		//notify signedup users
 	  		Doctrine_Core::getTable('EventNotify')->notify($eventId);
+	  		
+	  		//mark current userregcounter to -1
+	  		$counter = $this->getUser()->getAttribute('userregcounter');
+	  		if($counter)
+	  			$this->getUser()->setAttribute('userregcounter', $counter-1);
 	  		
   		}else{
   			//TODO: error handling - event not found 

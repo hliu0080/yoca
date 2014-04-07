@@ -13,9 +13,9 @@
 			<div class="row">
 				<div class="span12">
 					<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-						<?php print link_to('Back to list', 'mentee_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+						<?php print link_to('Back to list', $type=='my'?'mentee_manage_event':'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
-						<?php print link_to('Back to list', 'mentor_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+						<?php print link_to('Back to list', $type=='my'?'mentor_manage_event':'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php else:?>
 						<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php endif?>
@@ -106,9 +106,9 @@
 			<div class="row">
 				<div class="span6">
 					<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-						<?php print link_to('Back to list', 'mentee_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+						<?php print link_to('Back to list', $type=='my'?'mentee_manage_event':'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
-						<?php print link_to('Back to list', 'mentor_manage_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
+						<?php print link_to('Back to list', $type=='my'?'mentor_manage_event':'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php else:?>
 						<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php endif?>
