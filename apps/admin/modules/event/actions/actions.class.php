@@ -122,6 +122,8 @@ class eventActions extends sfActions
 	  	$body = "Event confirmed for Event ID $id";
 	  	$mailer = sfContext::getInstance()->getMailer();
 	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Confirmed', $body);
+	  	
+	  	$this->getUser()->setFlash('confirm', 'Confirm successful.');
   	}
   	
   	//Cancel event
@@ -150,6 +152,8 @@ class eventActions extends sfActions
   		Doctrine_Core::getTable('EventNotify')->cancel($id);
   		
   		//TODO: set mentee register counter - 1
+  		
+  		$this->getUser()->setFlash('cancel', 'Cancel successful.');
   	}
   	
   	//Delete event
@@ -158,6 +162,8 @@ class eventActions extends sfActions
   		$body = "Event cancelled for Event ID $id";
   		$mailer = sfContext::getInstance()->getMailer();
   		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Cancelled', $body);
+  		
+  		$this->getUser()->setFlash('delete', 'Delete successful.');
   	}
 
   	$this->event->set('status', $status);
@@ -167,7 +173,6 @@ class eventActions extends sfActions
   	$type = $request->getParameter('type');
   	$page = $request->getParameter('page');
   	$keyword = $request->getParameter('keyword');
-  	$this->getUser()->setFlash('cancel', 'Cancel successful.');
   	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
   }
   

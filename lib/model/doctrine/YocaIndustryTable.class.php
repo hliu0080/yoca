@@ -16,4 +16,16 @@ class YocaIndustryTable extends Doctrine_Table
     {
         return Doctrine_Core::getTable('YocaIndustry');
     }
+    
+    public function getIndustryForMentee(){
+    	return $this->createQuery('i')
+    	->where("i.type = 'mentee'")
+    	->execute();
+    }
+    
+    public function getIndustryForMentor(){
+    	return $this->createQuery('i')
+    	->where("i.type = 'mentor'")
+    	->execute();
+    }
 }

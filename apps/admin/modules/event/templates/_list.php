@@ -2,6 +2,8 @@
 	<?php print $sf_user->hasFlash('notify')?$sf_user->getFlash('notify'):''?>
 	<?php print $sf_user->hasFlash('register')?$sf_user->getFlash('register'):''?>
 	<?php print $sf_user->hasFlash('cancel')?$sf_user->getFlash('cancel'):''?>
+	<?php print $sf_user->hasFlash('delte')?$sf_user->getFlash('delete'):''?>
+	<?php print $sf_user->hasFlash('confirm')?$sf_user->getFlash('confirm'):''?>
 </div>
 
 
@@ -96,8 +98,10 @@
 				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
 					      			<?php if(count($reg) > 0):?>
 					      				<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
-					      			<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_reg_cap')):?>
+					      			<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_const_reg_cap')):?>
 					      				<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+					      			<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')>=sfConfig::get('app_const_reg_cap')):?>
+					      				<a class='btn btn-small disabled popup' data-content='Sorry, you have reached the max of 2 events per month' disabled>Register</a>
 					      			<?php elseif($event->getCapacity() <= $event->getBooked()):?>
 					      				<?php print link_to('Notify Me When Available', 'signup_event_notify', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 					      			<?php endif?>
@@ -142,3 +146,11 @@
 		<a class="btn btn-small btn-flat <?php print $page+1>$pages?'disabled':''?>" href="<?php print $page+1>$pages?'#':url_for('@manage_events?type='.$type.'&page='.($page+1).'&keyword='.$keyword)?>"><span class="awe-caret-right"></span></a>
 	</div>
 </div>
+
+<script>
+$(document).ready(function(){
+	$('.popup').popover({
+		trigger: 'hover'
+	});
+});
+</script>

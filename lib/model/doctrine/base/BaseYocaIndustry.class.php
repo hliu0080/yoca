@@ -9,13 +9,16 @@ Doctrine_Manager::getInstance()->bindComponent('YocaIndustry', 'doctrine');
  * 
  * @property integer $id
  * @property string $name
+ * @property string $type
  * @property Doctrine_Collection $Event
  * 
  * @method integer             getId()    Returns the current record's "id" value
  * @method string              getName()  Returns the current record's "name" value
+ * @method string              getType()  Returns the current record's "type" value
  * @method Doctrine_Collection getEvent() Returns the current record's "Event" collection
  * @method YocaIndustry        setId()    Sets the current record's "id" value
  * @method YocaIndustry        setName()  Sets the current record's "name" value
+ * @method YocaIndustry        setType()  Sets the current record's "type" value
  * @method YocaIndustry        setEvent() Sets the current record's "Event" collection
  * 
  * @package    yoca
@@ -42,6 +45,15 @@ abstract class BaseYocaIndustry extends sfDoctrineRecord
              'unsigned' => false,
              'primary' => false,
              'notnull' => true,
+             'autoincrement' => false,
+             'length' => 45,
+             ));
+        $this->hasColumn('type', 'string', 45, array(
+             'type' => 'string',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
              'autoincrement' => false,
              'length' => 45,
              ));

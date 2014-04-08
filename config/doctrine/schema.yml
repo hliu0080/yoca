@@ -210,11 +210,35 @@ YocaIndustry:
       primary: false
       notnull: true
       autoincrement: false
+    type:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
   relations:
     Event:
       local: id
       foreign: industry
       type: many
+YocaNeighborhood:
+  connection: doctrine
+  tableName: yoca_neighborhood
+  columns:
+    id:
+      type: integer(4)
+      fixed: false
+      unsigned: false
+      primary: true
+      autoincrement: true
+    name:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
 YocaUser:
   connection: doctrine
   tableName: yoca_user

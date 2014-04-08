@@ -17,12 +17,12 @@ class registerActions extends sfActions
 	  	
 	  	//check and bump up current userregcounter
 	  	$counter = $this->getUser()->getAttribute('userregcounter');
-	  	$this->forward404If($counter >= sfConfig::get('userregcounter'));
+	  	$this->forward404If($counter >= sfConfig::get('app_const_reg_cap'));
 	  	$this->getUser()->setAttribute('userregcounter', $counter+1);
 	  	
 		//check if event full
 		$event = Doctrine_Core::getTable('Event')->find($request->getParameter('eventId'));
-		$this->forward404Unless($event && $event->getCapacity()!=$event->getBooked());
+		$this->forward404Unless($event && $event->getCapacity()>$event->getBooked());
 		
 		//insert registration record
 		$reg = new Registration();

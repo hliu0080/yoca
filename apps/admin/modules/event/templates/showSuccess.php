@@ -73,7 +73,7 @@
 			      	<?php if($event->getStatus() == 0):?>
 			      		Pending
 			      	<?php elseif($event->getStatus() == 1):?>
-			      		<?php if($type == 'upcoming'):?>
+			      		<?php if($type == 'upcoming' || $type == 'my'):?>
 			      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
 			      				Registration Closed
 			      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
@@ -132,8 +132,10 @@
 							<?php if(strtotime($event->getDatetime())>time()+60*60*24 && $event->getStatus()==1):?>
 					      		<?php if(count($reg) > 0):?>
 					      			<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
-					      		<?php elseif($event->getCapacity() > $event->getBooked()):?>
+					      		<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_const_reg_cap')):?>
 					      			<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
+					      		<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')>=sfConfig::get('app_const_reg_cap')):?>
+					      			<a class='btn btn-wuxia disabled popup' data-content='Sorry, you have reached the max of 2 events per month' disabled>Register</a>
 					      		<?php elseif($event->getCapacity() <= $event->getBooked()):?>
 					      			<?php print link_to('Notify Me When Available', 'signup_event_notify', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
 					      		<?php endif?>
@@ -150,5 +152,11 @@
 			</div>
 		</div>
 	</div>
-
 </div>
+<script>
+$(document).ready(function(){
+	$('.popup').popover({
+		trigger: 'hover'
+	});
+});
+</script>

@@ -67,16 +67,16 @@ class YocaUserForm extends BaseYocaUserForm
   		
   		switch($usertype){
   			case 'Mentee':
-  				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool'));
+  				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool', 'add_empty'=>true));
   				$widgets['school'] = new sfWidgetFormInputText();
-  				$widgets['major_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserMajor'));
+  				$widgets['major_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserMajor', 'add_empty'=>true));
   				$widgets['major'] = new sfWidgetFormInputText();
   				$widgets['work'] = new sfWidgetFormChoice(array(
-  						'choices' => sfConfig::get('app_profile_mentee_work_experience')
+  						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentee_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
-  				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription'));
-  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true, 'expanded' => true));
+  				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription', 'add_empty'=>true));
+  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'multiple' => true, 'expanded' => true));
   				$widgets['industry'] = new sfWidgetFormInputText();
   				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
   				$widgets['expectation'] = new sfWidgetFormInputText();
@@ -117,12 +117,12 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['expectation'] = 'Other expectations if not listed above';
   				break;
   			case 'becomeMentee':
-  				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool'));
+  				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool', 'add_empty'=>true));
   				$widgets['school'] = new sfWidgetFormInputText();
-  				$widgets['major_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserMajor'));
+  				$widgets['major_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserMajor', 'add_empty'=>true));
   				$widgets['major'] = new sfWidgetFormInputText();
   				$widgets['work'] = new sfWidgetFormChoice(array(
-  						'choices' => sfConfig::get('app_profile_mentee_work_experience')
+  						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentee_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
   				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription'));
@@ -130,7 +130,7 @@ class YocaUserForm extends BaseYocaUserForm
   						'expanded' => true,
   						'choices' => sfConfig::get('app_profile_oh_preference')
   				));
-  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true, 'expanded' => true));
+  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'multiple' => true, 'expanded' => true));
   				$widgets['industry'] = new sfWidgetFormInputText();
   				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
   				$widgets['expectation'] = new sfWidgetFormInputText();
@@ -174,15 +174,15 @@ class YocaUserForm extends BaseYocaUserForm
   			case 'becomeMentor':
   				$widgets['school'] = new sfWidgetFormInputText();
   				$widgets['work'] = new sfWidgetFormChoice(array(
-  						'choices' => sfConfig::get('app_profile_mentor_work_experience')
+  						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentor_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
-  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry'));
+  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentor', 'add_empty'=>true));
   				$widgets['industry'] = new sfWidgetFormInputText();
   				$widgets['age'] = new sfWidgetFormChoice(array(
-  						'choices' => sfConfig::get('app_profile_age')
+  						'choices' => array('' => "Choose Age Group") + sfConfig::get('app_profile_age')
   				));
-  				$widgets['neighborhood'] = new sfWidgetFormInputText();
+  				$widgets['neighborhood'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaNeighborhood', 'add_empty'=>true));
   				$widgets['organization'] = new sfWidgetFormInputText();
   				
   				$validators['school'] = new sfValidatorString(array('max_length' => 45));
@@ -196,7 +196,7 @@ class YocaUserForm extends BaseYocaUserForm
   				$validators['age'] = new sfValidatorChoice(array(
   						'choices' => array_keys(sfConfig::get('app_profile_age'))
   				));
-  				$validators['neighborhood'] = new sfValidatorString(array('max_length' => 45));
+  				$validators['neighborhood'] = new sfValidatorDoctrineChoice(array('model' => 'YocaNeighborhood'));
   				$validators['organization'] = new sfValidatorString(array('max_length' => 255, 'required' => false));
   				
   				$labels['education'] = '* Education';
@@ -206,8 +206,8 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['industry_id'] = "* Industry I work in";
   				$labels['industry'] = "Other industry if not listed above";
   				$labels['age'] = "* Age Group";
-  				$labels['neighborhood'] = "* Neighborhood";
-  				$labels['organization'] = "Other organizations I belong to";
+  				$labels['neighborhood'] = "* Neighborhood where you'll be hosting your office hours";
+  				$labels['organization'] = "Other organizations you belong to";
   				break;
   			case 'Admin':
   				break;
