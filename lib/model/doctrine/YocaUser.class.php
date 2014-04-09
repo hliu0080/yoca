@@ -16,6 +16,13 @@ class YocaUser extends BaseYocaUser
 		if ($this->isNew())
 		{
 			$passHash = sfContext::getInstance()->getUser()->generateHash($this->getPassword());
+			
+			//TODO: check if username already exist
+			$is_exist = Doctrine_Core::getTable('YocaUser')->findBy('username', $this->getUsername());
+			if($is_exist){
+				return "User already exist";
+			}
+			
 			$this->setPassword($passHash);
 			$this->setCreatedAt(date("H-m-d H:i:s"));
 			$this->setUpdatedAt(date("H-m-d H:i:s"));

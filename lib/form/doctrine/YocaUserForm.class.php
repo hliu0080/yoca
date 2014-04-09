@@ -64,59 +64,10 @@ class YocaUserForm extends BaseYocaUserForm
   		$labels['firstname'] = '* First Name';
   		$labels['lastname'] = '* Last Name';
   		$labels['english_name'] = 'English Name';
+  		$labels['education'] = '* Education';
   		
   		switch($usertype){
   			case 'Mentee':
-  				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool', 'add_empty'=>true));
-  				$widgets['school'] = new sfWidgetFormInputText();
-  				$widgets['major_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserMajor', 'add_empty'=>true));
-  				$widgets['major'] = new sfWidgetFormInputText();
-  				$widgets['work'] = new sfWidgetFormChoice(array(
-  						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentee_work_experience')
-  				));
-  				$widgets['employer'] = new sfWidgetFormInputText();
-  				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription', 'add_empty'=>true));
-  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'renderer_options'=>array('formatter'=>array($this, 'CheckboxChoiceFormatter')), 'multiple' => true, 'expanded' => true));
-  				$widgets['industry'] = new sfWidgetFormInputText();
-  				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'renderer_options'=>array('formatter'=>array($this, 'CheckboxChoiceFormatter')), 'multiple' => true, 'expanded' => true));
-  				$widgets['expectation'] = new sfWidgetFormInputText();
-  				$widgets['oh_preference'] = new sfWidgetFormChoice(array(
-  						'expanded' => true,
-  						'renderer_options'=>array('formatter'=>array($this, 'RadioChoiceFormatter')),
-  						'choices' => sfConfig::get('app_profile_oh_preference')
-  				));
-  				
-  				$validators['school_id'] = new sfValidatorString(array('max_length' => 45));
-  				$validators['school'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
-  				$validators['major_id'] = new sfValidatorString(array('max_length' => 45));
-  				$validators['major'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
-  				$validators['work'] = new sfValidatorChoice(array(
-  						'choices' => array_keys(sfConfig::get('app_profile_mentee_work_experience'))
-  				));
-  				$validators['employer'] = new sfValidatorString(array('max_length' => 45));
-  				$validators['description'] = new sfValidatorString(array('max_length' => 45));
-  				$validators['industry_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry', 'multiple' => true, 'expanded' => true));
-  				$validators['industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
-  				$validators['expectation_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
-  				$validators['expectation'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
-  				$validators['oh_preference'] = new sfValidatorChoice(array(
-  						'choices' => array_keys(sfConfig::get('app_profile_oh_preference'))
-  				));
-  				
-  				$labels['education'] = '* Education';
-  				$labels['school_id'] = '* School';
-  				$labels['school'] = 'Other School';
-  				$labels['major_id'] = '* Major';
-  				$labels['major'] = 'Other Major';
-  				$labels['work'] = '* Work Experience';
-  				$labels['employer'] = '* Current/Recent Employer';
-  				$labels['oh_preference'] = '* Office Hour Preference';
-  				$labels['industry_id'] = '* Industries you are interested in';
-  				$labels['industry'] = 'Other industries if not listed above';
-  				$labels['description'] = '* Which of the following category best describes you?';
-  				$labels['expectation_id'] = '* What do you hope to get out of this program?';
-  				$labels['expectation'] = 'Other expectations if not listed above';
-  				break;
   			case 'becomeMentee':
   				$widgets['school_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserSchool', 'add_empty'=>true));
   				$widgets['school'] = new sfWidgetFormInputText();
@@ -126,7 +77,7 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentee_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
-  				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription'));
+  				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription', 'add_empty'=>true));
   				$widgets['oh_preference'] = new sfWidgetFormChoice(array(
   						'expanded' => true,
   						'renderer_options'=>array('formatter'=>array($this, 'RadioChoiceFormatter')),
@@ -154,7 +105,6 @@ class YocaUserForm extends BaseYocaUserForm
   				$validators['expectation_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true));
   				$validators['expectation'] = new sfValidatorString(array('max_length' => 45, 'required' => false));
   				
-  				$labels['education'] = '* Education';
   				$labels['school_id'] = '* School';
   				$labels['school'] = 'Other School';
   				$labels['major_id'] = '* Major';
@@ -167,10 +117,6 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['description'] = '* Which of the following category best describes you?';
   				$labels['expectation_id'] = '* What do you hope to get out of this program?';
   				$labels['expectation'] = 'Other expectations if not listed above';
-  				$labels['eula'] = 'Important Instruction: We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.';
-  				
-  				$widgets['eula'] = new sfWidgetFormInputCheckbox();
-  				$validators['eula'] = new sfValidatorString(array('max_length' => 45));
   				break;
   			case 'Mentor':
   			case 'becomeMentor':
@@ -201,7 +147,6 @@ class YocaUserForm extends BaseYocaUserForm
   				$validators['neighborhood'] = new sfValidatorDoctrineChoice(array('model' => 'YocaNeighborhood'));
   				$validators['organization'] = new sfValidatorString(array('max_length' => 255, 'required' => false));
   				
-  				$labels['education'] = '* Education';
   				$labels['school'] = '* School';
   				$labels['work'] = '* Work Experience';
   				$labels['employer'] = '* Current/Recent Employer';
@@ -217,6 +162,14 @@ class YocaUserForm extends BaseYocaUserForm
   				break;
   		}
   	}
+
+  	//add EULA for becomeMentee
+  	if($usertype == 'becomeMentee'){
+		$labels['eula'] = 'Important Instruction: We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.';
+  	  	$widgets['eula'] = new sfWidgetFormInputCheckbox();
+  	  	$validators['eula'] = new sfValidatorString(array('max_length' => 45));
+  	}
+  	
   	$this->setWidgets($widgets);
   	$this->setValidators($validators);
   	$this->widgetSchema->setLabels($labels);
@@ -226,8 +179,7 @@ class YocaUserForm extends BaseYocaUserForm
   	$this->widgetSchema->addFormFormatter('custom', $formatter);
   	$this->widgetSchema->setFormFormatterName('custom');
   	
-  	foreach ($this->getWidgetSchema()->getFields() as $field)
-  	{
+  	foreach ($this->getWidgetSchema()->getFields() as $field){
   		$field->setAttribute('class', 'input-xlarge');
   	}
   }
