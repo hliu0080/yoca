@@ -74,7 +74,7 @@ class sfWidgetFormDoctrineChoice extends sfWidgetFormChoice
     $choices = array();
     if (false !== $this->getOption('add_empty'))
     {
-      $choices[''] = true === $this->getOption('add_empty') ? "Choose ".str_replace('Yoca', '', $this->getOption('model')) : $this->translate($this->getOption('add_empty'));
+      $choices[''] = true === $this->getOption('add_empty') ? "Choose ".preg_replace('/Yoca|User/', '', $this->getOption('model')) : $this->translate($this->getOption('add_empty'));
     }
 
     if (null === $this->getOption('table_method'))

@@ -151,8 +151,6 @@ class eventActions extends sfActions
   		//mark event notify records status to "cancelled"
   		Doctrine_Core::getTable('EventNotify')->cancel($id);
   		
-  		//TODO: set mentee register counter - 1
-  		
   		$this->getUser()->setFlash('cancel', 'Cancel successful.');
   	}
   	
@@ -176,6 +174,10 @@ class eventActions extends sfActions
   	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
   }
   
+  /**
+   * Mentor my event page
+   * @param sfWebRequest $request
+   */
   public function executeMentorMyEvents(sfWebRequest $request){
   	$this->events = Doctrine_Core::getTable('Event')->findMentorEvents($this->getUser()->getAttribute('userid'));
   	$this->mentor = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
@@ -185,6 +187,10 @@ class eventActions extends sfActions
   	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }
   
+  /**
+   * Mentee my event page
+   * @param sfWebRequest $request
+   */
   public function executeMenteeMyEvents(sfWebRequest $request){
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
@@ -201,6 +207,10 @@ class eventActions extends sfActions
   }
   
 
+  /**
+   * Show event details
+   * @param sfWebRequest $request
+   */
   public function executeShow(sfWebRequest $request)
   {
   	$this->type = $request->getParameter('type');
@@ -211,11 +221,19 @@ class eventActions extends sfActions
     $this->forward404Unless($this->event);
   }
 
+  /**
+   * Create event page
+   * @param sfWebRequest $request
+   */
   public function executeNew(sfWebRequest $request)
   {
     $this->form = new EventForm();
   }
 
+  /**
+   * Create event
+   * @param sfWebRequest $request
+   */
   public function executeCreate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST));
@@ -228,6 +246,10 @@ class eventActions extends sfActions
     $this->setTemplate('mentorMyEvents');
   }
 
+  /**
+   * Edit event page
+   * @param sfWebRequest $request
+   */
   public function executeEdit(sfWebRequest $request)
   {
   	$this->type = $request->getParameter('type');
@@ -238,6 +260,10 @@ class eventActions extends sfActions
     $this->form = new EventForm($event);
   }
 
+  /**
+   * Edit event
+   * @param sfWebRequest $request
+   */
   public function executeUpdate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
