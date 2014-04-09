@@ -76,12 +76,13 @@ class YocaUserForm extends BaseYocaUserForm
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
   				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription', 'add_empty'=>true));
-  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'multiple' => true, 'expanded' => true));
+  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'renderer_options'=>array('formatter'=>array($this, 'CheckboxChoiceFormatter')), 'multiple' => true, 'expanded' => true));
   				$widgets['industry'] = new sfWidgetFormInputText();
-  				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
+  				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'renderer_options'=>array('formatter'=>array($this, 'CheckboxChoiceFormatter')), 'multiple' => true, 'expanded' => true));
   				$widgets['expectation'] = new sfWidgetFormInputText();
   				$widgets['oh_preference'] = new sfWidgetFormChoice(array(
   						'expanded' => true,
+  						'renderer_options'=>array('formatter'=>array($this, 'RadioChoiceFormatter')),
   						'choices' => sfConfig::get('app_profile_oh_preference')
   				));
   				
@@ -128,11 +129,12 @@ class YocaUserForm extends BaseYocaUserForm
   				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription'));
   				$widgets['oh_preference'] = new sfWidgetFormChoice(array(
   						'expanded' => true,
+  						'renderer_options'=>array('formatter'=>array($this, 'RadioChoiceFormatter')),
   						'choices' => sfConfig::get('app_profile_oh_preference')
   				));
-  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'multiple' => true, 'expanded' => true));
+  				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentee', 'renderer_options'=>array('formatter'=>array($this, 'CheckboxChoiceFormatter')), 'multiple' => true, 'expanded' => true));
   				$widgets['industry'] = new sfWidgetFormInputText();
-  				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'multiple' => true, 'expanded' => true));
+  				$widgets['expectation_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserExpectation', 'renderer_options'=>array('formatter'=>array($this, 'CheckboxChoiceFormatter')), 'multiple' => true, 'expanded' => true));
   				$widgets['expectation'] = new sfWidgetFormInputText();
   				
   				$validators['school_id'] = new sfValidatorString(array('max_length' => 45));
@@ -262,4 +264,21 @@ class YocaUserForm extends BaseYocaUserForm
   	}
   	parent::save($con);
   }
+  
+  public static function CheckboxChoiceFormatter($widget, $inputs) {
+  	$result = "";
+  	foreach ($inputs as $input) {
+  		$result .= "<label class='checkbox'>". $input['input'] . " " . $input['label'] . "</label>";
+  	}
+  	return $result;
+  }
+  
+  public static function RadioChoiceFormatter($widget, $inputs) {
+  	$result = "";
+  	foreach ($inputs as $input) {
+  		$result .= "<label class='radio'>". $input['input'] . " " . $input['label'] . "</label>";
+  	}
+  	return $result;
+  }
+  
 }

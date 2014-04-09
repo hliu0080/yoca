@@ -17,12 +17,20 @@ class YocaIndustryTable extends Doctrine_Table
         return Doctrine_Core::getTable('YocaIndustry');
     }
     
+    /**
+     * Get mentee industries
+     * @return Ambigous <Doctrine_Collection, mixed, PDOStatement, Doctrine_Adapter_Statement, Doctrine_Connection_Statement, unknown, number>
+     */
     public function getIndustryForMentee(){
     	return $this->createQuery('i')
     	->where("i.type = 'mentee'")
     	->execute();
     }
     
+    /**
+     * Get mentor industries
+     * @return Ambigous <Doctrine_Collection, mixed, PDOStatement, Doctrine_Adapter_Statement, Doctrine_Connection_Statement, unknown, number>
+     */
     public function getIndustryForMentor(){
     	return $this->createQuery('i')
     	->where("i.type = 'mentor'")

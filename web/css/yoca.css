@@ -44,3 +44,11 @@ table.detail_table tr:hover th{
 select{
 	width: 80px;
 }
+
+label.checkbox label, label input[type='text'].input-xlarge, label select.input-xlarge{
+	width: 300px !important;
+}
+
+label.radio label{
+	width: 350px !important;
+}
