@@ -142,7 +142,11 @@ class userActions extends sfActions
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST));
     $this->form = new YocaUserForm();
-    $this->processForm($request, $this->form);
+    try{
+    	$this->processForm($request, $this->form);
+    }catch(Exception $e){
+    	$this->getUser()->setFlash('error', $e->getMessage());
+    }
     $this->setTemplate('new');
   }
   
@@ -246,13 +250,13 @@ class userActions extends sfActions
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     if ($form->isValid())
     {
-      $yoca_user = $form->save();
-	  
+   	  $yoca_user = $form->save();
+
       if($form->isNew()){
       	$this->redirect('user/confirm');
       }
       
-      $usertype = $form->getOption('usertype');
+   	  $usertype = $form->getOption('usertype');
       if(!is_null($usertype)){
       	switch($usertype){
       		case 'becomeMentee':
@@ -268,6 +272,10 @@ class userActions extends sfActions
       			break;
       	}
       }
+    }else{
+    	if($form->isNew()){
+	    	throw new Exception(implode(' ', $form->getErrorSchema()->getErrors()));
+    	}
     }
   }
 }

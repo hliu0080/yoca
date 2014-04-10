@@ -31,6 +31,12 @@
 <form action="<?php echo url_for($url) ?>" class="<?php print $form->getObject()->isNew()?'':'form-horizontal'?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
 <?php if ($form->getObject()->isNew()): ?>
 	<fieldset>
+		<?php if(!is_null($sf_user->getFlash('error'))):?>
+			<div class="alert alert-block alert-error">
+				<p><strong>Error</strong></p>
+				<p><?php print $sf_user->getFlash('error')?></p>
+			</div>
+		<?php endif?>
 		<div style="padding-top:20px;text-align:center"><p>Already a YOCA member? <a href="<?php print url_for('login')?>">Log in</a></p></div>
 		<div class="control-group">
 			<?php print $form['username']->renderLabel()?>

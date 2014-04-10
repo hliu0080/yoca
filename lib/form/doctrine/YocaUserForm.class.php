@@ -21,23 +21,15 @@ class YocaUserForm extends BaseYocaUserForm
   		);
   		
   		$validators = array(
-  				'username' => new sfValidatorEmail(array('max_length' => 255)),
-  				'password' => new sfValidatorString(array('max_length' => 255)),
-  				're_password' => new sfValidatorString(array('max_length' => 255)),
+  				'username' => new sfValidatorEmail(array('max_length' => 255), array('required' => 'Username required.', 'invalid' => 'Please setup username as your email address.')),
+  				'password' => new sfValidatorString(array('max_length' => 255), array('required' => 'Password required.')),
+  				're_password' => new sfValidatorString(array('max_length' => 255), array('required' => 'Confirm password required.')),
   		);
   		
   		$labels = array(
   				'username' => '* Username / Email Address',
   				'password' => '* Password',
   				're_password' => '* Confirm Password'
-  		);
-  		
-  		$this->validatorSchema->setPostValidator(
-  				new sfValidatorAnd(array(
-  						new sfValidatorSchemaCompare(
-  								'password', sfValidatorSchemaCompare::EQUAL, 're_password', array(),
-  								array('invalid' => 'Passwords do not match'))
-  				))
   		);
   	}
   	
@@ -172,6 +164,23 @@ class YocaUserForm extends BaseYocaUserForm
   	
   	$this->setWidgets($widgets);
   	$this->setValidators($validators);
+  	if($this->isNew()){
+  		$this->validatorSchema->setPostValidator(
+  			new sfValidatorSchemaCompare(
+  					'password',
+  					sfValidatorSchemaCompare::EQUAL,
+  					're_password',
+  					array(),
+  					array('invalid' => 'The passwords must match.')
+  			)
+  		);
+  		
+  		$this->mergePostValidator(new sfValidatorDoctrineUnique(array(
+  				'model' => 'YocaUser',
+  				'column' => 'username',
+  				'primary_key' => 'id'
+  		), array('invalid' => 'Username already exist.')));
+  	}
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat($this->isNew()?'signup[%s]':'edit[%s]');
   	
@@ -185,11 +194,12 @@ class YocaUserForm extends BaseYocaUserForm
   }
   
   public function save($con = NULL){
+  	$values = $this->getValues();
   	if($this->isNew()){
 	  	//Send confirmation email
-	  	$body = "Member registeration successful for {$this->getObject()->getUsername()}";
+	  	$body = "Member registeration successful for {$values['username']}";
 	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->getObject()->getUsername(), 'Greetings from YOCA!', $body);
+	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $values['username'], 'Greetings from YOCA!', $body);
   	}elseif($this->getOption('usertype') == 'becomeMentee'){
   		//Send confirmation email if user type is member
   		$body = "Mentee registration successful for {$this->getObject()->getUsername()}";
