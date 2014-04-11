@@ -6,9 +6,6 @@
 	<?php //include_partial('sec_nav', array('sections' => $sections))?>
 	
 	<div class="content">
-		<div class="page-header">
-			<h1>Become Mentee</h1>
-		</div>
 		<div class="page-container">
 			<h2>Congratulations! You have just become a YOCA mentee.</h2>
 			<div class="row" style="margin-top:15px;margin-bottom:30px">
