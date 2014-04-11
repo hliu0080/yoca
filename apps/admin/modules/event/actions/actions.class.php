@@ -38,6 +38,8 @@ class eventActions extends sfActions
    * @param sfWebRequest $request
    */
   public function executeList(sfWebRequest $request){
+  	$this->forward404($this->getUser()->getAttribute('usertype')=='Member');
+  	
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
   	$this->page = $request->getParameter('page');
