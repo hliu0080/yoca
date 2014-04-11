@@ -18,10 +18,8 @@ class YocaUser extends BaseYocaUser
 			$passHash = sfContext::getInstance()->getUser()->generateHash($this->getPassword());
 			
 			$this->setPassword($passHash);
-			$this->setCreatedAt(date("H-m-d H:i:s"));
-			$this->setUpdatedAt(date("H-m-d H:i:s"));
+			$this->setCreatedAt(date("Y-m-d H:i:s"));
 		}else{
-			$this->setUpdatedAt(date("H-m-d H:i:s"));
 			if(!is_null($this->getEnglishName()) && strlen($this->getEnglishName())==0){
 				$this->setEnglishName(null);
 			}

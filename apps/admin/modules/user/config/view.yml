@@ -1,2 +1,5 @@
 newSuccess: 
   layout:         login_layout
+
+confirmSuccess:
+  layout:         confirmation_layout
