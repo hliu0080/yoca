@@ -212,7 +212,7 @@ class userActions extends sfActions
     $yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
     $this->form = new YocaUserForm($yoca_user, array('usertype' => 'becomeMentee'));
     $this->processForm($request, $this->form);
-    $this->setTemplate('edit');
+    $this->setTemplate('becomeMentee');
   }
   
   public function executeMenteeConfirm(sfWebRequest $request){
@@ -237,7 +237,7 @@ class userActions extends sfActions
   	$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
   	$this->form = new YocaUserForm($yoca_user, array('usertype' => 'becomeMentor'));
   	$this->processForm($request, $this->form);
-  	$this->setTemplate('edit');
+  	$this->setTemplate('becomeMentor');
   }
   
   public function executeMentorConfirm(sfWebRequest $request){

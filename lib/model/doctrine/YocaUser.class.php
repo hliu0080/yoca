@@ -36,6 +36,9 @@ class YocaUser extends BaseYocaUser
 					$this->setSchoolId(is_array($this->getSchoolId())?implode(',', $this->getSchoolId()):$this->getSchoolId());
 				}
 			}
+			if(!is_null($this->getSchool()) && strlen($this->getSchool())==0){
+				$this->setSchool(null);
+			}
 			if(!is_null($this->getMajorId())){
 				if(strlen($this->getMajorId())==0){
 					$this->setMajorId(null);
@@ -43,7 +46,7 @@ class YocaUser extends BaseYocaUser
 					$this->setMajorId(is_array($this->getMajorId())?implode(',', $this->getMajorId()):$this->getMajorId());
 				}
 			}
-			if(!is_null($this->getMajor()) && $this->getMajor()){
+			if(!is_null($this->getMajor()) && strlen($this->getMajor())==0){
 				$this->setMajor($this->getMajor());
 			}else{
 				$this->setMajor(null);

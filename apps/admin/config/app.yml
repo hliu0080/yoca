@@ -23,7 +23,3 @@ all:
     status:                 { 1: "Registered", 2: "Cancelled By Mentee", 3: "Cancelled By System", 4: "Pending Survey", 5: "Finished" }  
   event:
     status:                 { 0: "Pending", 1: "Confirmed", 2: "Cancelled By System", 3: "Deleted"}
-
-dev:
-  mail:
-    service: contact@mynuonuo.com
