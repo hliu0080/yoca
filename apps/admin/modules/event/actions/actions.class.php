@@ -38,7 +38,12 @@ class eventActions extends sfActions
    * @param sfWebRequest $request
    */
   public function executeList(sfWebRequest $request){
-  	$this->forward404($this->getUser()->getAttribute('usertype')=='Member');
+  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
+  	if(!$yoca_user->get('is_active')){
+  		$this->redirect('event/pending');
+  	}
+  	
+  	$this->forward404if($this->getUser()->getAttribute('usertype') == 'Member');
   	
   	$this->type = $request->getParameter('type');
   	$this->keyword = $request->getParameter('keyword');
@@ -181,8 +186,22 @@ class eventActions extends sfActions
    * @param sfWebRequest $request
    */
   public function executeMentorMyEvents(sfWebRequest $request){
+  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
+  	if(!$yoca_user->get('is_active')){
+  		$this->redirect('event/pending');
+  	}
+  	
+  	$this->type = $request->getParameter('type');
+  	$this->keyword = $request->getParameter('keyword');
+  	$this->page = $request->getParameter('page');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_const_record_num');
+  	
   	$this->events = Doctrine_Core::getTable('Event')->findMentorEvents($this->getUser()->getAttribute('userid'));
   	$this->mentor = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
+  	
+  	$this->total = count($this->events);
+  	$this->pages = ceil($this->total / sfConfig::get('app_const_record_num'));
+  	$this->forward404if($this->total && $this->page>$this->pages);
   	
   	$this->form = new EventForm(array(), array('industry'=> $this->mentor->get('industry_id'), 'neighborhood' => $this->mentor->get('neighborhood')));
   	

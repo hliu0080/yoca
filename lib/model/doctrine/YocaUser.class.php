@@ -30,17 +30,73 @@ class YocaUser extends BaseYocaUser
 				$this->setWechat(null);
 			}
 			if(!is_null($this->getSchoolId())){
-				$this->setSchoolId(is_array($this->getSchoolId())?implode(',', $this->getSchoolId()):$this->getSchoolId());
+				if(strlen($this->getSchoolId())==0){
+					$this->setSchoolId(null);
+				}else{
+					$this->setSchoolId(is_array($this->getSchoolId())?implode(',', $this->getSchoolId()):$this->getSchoolId());
+				}
 			}
 			if(!is_null($this->getMajorId())){
-				$this->setMajorId(is_array($this->getMajorId())?implode(',', $this->getMajorId()):$this->getMajorId());
+				if(strlen($this->getMajorId())==0){
+					$this->setMajorId(null);
+				}else{
+					$this->setMajorId(is_array($this->getMajorId())?implode(',', $this->getMajorId()):$this->getMajorId());
+				}
+			}
+			if(!is_null($this->getMajor()) && $this->getMajor()){
+				$this->setMajor($this->getMajor());
+			}else{
+				$this->setMajor(null);
+			}
+			if(!is_null($this->getOhPreference()) && strlen($this->getOhPreference())==0){
+				$this->setOhPreference($this->getOhPreference());
+			}else{
+				$this->setOhPreference(null);
 			}
 			if(!is_null($this->getIndustryId())){
-				$this->setIndustryId(is_array($this->getIndustryId())?implode(',', $this->getIndustryId()):$this->getIndustryId());
+				if(strlen($this->getIndustryId())==0){
+					$this->setIndustryId(null);
+				}else{
+					$this->setIndustryId(is_array($this->getIndustryId())?implode(',', $this->getIndustryId()):$this->getIndustryId());
+				}
+			}
+			if(!is_null($this->getIndustry()) && $this->getIndustry()){
+				$this->setIndustry($this->getIndustry());
+			}else{
+				$this->setIndustry(null);
 			}
 			if(!is_null($this->getExpectationId())){
-				$this->setExpectationId($this->getExpectationId()?implode(',', $this->getExpectationId()):$this->getExpectationId());
+				if(strlen($this->getExpectationId())==0){
+					$this->setExpectationId(null);
+				}else{
+					$this->setExpectationId(is_array($this->getExpectationId())?implode(',', $this->getExpectationId()):$this->getExpectationId());
+				}
 			}
+			if(!is_null($this->getExpectation()) && strlen($this->getExpectation())){
+				$this->setExpectation($this->getExpectation());
+			}else{
+				$this->setExpectation(null);
+			}
+			if(!is_null($this->getDescription()) && strlen($this->getDescription())){
+				$this->setDescription($this->getDescription());
+			}else{
+				$this->setDescription(null);
+			}
+			if(!is_null($this->getAge()) && strlen($this->getAge())){
+				$this->setAge($this->getAge());
+			}else{
+				$this->setAge(null);
+			}
+			if(!is_null($this->getNeighborhood()) && strlen($this->getNeighborhood())){
+				$this->setNeighborhood($this->getNeighborhood());
+			}else{
+				$this->setNeighborhood(null);
+			}
+			if(!is_null($this->getOrganization()) && strlen($this->getOrganization())){
+				$this->setOrganization($this->getOrganization());
+			}else{
+				$this->setOrganization(null);
+			}	
 		}
 		
 		return parent::save($con);

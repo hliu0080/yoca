@@ -13,7 +13,7 @@ class EventForm extends BaseEventForm
   public function configure()
   {
   	$widgets = array(
-  		'industry' => new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry')),
+  		'industry' => new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentor')),
   		'capacity' => new sfWidgetFormInputText(),
   		'datetime' => new sfWidgetFormDateTime(array(
   				'date' => array('years' => array('2014' => '2014'), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
