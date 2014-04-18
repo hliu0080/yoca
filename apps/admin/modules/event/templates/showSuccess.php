@@ -50,7 +50,7 @@
 			    </tr>
 			    <tr>
 			      <th>Neighborhood</th>
-			      <td><?php echo $event->getNeighborhood() ?></td>
+			      <td><?php echo Doctrine_Core::getTable('YocaNeighborhood')->find($event->getNeighborhood()) ?></td>
 			    </tr>
 			    <tr>
 			      <th>Address</th>

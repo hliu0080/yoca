@@ -30,7 +30,7 @@
 			      <th>User Type</th>
 			      <td><?php echo $yoca_user->getType() ?></td>
 			    </tr>
-			    <?php if($type == "Mentor" || $type == "Mentee"):?>
+			    <?php if($type == "Mentor" || $type == "Mentee" || $type == "Member" || $type == "Admin"):?>
 			    	<tr>
 				      <th>First Name</th>
 				      <td><?php echo $yoca_user->getFirstname() ?></td>
@@ -58,11 +58,11 @@
 					<?php if($type == "Mentee"):?>
 					    <tr>
 					      	<th>School</th>
-					      	<td><?php echo $yoca_user->getSchool() ?></td>
+					      	<td><?php echo $yoca_user->getSchoolId()==25?$yoca_user->getSchool():Doctrine_Core::getTable('YocaUserSchool')->find($yoca_user->getSchoolId()) ?></td>
 					    </tr>
 					    <tr>
 					      	<th>Major</th>
-					      	<td><?php echo $yoca_user->getMajor() ?></td>
+					      	<td><?php echo $yoca_user->getMajorId()==19?$yoca_user->getMajor():Doctrine_Core::getTable('YocaUserMajor')->find($yoca_user->getMajorId()) ?></td>
 					    </tr>
 					    <tr>
 					    	<th>Work Experience</th>
@@ -74,7 +74,16 @@
 				    	</tr>
 				    	<tr>
 				      		<th>Industry</th>
-				     		<td><?php echo $yoca_user->getIndustry() ?></td>
+				     		<td>
+				     			<?php  
+					      			$industry = explode(',', $yoca_user->getIndustryId());
+					      			$indArr = array();
+					      			foreach($industry as $i){
+					      				$indArr[] = Doctrine_Core::getTable('YocaIndustry')->find($i);
+					      			}
+					      			print implode(', ', $indArr);
+					      		?>
+				     		</td>
 				    	</tr>
 					    <tr>
 					      	<th>Office Hour Preference</th>
@@ -82,11 +91,20 @@
 					    </tr>
 					    <tr>
 					      	<th>Description</th>
-					      	<td><?php echo $yoca_user->getDescription() ?></td>
+					      	<td><?php echo Doctrine_Core::getTable('YocaUserDescription')->find($yoca_user->getDescription()) ?></td>
 					    </tr>
 					    <tr>
 					      	<th>Expectation</th>
-					      	<td><?php echo $yoca_user->getExpectation() ?></td>
+					      	<td>
+					      		<?php  
+					      			$expec = explode(',', $yoca_user->getExpectationId());
+					      			$expArr = array();
+					      			foreach($expec as $e){
+					      				$expArr[] = Doctrine_Core::getTable('YocaUserExpectation')->find($e);
+					      			}
+					      			print implode(', ', $expArr);
+					      		?>
+					      	</td>
 					    </tr>
 					<?php elseif($type == 'Mentor'):?>
 						<tr>
@@ -99,7 +117,7 @@
 					    </tr>
 					    <tr>
 				      		<th>Industry</th>
-				     		<td><?php echo $yoca_user->getIndustry() ?></td>
+				     		<td><?php echo Doctrine_Core::getTable('YocaIndustry')->find($yoca_user->getIndustryId()) ?></td>
 				    	</tr>
 					    <tr>
 					      	<th>Age</th>
@@ -107,7 +125,7 @@
 					    </tr>
 					    <tr>
 					      	<th>Neighborhood</th>
-					      	<td><?php echo $yoca_user->getNeighborhood() ?></td>
+					      	<td><?php echo Doctrine_Core::getTable('YocaNeighborhood')->find($yoca_user->getNeighborhood()) ?></td>
 					    </tr>
 					    <tr>
 					      	<th>Organization</th>

@@ -19,7 +19,7 @@ class EventForm extends BaseEventForm
   				'date' => array('years' => array('2014' => '2014'), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
   				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false, 'format_without_seconds'=>'%hour% : %minute%')
   		)),
-  		'neighborhood' => new sfWidgetFormInputText(),
+  		'neighborhood' => new sfWidgetFormDoctrineChoice(array('model' => 'YocaNeighborhood')),
   		'address' => new sfWidgetFormInputText(),
   	);
   	$validators = array(
@@ -28,7 +28,7 @@ class EventForm extends BaseEventForm
   		'datetime' => new sfValidatorDate(array(
   				'min' => mktime(0, 0, 0, date('m'), date('d'), date('y')),
   		)),
-  		'neighborhood' => new sfValidatorString(array('max_length' => 45)),
+  		'neighborhood' => new sfValidatorDoctrineChoice(array('model' => 'YocaNeighborhood')),
   		'address' => new sfValidatorString(array('max_length' => 255)),
   	);
   	$labels = array(

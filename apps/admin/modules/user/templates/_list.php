@@ -46,11 +46,11 @@
 		    	<td><?php print sfConfig::get('app_profile_mentor_work_experience')[$user->get('work')]?></td>
 		    	<td><?php print $user->get('employer')?></td>
 		    	<td><?php print $user->get('is_active')?'Confirmed':'<span class="label label-warning">Pending</span>'?></td>
-		    	<td><?php print $user->get('industry')?></td>
+		    	<td><?php print Doctrine_Core::getTable('YocaIndustry')->find($user->get('industry_id'))?></td>
 	    	<?php elseif($type == 'Mentee'):?>
 	    		<td><?php print $user->get('education')?></td>
-		    	<td><?php print $user->get('school')?></td>
-		    	<td><?php print $user->get('major')?></td>
+		    	<td><?php print $user->getSchoolId()==25?$user->getSchool():Doctrine_Core::getTable('YocaUserSchool')->find($user->getSchoolId())?></td>
+		    	<td><?php print $user->getMajorId()==19?$user->getMajor():Doctrine_Core::getTable('YocaUserMajor')->find($user->getMajorId())?></td>
 	    	<?php elseif($type == 'Member'):?>
 	    		<td><?php print $user->get('education')?></td>
 	    		<td><?php print $user->get('is_active')?'Confirmed':'Pending'?></td>

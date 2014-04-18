@@ -18,10 +18,7 @@ class Event extends BaseEvent
 			$this->setBooked(0);
 			$this->setStatus(0);
 			$this->setCreatedAt(date("Y-m-d H:i:s"));
-			$this->setUpdatedAt(date("Y-m-d H:i:s"));
 		}
-		
-		$this->setUpdatedAt(date("Y-m-d H:i:s"));
 				
 		parent::save($con);
 	}

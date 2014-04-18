@@ -6,7 +6,7 @@ all:
   mail:
     service: service@yocausa.org
   const:
-    record_num:             5
+    record_num:             10
     reg_cap:                2
   dashboard:
     member:                 [ Mentorship Program, My Profile ]

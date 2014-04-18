@@ -44,7 +44,7 @@
 	      	<td><?php echo $event->getCapacity() ?></td>
 	      	<td><?php echo $event->getBooked() ?></td>
 	      	<td><?php echo date("m/d/Y H:i", strtotime($event->getDatetime())) ?></td>
-	      	<td><?php echo $event->getNeighborhood() ?></td>
+	      	<td><?php echo Doctrine_Core::getTable('YocaNeighborhood')->find($event->getNeighborhood()) ?></td>
 	      	<td><?php echo $event->getAddress() ?></td>
 	      	
 	      	<!-- Status -->

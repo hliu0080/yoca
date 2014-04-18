@@ -126,9 +126,17 @@ class eventActions extends sfActions
   	//Confirm event
   	if($status == 1){
 	  	//Send confirmation email to mentor
-	  	$body = "Event confirmed for Event ID $id";
+	  	$body = "Event confirmed for Event ID $id\n";
+	  	$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
+	  	$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
+	  	$body .= "Capacity: ".$this->event->get('capacity')."\n";
+	  	$body .= "Time: ".$this->event->get('datetime')."\n";
+	  	$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
+	  	$body .= "Address: ".$this->event->get('address')."\n";
+	  	$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
+	  	$body .= "Created At: ".$this->event->get('created_at');
 	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Confirmed', $body);
+	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Your YOCA event has been confirmed', $body);
 	  	
 	  	$this->getUser()->setFlash('confirm', 'Confirm successful.');
   	}
@@ -147,10 +155,20 @@ class eventActions extends sfActions
   		}
   		
   		//Send email to registered mentees, and mentor
-  		$body = "Event cancelled for Event ID $id";
+  		$body = "We are sorry. The upcoming YOCA event has been cancelled.";
+  		$body .= "Event cancelled for Event ID $id\n";
+  		$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
+  		$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
+  		$body .= "Capacity: ".$this->event->get('capacity')."\n";
+  		$body .= "Booked: ".$this->event->get('booked')."\n";
+  		$body .= "Time: ".$this->event->get('datetime')."\n";
+  		$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
+  		$body .= "Address: ".$this->event->get('address')."\n";
+  		$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
+  		$body .= "Created At: ".$this->event->get('created_at');
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $usernameArray, 'Event Cancelled', $body);
-		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Cancelled', $body);
+  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $usernameArray, 'Your YOCA event has been cancelled', $body);
+		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Your YOCA event has been cancelled', $body);
 
   		//Set registration status to 3 - cancelled by system
   		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
@@ -164,9 +182,17 @@ class eventActions extends sfActions
   	//Delete event
   	if($status == 3){
   		//Send cancellation email to mentor
-  		$body = "Event cancelled for Event ID $id";
+  		$body = "Event deleted for Event ID $id\n";
+  		$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
+  		$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
+  		$body .= "Capacity: ".$this->event->get('capacity')."\n";
+  		$body .= "Time: ".$this->event->get('datetime')."\n";
+  		$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
+  		$body .= "Address: ".$this->event->get('address')."\n";
+  		$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
+  		$body .= "Created At: ".$this->event->get('created_at');
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Event Cancelled', $body);
+  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Your YOCA event has been deleted', $body);
   		
   		$this->getUser()->setFlash('delete', 'Delete successful.');
   	}
@@ -345,5 +371,27 @@ class eventActions extends sfActions
       else
       	$this->redirect($this->generateUrl('default', array('module' => 'event', 'action' => 'show', 'id' => $request->getParameter('id'))));
     }
+  }
+  
+  /**
+   * Convert event status integer to text
+   * @param unknown $statusValue
+   * @return string
+   */
+  protected function getEventStatus($statusValue){
+  	switch($statusValue){
+  		case 0:
+  			$status = 'Pending';
+  			break;
+  		case 1:
+  			$status = 'Confirmed';
+  			break;
+  		case 2:
+  			$status = 'Cancelled';
+  			break;
+  		default:
+  			$status = 'Unknow';
+  	}
+  	return $status;
   }
 }
