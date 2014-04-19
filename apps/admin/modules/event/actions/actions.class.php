@@ -364,6 +364,10 @@ class eventActions extends sfActions
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     if ($form->isValid())
     {
+    	$datetimeArr = $request->getPostParameter('newEvent')['datetime'];
+    	$datetime = $datetimeArr['year']."-".sprintf("%02s", $datetimeArr['month'])."-".sprintf("%02s", $datetimeArr['day'])." ".sprintf("%02s", $datetimeArr['hour']).":".($datetimeArr['minute']==0?"00":"30");
+    	$form->setOption('datetime', $datetime);
+    	
       $event = $form->save();
 
       if($form->isNew())

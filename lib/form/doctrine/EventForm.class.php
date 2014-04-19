@@ -59,4 +59,9 @@ class EventForm extends BaseEventForm
   		$field->setAttribute('class', 'input-xlarge');
   	}
   }
+  
+  public function save($con = null){
+  	var_dump($this->getOption('datetime'));
+  	exit;
+  }
 }
