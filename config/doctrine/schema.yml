@@ -139,6 +139,23 @@ EventNotify:
       primary: false
       notnull: false
       autoincrement: false
+EventTopic:
+  connection: doctrine
+  tableName: event_topic
+  columns:
+    id:
+      type: integer(4)
+      fixed: false
+      unsigned: false
+      primary: true
+      autoincrement: true
+    name:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
 Registration:
   connection: doctrine
   tableName: registration

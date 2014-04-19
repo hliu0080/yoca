@@ -14,7 +14,7 @@ all:
     mentor:                 [ Mentorship Program, My Profile ]
     admin:                  [ Manage Users, Manage Events, My Profile ]
   profile:
-    age:                    { 1: "Younger than 18", 2: "18-24", 3: "25-35", 4: "35-45", 5: "45-55", 6: "55 or above" }
+    age:                    { 1: "Younger than 18", 2: "18-24", 3: "25-34", 4: "35-44", 5: "45-54", 6: "55 or above" }
     education:              { Bachelor: Bachelor, Master: Master, MBA/EMBA: MBA/EMBA, PhD/JD/LLM/MD: PhD/JD/LLM/MD }
     mentee_work_experience: { 1: "Internship (less than 6 months)", 2: "Internship (7-12 months)", 3: "Internship (more than 1 year)", 4: "Full-time (less than 1 year)", 5: "Full-time (1 to less than 2 years)", 6: "Full-time (2 to less than 3 years)", 7: "Full-time (more than 3 years)", 8: "No experience" }
     mentor_work_experience: { 1: "Less than 1 year", 2: "1-3 years", 3: "3-5 years", 4: "5+ years" }
