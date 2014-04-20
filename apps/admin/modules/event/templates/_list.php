@@ -22,12 +22,11 @@
 <table class="table table-striped table-bordered" id="<?php print strtolower($type).'_eventtable'?>">
   <thead>
     <tr>
-      <th>ID</th>
+      <th>Time</th>
+      <th>Topic</th>
       <th>Industry</th>
       <th>Mentor ID</th>
-      <th>Capacity</th>
-      <th>Booked</th>
-      <th>Time</th>
+      <th>Capacity / Booked</th>
       <th>Neighborhood</th>
       <th>Address</th>
       <th>Status</th>
@@ -38,25 +37,24 @@
   	<?php if($total):?>
     	<?php foreach ($events as $event): ?>
 	    <tr>
-		    <td><?php print link_to($event->getId(), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event->getId()))?></td>
-	      	<td><?php echo $event->getYocaIndustry()->getName() ?></td>
-	      	<td><?php echo $event->getMentorid() ?></td>
-	      	<td><?php echo $event->getCapacity() ?></td>
-	      	<td><?php echo $event->getBooked() ?></td>
-	      	<td><?php echo date("m/d/Y H:i", strtotime($event->getDatetime())) ?></td>
-	      	<td><?php echo Doctrine_Core::getTable('YocaNeighborhood')->find($event->getNeighborhood()) ?></td>
-	      	<td><?php echo $event->getAddress() ?></td>
+		    <td><?php print link_to(date("m/d/Y H:i", strtotime($event['datetime'])), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event['id']))?></td>
+	      	<td><?php echo $event['EventTopic']['name'] ?></td>
+	      	<td><?php echo $event['YocaIndustry']['name'] ?></td>
+	      	<td><?php echo $event['mentorid'] ?></td>
+	      	<td><?php echo $event['capacity'] . " / " .$event['booked'] ?></td>
+	      	<td><?php echo $event['YocaNeighborhood']['name'] ?></td>
+	      	<td><?php echo $event['EventAddress']['name'] ?></td>
 	      	
 	      	<!-- Status -->
 	      	<td>
-			<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
-	      	<?php if($event->getStatus() == 0):?>
+			<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event['id'], $sf_user->getAttribute('userid'), 1)?>
+	      	<?php if($event['status'] == 0):?>
 	      		Pending
 	      	<?php elseif($event->getStatus() == 1):?>
 	      		<?php if($type == 'upcoming'):?>
 	      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
 	      				Registration Closed
-	      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
+	      			<?php elseif($event['capacity'] > $event['booked']):?>
 	      				Available
       					<?php if(count($reg)>0):?>
       						/ Registered
@@ -75,7 +73,7 @@
 		      			Closed
 	      			<?php endif?>
 	      		<?php elseif($type == 'my'):?>
-	      			<?php if(strtotime($event->getDatetime()) > time()):?>
+	      			<?php if(strtotime($event['datetime']) > time()):?>
 	      				Registered
 	      			<?php elseif('registration status pending survey'):?>
 	      				Pending Survey
@@ -91,24 +89,24 @@
 	      	<!-- Actions -->
 	      	<td class="toolbar">
 	      		<div class="btn-group">
-		      		<?php print link_to('View', 'show_event', array('id'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
+		      		<?php print link_to('View', 'show_event', array('id'=>$event['id'], 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
 			      	<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
 			      		<?php if($type == 'upcoming' || $type == 'my'):?>
 				      		<?php if($event->getStatus() == 1):?>
 				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
 					      			<?php if(count($reg) > 0):?>
 					      				<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
-					      			<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_const_reg_cap')):?>
+					      			<?php elseif($event['capacity']>$event['booked'] && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_const_reg_cap')):?>
 					      				<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
-					      			<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')>=sfConfig::get('app_const_reg_cap')):?>
+					      			<?php elseif($event['capacity']>$event['booked'] && $sf_user->getAttribute('userregcounter')>=sfConfig::get('app_const_reg_cap')):?>
 					      				<a class='btn btn-small disabled popup' data-content='Sorry, you have reached the max of 2 events per month' disabled>Register</a>
-					      			<?php elseif($event->getCapacity() <= $event->getBooked()):?>
-					      				<?php print link_to('Notify Me When Available', 'signup_event_notify', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+					      			<?php elseif($event['capacity'] <= $event['booked']):?>
+					      				<?php print link_to('Notify Me When Available', 'signup_event_notify', array('eventId'=>$event['id'], 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 					      			<?php endif?>
 					      		<?php endif?>
 				      		<?php endif?>
 			      		<?php elseif($type == 'past'):?>
-			      			<?php if($event->getStatus() == 1):?>
+			      			<?php if($event['status'] == 1):?>
 			      				<?php if(count($reg) > 0 && "pending survey"):?>
 			      					Survey
 			      				<?php endif?>
@@ -118,13 +116,13 @@
 			      	
 			      	<?php elseif($sf_user->getAttribute('usertype') == 'Admin'):?>
 			      		<?php if($type == 'pending'):?>
-			      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
-			      				<?php print link_to('Confirm', 'set_event_status', array('id'=>$event->getId(), 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+			      			<?php if(strtotime($event['datetime']) > time()+60*60*24):?>
+			      				<?php print link_to('Confirm', 'set_event_status', array('id'=>$event['id'], 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 			      			<?php endif?>
-			      			<?php print link_to('Delete', 'set_event_status', array('id'=>$event->getId(), 'status'=>3, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+			      			<?php print link_to('Delete', 'set_event_status', array('id'=>$event['id'], 'status'=>3, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 			      		<?php elseif($type == 'upcoming'):?>
 			      			<?php if($event->getStatus() == 1):?>
-			      				<?php print link_to('Cancel', 'set_event_status', array('id'=>$event->getId(), 'status'=>2, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
+			      				<?php print link_to('Cancel', 'set_event_status', array('id'=>$event['id'], 'status'=>2, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 							<?php endif?>
 			      		<?php endif?>
 			      	<?php endif?>

@@ -9,11 +9,14 @@ Doctrine_Manager::getInstance()->bindComponent('YocaNeighborhood', 'doctrine');
  * 
  * @property integer $id
  * @property string $name
+ * @property Doctrine_Collection $Event
  * 
- * @method integer          getId()   Returns the current record's "id" value
- * @method string           getName() Returns the current record's "name" value
- * @method YocaNeighborhood setId()   Sets the current record's "id" value
- * @method YocaNeighborhood setName() Sets the current record's "name" value
+ * @method integer             getId()    Returns the current record's "id" value
+ * @method string              getName()  Returns the current record's "name" value
+ * @method Doctrine_Collection getEvent() Returns the current record's "Event" collection
+ * @method YocaNeighborhood    setId()    Sets the current record's "id" value
+ * @method YocaNeighborhood    setName()  Sets the current record's "name" value
+ * @method YocaNeighborhood    setEvent() Sets the current record's "Event" collection
  * 
  * @package    yoca
  * @subpackage model
@@ -47,6 +50,8 @@ abstract class BaseYocaNeighborhood extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        
+        $this->hasMany('Event', array(
+             'local' => 'id',
+             'foreign' => 'neighborhood'));
     }
 }

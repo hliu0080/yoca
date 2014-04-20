@@ -19,7 +19,7 @@ class Event extends BaseEvent
 			$this->setStatus(0);
 			$this->setCreatedAt(date("Y-m-d H:i:s"));
 		}
-				
+		
 		parent::save($con);
 	}
 }

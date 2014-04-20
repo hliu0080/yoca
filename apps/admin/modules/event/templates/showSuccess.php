@@ -21,6 +21,7 @@
 					<?php endif?>
 				</div>
 			</div>
+			
 		
 			<table class="table table-bordered detail_table">
 			  <tbody>
@@ -31,6 +32,10 @@
 			    <tr>
 			      <th>Industry</th>
 			      <td><?php echo $event->getYocaIndustry()->getName() ?></td>
+			    </tr>
+			    <tr>
+			    	<th>Topic</th>
+			    	<td><?php echo $event->getEventTopic()->getName() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Mentor ID</th>
@@ -50,11 +55,11 @@
 			    </tr>
 			    <tr>
 			      <th>Neighborhood</th>
-			      <td><?php echo Doctrine_Core::getTable('YocaNeighborhood')->find($event->getNeighborhood()) ?></td>
+			      <td><?php echo $event->getYocaNeighborhood()->getName() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Address</th>
-			      <td><?php echo $event->getAddress() ?></td>
+			      <td><?php echo $event->getEventAddress()->getName() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Created At</th>

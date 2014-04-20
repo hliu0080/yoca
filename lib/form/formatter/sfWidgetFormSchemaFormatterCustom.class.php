@@ -2,8 +2,8 @@
 class sfWidgetFormSchemaFormatterCustom extends sfWidgetFormSchemaFormatter
 {
   protected
-    $rowFormat					= '<div class="control-group">%label%<div class="controls">%field%<span class="help-inline">%help%</span></div>%hidden_fields%</div>',
-    $errorRowFormat  			= '<div class="control-group error">%label%<div class="controls">%field%<span class="help-inline">%help%</span><span class="help-inline">%error%</span></div>%hidden_fields%</div>',
+    $rowFormat					= '<div class="control-group">%label%<div class="controls">%field%<span class="help-block">%help%</span></div>%hidden_fields%</div>',
+    $errorRowFormat  			= '<div class="control-group error">%label%<div class="controls">%field%<span class="help-block">%help%</span><span class="help-inline">%error%</span></div>%hidden_fields%</div>',
     $errorListFormatInARow		= "  %errors%  ",
     $errorRowFormatInARow		= "  %error%\n";
 //     $helpFormat					= '<p class="help-block">%help%</p>',

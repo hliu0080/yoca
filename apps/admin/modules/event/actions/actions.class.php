@@ -97,7 +97,8 @@ class eventActions extends sfActions
   	$query = Doctrine_Core::getTable('Event')
   	->createQuery('a')
   	->whereIn('status', $status)
-  	->andWhere("datetime $cond ?", date('Y-m-d H:i:s'));
+  	->andWhere("datetime $cond ?", date('Y-m-d H:i:s'))
+  	->orderBy('datetime asc');
   	if($this->keyword){
   		$query->addWhere('industry like ? or mentorid like ? or neighborhood like ? or address like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
   	}
@@ -122,17 +123,20 @@ class eventActions extends sfActions
   	$this->event = Doctrine_Core::getTable('Event')->find(array($id));
   	$mentor = Doctrine_Core::getTable('YocaUser')->findOneBy('id', $this->event->get('mentorid'));
   	$this->forward404Unless($mentor);
-  	 
+  	$this->event->set('status', $status);
+  	$this->event->save();
+  	
   	//Confirm event
   	if($status == 1){
 	  	//Send confirmation email to mentor
 	  	$body = "Event confirmed for Event ID $id\n";
+	  	$body .= "Topic: " .Doctrine_Core::getTable('EventTopic')->find($this->event->get('topic'))."\n";
 	  	$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
 	  	$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
 	  	$body .= "Capacity: ".$this->event->get('capacity')."\n";
 	  	$body .= "Time: ".$this->event->get('datetime')."\n";
 	  	$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
-	  	$body .= "Address: ".$this->event->get('address')."\n";
+	  	$body .= "Address: ".Doctrine_Core::getTable('EventAddress')->find($this->event->get('address'))."\n";
 	  	$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
 	  	$body .= "Created At: ".$this->event->get('created_at');
 	  	$mailer = sfContext::getInstance()->getMailer();
@@ -197,9 +201,6 @@ class eventActions extends sfActions
   		$this->getUser()->setFlash('delete', 'Delete successful.');
   	}
 
-  	$this->event->set('status', $status);
-  	$this->event->save();
-  	
   	//TODO: add redirect to showSuccess
   	$type = $request->getParameter('type');
   	$page = $request->getParameter('page');
@@ -212,7 +213,7 @@ class eventActions extends sfActions
    * @param sfWebRequest $request
    */
   public function executeMentorMyEvents(sfWebRequest $request){
-  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
+  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
   	if(!$yoca_user->get('is_active')){
   		$this->redirect('event/pending');
   	}
@@ -264,7 +265,7 @@ class eventActions extends sfActions
   	$this->page = $request->getParameter('page');
   	$this->keyword = $request->getParameter('keyword');
   	
-    $this->event = Doctrine_Core::getTable('Event')->find(array($request->getParameter('id')));
+    $this->event = Doctrine_Core::getTable('Event')->find($request->getParameter('id'));
     $this->forward404Unless($this->event);
   }
 
@@ -365,10 +366,11 @@ class eventActions extends sfActions
     if ($form->isValid())
     {
     	$datetimeArr = $request->getPostParameter('newEvent')['datetime'];
-    	$datetime = $datetimeArr['year']."-".sprintf("%02s", $datetimeArr['month'])."-".sprintf("%02s", $datetimeArr['day'])." ".sprintf("%02s", $datetimeArr['hour']).":".($datetimeArr['minute']==0?"00":"30");
-    	$form->setOption('datetime', $datetime);
-    	
-      $event = $form->save();
+    	$datetime = $datetimeArr['year']."-".sprintf("%02s", $datetimeArr['month'])."-".sprintf("%02s", $datetimeArr['day'])." ".sprintf("%02s", $datetimeArr['hour']).":".($datetimeArr['minute']==0?"00":"30").":00";
+
+    	$event = $form->save();
+    	$event->setDatetime(date($datetime));
+    	$event->save();
 
       if($form->isNew())
       	$this->redirect('@mentor_manage_event');

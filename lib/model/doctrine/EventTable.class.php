@@ -19,8 +19,14 @@ class EventTable extends Doctrine_Table
     
     public function findMentorEvents($mentorId){
     	return self::getInstance()->createQuery('e')
+    	->leftJoin('e.EventTopic t')
 		->leftJoin('e.YocaIndustry i')
+		->leftJoin('e.YocaNeighborhood n')
+		->leftJoin('e.EventAddress a')
+		->select('e.*, t.name, i.name, n.name, a.name')
     	->where('e.mentorid = ? and e.status <> 3', $mentorId)
+    	->orderBy('e.datetime asc')
+    	->setHydrationMode(Doctrine::HYDRATE_ARRAY)
     	->execute();
     }
     

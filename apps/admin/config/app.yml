@@ -4,7 +4,7 @@
 # default values
 all:
   mail:
-    service: service@yocausa.org
+    service: noreply@yocausa.org
   const:
     record_num:             10
     reg_cap:                2
