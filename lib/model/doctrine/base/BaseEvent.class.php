@@ -19,10 +19,10 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @property string $status
  * @property timestamp $created_at
  * @property timestamp $updated_at
- * @property EventTopic $EventTopic
  * @property EventAddress $EventAddress
  * @property YocaIndustry $YocaIndustry
  * @property YocaNeighborhood $YocaNeighborhood
+ * @property EventTopic $EventTopic
  * @property Doctrine_Collection $Registration
  * 
  * @method integer             getId()               Returns the current record's "id" value
@@ -37,10 +37,10 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method string              getStatus()           Returns the current record's "status" value
  * @method timestamp           getCreatedAt()        Returns the current record's "created_at" value
  * @method timestamp           getUpdatedAt()        Returns the current record's "updated_at" value
- * @method EventTopic          getEventTopic()       Returns the current record's "EventTopic" value
  * @method EventAddress        getEventAddress()     Returns the current record's "EventAddress" value
  * @method YocaIndustry        getYocaIndustry()     Returns the current record's "YocaIndustry" value
  * @method YocaNeighborhood    getYocaNeighborhood() Returns the current record's "YocaNeighborhood" value
+ * @method EventTopic          getEventTopic()       Returns the current record's "EventTopic" value
  * @method Doctrine_Collection getRegistration()     Returns the current record's "Registration" collection
  * @method Event               setId()               Sets the current record's "id" value
  * @method Event               setMentorid()         Sets the current record's "mentorid" value
@@ -54,10 +54,10 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method Event               setStatus()           Sets the current record's "status" value
  * @method Event               setCreatedAt()        Sets the current record's "created_at" value
  * @method Event               setUpdatedAt()        Sets the current record's "updated_at" value
- * @method Event               setEventTopic()       Sets the current record's "EventTopic" value
  * @method Event               setEventAddress()     Sets the current record's "EventAddress" value
  * @method Event               setYocaIndustry()     Sets the current record's "YocaIndustry" value
  * @method Event               setYocaNeighborhood() Sets the current record's "YocaNeighborhood" value
+ * @method Event               setEventTopic()       Sets the current record's "EventTopic" value
  * @method Event               setRegistration()     Sets the current record's "Registration" collection
  * 
  * @package    yoca
@@ -182,10 +182,6 @@ abstract class BaseEvent extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('EventTopic', array(
-             'local' => 'topic',
-             'foreign' => 'id'));
-
         $this->hasOne('EventAddress', array(
              'local' => 'address',
              'foreign' => 'id'));
@@ -196,6 +192,10 @@ abstract class BaseEvent extends sfDoctrineRecord
 
         $this->hasOne('YocaNeighborhood', array(
              'local' => 'neighborhood',
+             'foreign' => 'id'));
+
+        $this->hasOne('EventTopic', array(
+             'local' => 'topic',
              'foreign' => 'id'));
 
         $this->hasMany('Registration', array(

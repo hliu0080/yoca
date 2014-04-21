@@ -16,6 +16,8 @@ abstract class BaseYocaUserForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'             => new sfWidgetFormInputHidden(),
+      'mentor_id'      => new sfWidgetFormInputText(),
+      'mentor_title'   => new sfWidgetFormInputText(),
       'username'       => new sfWidgetFormInputText(),
       'password'       => new sfWidgetFormInputText(),
       'type'           => new sfWidgetFormInputText(),
@@ -34,6 +36,7 @@ abstract class BaseYocaUserForm extends BaseFormDoctrine
       'oh_preference'  => new sfWidgetFormInputText(),
       'industry_id'    => new sfWidgetFormInputText(),
       'industry'       => new sfWidgetFormInputText(),
+      'sub_industry'   => new sfWidgetFormInputText(),
       'description'    => new sfWidgetFormInputText(),
       'expectation_id' => new sfWidgetFormInputText(),
       'expectation'    => new sfWidgetFormInputText(),
@@ -47,6 +50,8 @@ abstract class BaseYocaUserForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'             => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
+      'mentor_id'      => new sfValidatorString(array('max_length' => 45, 'required' => false)),
+      'mentor_title'   => new sfValidatorString(array('max_length' => 45, 'required' => false)),
       'username'       => new sfValidatorString(array('max_length' => 255)),
       'password'       => new sfValidatorString(array('max_length' => 255)),
       'type'           => new sfValidatorString(array('max_length' => 45, 'required' => false)),
@@ -65,6 +70,7 @@ abstract class BaseYocaUserForm extends BaseFormDoctrine
       'oh_preference'  => new sfValidatorString(array('max_length' => 45, 'required' => false)),
       'industry_id'    => new sfValidatorString(array('max_length' => 45, 'required' => false)),
       'industry'       => new sfValidatorString(array('max_length' => 45, 'required' => false)),
+      'sub_industry'   => new sfValidatorString(array('max_length' => 45, 'required' => false)),
       'description'    => new sfValidatorString(array('max_length' => 45, 'required' => false)),
       'expectation_id' => new sfValidatorString(array('max_length' => 45, 'required' => false)),
       'expectation'    => new sfValidatorString(array('max_length' => 45, 'required' => false)),

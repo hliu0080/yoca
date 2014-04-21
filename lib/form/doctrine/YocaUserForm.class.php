@@ -117,8 +117,10 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentor_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
+  				$widgets['title'] = new sfWidgetFormInputText();
   				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentor', 'add_empty'=>true));
   				$widgets['industry'] = new sfWidgetFormInputText();
+  				$widgets['sub_industry'] = new sfWidgetFormInputText();
   				$widgets['age'] = new sfWidgetFormChoice(array(
   						'choices' => array('' => "Choose Age Group") + sfConfig::get('app_profile_age')
   				));
@@ -130,8 +132,10 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array_keys(sfConfig::get('app_profile_mentor_work_experience'))
   				));
   				$validators['employer'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
+  				$validators['title'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
   				$validators['industry_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry'));
   				$validators['industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false, 'trim' => true));
+  				$validators['sub_industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false, 'trim' => true));
   				$validators['school'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
   				$validators['age'] = new sfValidatorChoice(array(
   						'choices' => array_keys(sfConfig::get('app_profile_age'))
@@ -142,8 +146,10 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['school'] = '* School';
   				$labels['work'] = '* Work Experience';
   				$labels['employer'] = '* Current/Recent Employer';
-  				$labels['industry_id'] = "* Industry I work in";
+  				$labels['title'] = '* Title';
+  				$labels['industry_id'] = "* Industry You work in";
   				$labels['industry'] = "Other industry if not listed above";
+  				$labels['sub_industry'] = "Industry sub-category";
   				$labels['age'] = "* Age Group";
   				$labels['neighborhood'] = "* Neighborhood where you'll be hosting your office hours";
   				$labels['organization'] = "Other organizations you belong to";
@@ -157,7 +163,6 @@ class YocaUserForm extends BaseYocaUserForm
 
   	//add EULA for becomeMentee
   	if($usertype == 'becomeMentee'){
-// 		$labels['eula'] = 'We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.';
 		$labels['eula'] = 'Important Instruction';
 		$widgets['eula'] = new sfWidgetFormInputCheckbox();
   	  	$validators['eula'] = new sfValidatorChoice(array('required' => true, 'choices' => array('on')));
@@ -185,6 +190,7 @@ class YocaUserForm extends BaseYocaUserForm
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat($this->isNew()?'signup[%s]':'edit[%s]');
   	$this->widgetSchema->setHelp('eula', 'We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.');
+  	$this->widgetSchema->setHelp('sub_industry', 'i.e: Trading, SEO, etc.');
   	
   	$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());
   	$this->widgetSchema->addFormFormatter('custom', $formatter);

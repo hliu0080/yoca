@@ -86,10 +86,6 @@ Event:
       notnull: false
       autoincrement: false
   relations:
-    EventTopic:
-      local: topic
-      foreign: id
-      type: one
     EventAddress:
       local: address
       foreign: id
@@ -100,6 +96,10 @@ Event:
       type: one
     YocaNeighborhood:
       local: neighborhood
+      foreign: id
+      type: one
+    EventTopic:
+      local: topic
       foreign: id
       type: one
     Registration:
@@ -317,6 +317,20 @@ YocaUser:
       unsigned: false
       primary: true
       autoincrement: true
+    mentor_id:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
+    mentor_title:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
     username:
       type: string(255)
       fixed: false
@@ -438,6 +452,13 @@ YocaUser:
       notnull: false
       autoincrement: false
     industry:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
+    sub_industry:
       type: string(45)
       fixed: false
       unsigned: false
