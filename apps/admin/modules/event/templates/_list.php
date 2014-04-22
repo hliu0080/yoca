@@ -6,7 +6,7 @@
 	<?php print $sf_user->hasFlash('confirm')?$sf_user->getFlash('confirm'):''?>
 </div>
 
-
+<?php if($type != 'my'):?>
 <div class="pull-right">
 	<form style="background: none !important" action="<?php print url_for('search_events')?>" method="post">
 		<div class="controls">
@@ -17,6 +17,7 @@
 		</div>
 	</form>
 </div>
+<?php endif?>
 
 
 <table class="table table-striped table-bordered" id="<?php print strtolower($type).'_eventtable'?>">
@@ -25,10 +26,10 @@
       <th>Time</th>
       <th>Topic</th>
       <th>Industry</th>
-      <th>Mentor ID</th>
-      <th>Capacity / Booked</th>
+      <th>Mentor</th>
+      <th>Booked / Capacity</th>
       <th>Neighborhood</th>
-      <th>Address</th>
+<!--       <th>Address</th> -->
       <th>Status</th>
       <th>Actions</th>
     </tr>
@@ -40,10 +41,11 @@
 		    <td><?php print link_to(date("m/d/Y H:i", strtotime($event['datetime'])), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event['id']))?></td>
 	      	<td><?php echo $event['EventTopic']['id']==8?$event['topic']:$event['EventTopic']['name'] ?></td>
 	      	<td><?php echo $event['YocaIndustry']['name'] ?></td>
-	      	<td><?php echo $event['mentorid'] ?></td>
-	      	<td><?php echo $event['capacity'] . " / " .$event['booked'] ?></td>
+	      	<td><?php echo $event['YocaUser']['mentor_id']?></td>
+<!-- 	      	<td><?php //echo link_to($event['YocaUser']['mentor_id'], 'show_user', array('type'=>'Mentor', 'id'=>$event['mentorid'])) ?></td> -->
+	      	<td><?php echo $event['booked'] . " / " .$event['capacity'] ?></td>
 	      	<td><?php echo $event['YocaNeighborhood']['name'] ?></td>
-	      	<td><?php echo $event['EventAddress']['id']==18?$event['address']:$event['EventAddress']['name'] ?></td>
+<!-- 	      	<td><?php //echo $event['EventAddress']['id']==18?$event['address']:$event['EventAddress']['name'] ?></td> -->
 	      	
 	      	<!-- Status -->
 	      	<td>
@@ -138,11 +140,14 @@
 </table>
 <div class="row">
 	<div class="span6"><?php print "$total " .(($total>1)?'records':'record'). " found"?></div>
+	
+	<?php if($type != 'my'):?>
 	<div class="span6 text-right">
 		<a class="btn btn-small btn-flat <?php print $page-1>0?'':'disabled'?>" href="<?php print $page-1>0?url_for('@manage_events?type='.$type.'&page='.($page-1).'&keyword='.$keyword):'#'?>"><span class="awe-caret-left"></span></a>
 		<?php print $total?"$page of $pages":""?>
 		<a class="btn btn-small btn-flat <?php print $page+1>$pages?'disabled':''?>" href="<?php print $page+1>$pages?'#':url_for('@manage_events?type='.$type.'&page='.($page+1).'&keyword='.$keyword)?>"><span class="awe-caret-right"></span></a>
 	</div>
+	<?php endif?>
 </div>
 
 <script>

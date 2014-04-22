@@ -38,8 +38,8 @@
 			    	<td><?php echo $event->getEventTopic()->getId()==8?$event->getTopic():$event->getEventTopic()->getName() ?></td>
 			    </tr>
 			    <tr>
-			      <th>Mentor ID</th>
-			      <td><?php echo $event->getMentorid() ?></td>
+			      <th>Mentor</th>
+			      <td><?php echo $event->getYocaUser()->getMentorId() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Capacity</th>
@@ -118,17 +118,18 @@
 						<?php print link_to('Back to list', 'manage_events', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword))?>
 					<?php endif?>
 				</div>
-				<div class="span6">
+				<div class="span6 text-right">
 					<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
 						<?php if($type == 'pending'):?>
-							<a href="<?php echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-wuxia'>Edit</a>
+<!-- TODO: edit event -->						
+<!-- 							<a href="<?php //echo url_for('event/edit?id='.$event->getId())?>" class='btn btn-wuxia'>Edit Event</a> -->
 			      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
-			      				<?php echo link_to('Confirm', 'set_event_status', array('id'=>$event->getId(), 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      				<?php echo link_to('Confirm Event', 'set_event_status', array('id'=>$event->getId(), 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia btn-success')) ?>
 			      			<?php endif?>
-			      			<?php echo link_to('Delete', 'set_event_status', array('id'=>$event->getId(), 'status'=>3, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      			<?php echo link_to('Delete Event', 'set_event_status', array('id'=>$event->getId(), 'status'=>3, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia btn-danger')) ?>
 			      		<?php elseif($type == 'upcoming'):?>
 			      			<?php if($event->getStatus() == 1):?>
-			      				<?php echo link_to('Cancel', 'set_event_status', array('id'=>$event->getId(), 'status'=>2, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia')) ?>
+			      				<?php echo link_to('Cancel', 'set_event_status', array('id'=>$event->getId(), 'status'=>2, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia btn-danger')) ?>
 			      			<?php endif?>
 			      		<?php endif?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
@@ -136,9 +137,9 @@
 							<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 							<?php if(strtotime($event->getDatetime())>time()+60*60*24 && $event->getStatus()==1):?>
 					      		<?php if(count($reg) > 0):?>
-					      			<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
+					      			<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia btn-danger'))?>
 					      		<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_const_reg_cap')):?>
-					      			<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia'))?>
+					      			<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia btn-success'))?>
 					      		<?php elseif($event->getCapacity()>$event->getBooked() && $sf_user->getAttribute('userregcounter')>=sfConfig::get('app_const_reg_cap')):?>
 					      			<a class='btn btn-wuxia disabled popup' data-content='Sorry, you have reached the max of 2 events per month' disabled>Register</a>
 					      		<?php elseif($event->getCapacity() <= $event->getBooked()):?>

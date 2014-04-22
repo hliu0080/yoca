@@ -86,14 +86,14 @@ class userActions extends sfActions
    */
   public function executeShow(sfWebRequest $request)
   {
-  	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
+//   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Admin');
   	
   	$this->type = $request->getParameter('type');
   	$this->page = $request->getParameter('page');
   	$this->keyword = $request->getParameter('keyword');
   	
   	$this->yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($request->getParameter('id')));
-  	$this->forward404Unless($this->yoca_user);
+//   	$this->forward404Unless($this->yoca_user);
   }
   
   /**
@@ -243,7 +243,7 @@ class userActions extends sfActions
   public function executeUpdateMentor(sfWebRequest $request){
   	$this->forward404Unless($this->getUser()->getAttribute('usertype')=='Member');
   	$this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
+  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
   	$this->form = new YocaUserForm($yoca_user, array('usertype' => 'becomeMentor'));
   	$this->processForm($request, $this->form);
   	$this->setTemplate('becomeMentor');

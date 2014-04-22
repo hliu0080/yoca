@@ -19,7 +19,7 @@
 					<?php print $form?>
 				</fieldset>
 				<div class="form-actions">
-	      			<input class="btn btn-wuxia btn-primary" type="submit" value="Submit"/>
+	      			<input class="btn btn-wuxia btn-primary" type="submit" value="Update Password"/>
 				</div>
 			</form>
 		</div>

@@ -16,7 +16,7 @@ abstract class BaseEventForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'           => new sfWidgetFormInputHidden(),
-      'mentorid'     => new sfWidgetFormInputText(),
+      'mentorid'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'add_empty' => true)),
       'industry'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('YocaIndustry'), 'add_empty' => true)),
       'topic_id'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('EventTopic'), 'add_empty' => true)),
       'topic'        => new sfWidgetFormInputText(),
@@ -34,7 +34,7 @@ abstract class BaseEventForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'           => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'mentorid'     => new sfValidatorString(array('max_length' => 45, 'required' => false)),
+      'mentorid'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('YocaUser'), 'required' => false)),
       'industry'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('YocaIndustry'), 'required' => false)),
       'topic_id'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('EventTopic'), 'required' => false)),
       'topic'        => new sfValidatorString(array('max_length' => 45, 'required' => false)),

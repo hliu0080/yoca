@@ -29,7 +29,7 @@ class ChangePasswordForm extends sfForm{
 		$this->widgetSchema->setLabels(array(
 				'current_password' => '* Current Password',
 				'new_password' => '* New Password',
-				'new_password_again' => '* New Password Again',
+				'new_password_again' => '* Confirm New Password',
 		));
 		
 		$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());

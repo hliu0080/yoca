@@ -38,6 +38,7 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUser', 'doctrine');
  * @property string $is_active
  * @property timestamp $created_at
  * @property timestamp $updated_at
+ * @property Doctrine_Collection $Event
  * @property Doctrine_Collection $Registration
  * 
  * @method integer             getId()             Returns the current record's "id" value
@@ -71,6 +72,7 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUser', 'doctrine');
  * @method string              getIsActive()       Returns the current record's "is_active" value
  * @method timestamp           getCreatedAt()      Returns the current record's "created_at" value
  * @method timestamp           getUpdatedAt()      Returns the current record's "updated_at" value
+ * @method Doctrine_Collection getEvent()          Returns the current record's "Event" collection
  * @method Doctrine_Collection getRegistration()   Returns the current record's "Registration" collection
  * @method YocaUser            setId()             Sets the current record's "id" value
  * @method YocaUser            setMentorId()       Sets the current record's "mentor_id" value
@@ -103,6 +105,7 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUser', 'doctrine');
  * @method YocaUser            setIsActive()       Sets the current record's "is_active" value
  * @method YocaUser            setCreatedAt()      Sets the current record's "created_at" value
  * @method YocaUser            setUpdatedAt()      Sets the current record's "updated_at" value
+ * @method YocaUser            setEvent()          Sets the current record's "Event" collection
  * @method YocaUser            setRegistration()   Sets the current record's "Registration" collection
  * 
  * @package    yoca
@@ -400,6 +403,10 @@ abstract class BaseYocaUser extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
+        $this->hasMany('Event', array(
+             'local' => 'id',
+             'foreign' => 'mentorid'));
+
         $this->hasMany('Registration', array(
              'local' => 'id',
              'foreign' => 'mentee_id'));

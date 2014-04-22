@@ -84,9 +84,9 @@
 		?>
       	<div class="form-actions">
       		<?php if($form->getOption('usertype')=='becomeMentee' || $form->getOption('usertype')=='becomeMentor'):?>
-      			<input class="btn btn-wuxia btn-primary" type="submit" value="Submit"/>
+      			<input class="btn btn-wuxia btn-primary" type="submit" value="Submit Profile"/>
       		<?php else:?>
-				<input class="btn btn-wuxia btn-primary" type="submit" value="Update"/>
+				<input class="btn btn-wuxia btn-primary" type="submit" value="Update Profile"/>
 			<?php endif?>
 		</div>
   	</fieldset>

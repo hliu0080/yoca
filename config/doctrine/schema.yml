@@ -9,7 +9,7 @@ Event:
       primary: true
       autoincrement: true
     mentorid:
-      type: string(45)
+      type: integer(4)
       fixed: false
       unsigned: false
       primary: false
@@ -107,6 +107,10 @@ Event:
       notnull: false
       autoincrement: false
   relations:
+    YocaUser:
+      local: mentorid
+      foreign: id
+      type: one
     EventAddress:
       local: address_id
       foreign: id
@@ -551,6 +555,10 @@ YocaUser:
       notnull: false
       autoincrement: false
   relations:
+    Event:
+      local: id
+      foreign: mentorid
+      type: many
     Registration:
       local: id
       foreign: mentee_id

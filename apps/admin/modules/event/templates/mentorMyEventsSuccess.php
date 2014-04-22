@@ -10,8 +10,8 @@
 			<h1>Mentorship Program</h1>
 		</div>
 		<div class="page-container">
-			<h2>Create Event</h2>
-			<?php include_partial('form', array('form' => $form)) ?>
+			<h2>Create New Event</h2>
+			<?php include_partial('form', array('form' => $form, 'type'=>$type, 'total'=>$total, 'page'=>$page, 'pages'=>$pages, 'keyword'=>$keyword)) ?>
 			
 			<hr />
 			

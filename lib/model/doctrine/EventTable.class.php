@@ -23,7 +23,8 @@ class EventTable extends Doctrine_Table
 		->leftJoin('e.YocaIndustry i')
 		->leftJoin('e.YocaNeighborhood n')
 		->leftJoin('e.EventAddress a')
-		->select('e.*, t.name, i.name, n.name, a.name')
+		->leftJoin('e.YocaUser u')
+		->select('e.*, t.name, i.name, n.name, a.name, u.mentor_id')
     	->where('e.mentorid = ? and e.status <> 3', $mentorId)
     	->orderBy('e.datetime asc')
     	->setHydrationMode(Doctrine::HYDRATE_ARRAY)
@@ -36,5 +37,16 @@ class EventTable extends Doctrine_Table
     	->leftJoin('e.Registration r')
     	->where('r.mentee_id = ?', $menteeId)
     	->execute();
+    }
+    
+    public function findEvent($id){
+    	return self::getInstance()->createQuery('e')
+    	->leftJoin('e.EventTopic t')
+    	->leftJoin('e.YocaIndustry i')
+    	->leftJoin('e.YocaNeighborhood n')
+    	->leftJoin('e.EventAddress a')
+    	->leftJoin('e.YocaUser u')
+    	->where('e.id = ?', $id)
+    	->fetchOne();
     }
 }

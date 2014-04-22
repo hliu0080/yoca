@@ -69,7 +69,12 @@ class eventActions extends sfActions
   	$this->page = 1;
   	$this->start = 0;
   	
-  	$this->fetchEvents();
+//   	if($this->type == 'my'){
+//   		$this->events = Doctrine_Core::getTable('Event')->findMentorEvents($this->getUser()->getAttribute('userid'));
+//   	}else{
+	  	$this->fetchEvents();
+//   	}
+  	
   	 
   	if($this->getUser()->getAttribute('usertype') == 'Admin'){
   		$this->getUser()->setAttribute('cur_page', 'manage_events');
@@ -95,7 +100,8 @@ class eventActions extends sfActions
   	}
   	 
   	$query = Doctrine_Core::getTable('Event')
-  	->createQuery('a')
+  	->createQuery('e')
+  	->leftJoin('e.YocaUser u')
   	->whereIn('status', $status)
   	->andWhere("datetime $cond ?", date('Y-m-d H:i:s'))
   	->orderBy('datetime asc');
@@ -120,27 +126,26 @@ class eventActions extends sfActions
   	$id = $request->getParameter('id');
   	$this->forward404If(is_null($status) || is_null($id));
   	
-  	$this->event = Doctrine_Core::getTable('Event')->find(array($id));
-  	$mentor = Doctrine_Core::getTable('YocaUser')->findOneBy('id', $this->event->get('mentorid'));
-  	$this->forward404Unless($mentor);
-  	$this->event->set('status', $status);
-  	$this->event->save();
+  	$event = Doctrine_Core::getTable('Event')->findEvent($id);
+  	$event->set('status', $status);
+  	$event->save();
   	
   	//Confirm event
   	if($status == 1){
 	  	//Send confirmation email to mentor
-	  	$body = "Event confirmed for Event ID $id\n";
-	  	$body .= "Topic: " .Doctrine_Core::getTable('EventTopic')->find($this->event->get('topic'))."\n";
-	  	$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
-	  	$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
-	  	$body .= "Capacity: ".$this->event->get('capacity')."\n";
-	  	$body .= "Time: ".$this->event->get('datetime')."\n";
-	  	$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
-	  	$body .= "Address: ".Doctrine_Core::getTable('EventAddress')->find($this->event->get('address'))."\n";
-	  	$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
-	  	$body .= "Created At: ".$this->event->get('created_at');
+	  	$body = "Event Confirmed\n\n";
+	  	$body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+	  	$body .= "Industry: ".$event->getYocaIndustry()->getName()."\n";
+	  	$body .= "Mentor: ".$event->getYocaUser()->getMentorId()."\n";
+	  	$body .= "Capacity: ".$event->getCapacity()."\n";
+	  	$body .= "Time: ".$event->getDatetime()."\n";
+	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
+	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
+	  	$body .= "Created At: ".$event->getCreatedAt();
+
 	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Your YOCA event has been confirmed', $body);
+	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been confirmed', $body);
 	  	
 	  	$this->getUser()->setFlash('confirm', 'Confirm successful.');
   	}
@@ -159,20 +164,23 @@ class eventActions extends sfActions
   		}
   		
   		//Send email to registered mentees, and mentor
-  		$body = "We are sorry. The upcoming YOCA event has been cancelled.";
-  		$body .= "Event cancelled for Event ID $id\n";
-  		$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
-  		$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
-  		$body .= "Capacity: ".$this->event->get('capacity')."\n";
-  		$body .= "Booked: ".$this->event->get('booked')."\n";
-  		$body .= "Time: ".$this->event->get('datetime')."\n";
-  		$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
-  		$body .= "Address: ".$this->event->get('address')."\n";
-  		$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
-  		$body .= "Created At: ".$this->event->get('created_at');
+  		$body = "We are sorry. The upcoming YOCA event has been cancelled.\n\n";
+  		$body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+	  	$body .= "Industry: ".$event->getYocaIndustry()->getName()."\n";
+	  	$body .= "Mentor: ".$event->getYocaUser()->getMentorId()."\n";
+	  	$body .= "Capacity: ".$event->getCapacity()."\n";
+	  	$body .= "Booked: ".$event->getBooked()."\n";
+	  	$body .= "Time: ".$event->getDatetime()."\n";
+	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
+	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
+	  	$body .= "Created At: ".$event->getCreatedAt();
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $usernameArray, 'Your YOCA event has been cancelled', $body);
-		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Your YOCA event has been cancelled', $body);
+  		
+  		if(count($usernameArray)){
+	  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $usernameArray, 'Your YOCA event has been cancelled', $body);
+  		}
+		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been cancelled', $body);
 
   		//Set registration status to 3 - cancelled by system
   		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
@@ -186,17 +194,19 @@ class eventActions extends sfActions
   	//Delete event
   	if($status == 3){
   		//Send cancellation email to mentor
-  		$body = "Event deleted for Event ID $id\n";
-  		$body .= "Industry: ".Doctrine_Core::getTable('YocaIndustry')->find($this->event->get('industry'))."\n";
-  		$body .= "Mentor ID: ".$this->event->get('mentorid')."\n";
-  		$body .= "Capacity: ".$this->event->get('capacity')."\n";
-  		$body .= "Time: ".$this->event->get('datetime')."\n";
-  		$body .= "Neighborhood: ".Doctrine_Core::getTable('YocaNeighborhood')->find($this->event->get('neighborhood'))."\n";
-  		$body .= "Address: ".$this->event->get('address')."\n";
-  		$body .= "Status: ".$this->getEventStatus($this->event->get('status'))."\n";
-  		$body .= "Created At: ".$this->event->get('created_at');
+  		$body = "Event Deleted\n\n";
+  		$body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+	  	$body .= "Industry: ".$event->getYocaIndustry()->getName()."\n";
+	  	$body .= "Mentor: ".$event->getYocaUser()->getMentorId()."\n";
+	  	$body .= "Capacity: ".$event->getCapacity()."\n";
+	  	$body .= "Booked: ".$event->getBooked()."\n";
+	  	$body .= "Time: ".$event->getDatetime()."\n";
+	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
+	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
+	  	$body .= "Created At: ".$event->getCreatedAt();
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $mentor->getUsername(), 'Your YOCA event has been deleted', $body);
+  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been deleted', $body);
   		
   		$this->getUser()->setFlash('delete', 'Delete successful.');
   	}
@@ -284,9 +294,18 @@ class eventActions extends sfActions
    */
   public function executeCreate(sfWebRequest $request)
   {
-    $this->forward404Unless($request->isMethod(sfRequest::POST));
+  	$this->forward404Unless($request->isMethod(sfRequest::POST));
+  	
+  	$this->type = $request->getParameter('type');
+  	$this->keyword = $request->getParameter('keyword');
+  	$this->page = $request->getParameter('page');
+  	$this->start = ($this->page - 1) * sfConfig::get('app_const_record_num');
+  	 
+  	$this->events = Doctrine_Core::getTable('Event')->findMentorEvents($this->getUser()->getAttribute('userid'));
+  	 
+  	$this->total = count($this->events);
+  	$this->pages = ceil($this->total / sfConfig::get('app_const_record_num'));
 
-    $this->events = Doctrine_Core::getTable('Event')->findMentorEvents($this->getUser()->getAttribute('userid'));
     $this->mentor = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
     
     $this->form = new EventForm();
@@ -300,6 +319,7 @@ class eventActions extends sfActions
    */
   public function executeEdit(sfWebRequest $request)
   {
+  	$this->forward404();
   	$this->type = $request->getParameter('type');
   	$this->page = $request->getParameter('page');
   	$this->keyword = $request->getParameter('keyword');
@@ -314,15 +334,17 @@ class eventActions extends sfActions
    */
   public function executeUpdate(sfWebRequest $request)
   {
+  	$this->forward404();
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-    $this->forward404Unless($event = Doctrine_Core::getTable('Event')->find(array($request->getParameter('id'))), sprintf('Object event does not exist (%s).', $request->getParameter('id')));
+    $event = Doctrine_Core::getTable('Event')->find($request->getParameter('id'));
+    $this->forward404Unless($event, sprintf('Object event does not exist (%s).', $request->getParameter('id')));
     
     $this->events = Doctrine_Core::getTable('Event')->findMentorEvents($this->getUser()->getAttribute('userid'));
     $this->mentor = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
     
     $this->form = new EventForm($event);
     $this->processForm($request, $this->form);
-    $this->setTemplate('mentorMyEvents');
+    $this->setTemplate('edit');
   }
 
   public function executeDelete(sfWebRequest $request)
@@ -363,19 +385,19 @@ class eventActions extends sfActions
   protected function processForm(sfWebRequest $request, sfForm $form)
   {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+    
     if ($form->isValid())
     {
-    	$datetimeArr = $request->getPostParameter('newEvent')['datetime'];
+    	$datetimeArr = $form->isNew()?$request->getPostParameter('newEvent')['datetime']:$request->getPostParameter('updateEvent')['datetime'];
     	$datetime = $datetimeArr['year']."-".sprintf("%02s", $datetimeArr['month'])."-".sprintf("%02s", $datetimeArr['day'])." ".sprintf("%02s", $datetimeArr['hour']).":".($datetimeArr['minute']==0?"00":"30").":00";
 
     	$event = $form->save();
     	$event->setDatetime(date($datetime));
     	$event->save();
-
-      if($form->isNew())
-      	$this->redirect('@mentor_manage_event');
-      else
-      	$this->redirect($this->generateUrl('default', array('module' => 'event', 'action' => 'show', 'id' => $request->getParameter('id'))));
+    	
+    	if($form->isNew()){
+	    	$this->redirect('@mentor_manage_event');
+    	}
     }
   }
   
@@ -394,6 +416,9 @@ class eventActions extends sfActions
   			break;
   		case 2:
   			$status = 'Cancelled';
+  			break;
+  		case 3:
+  			$status = 'Deleted';
   			break;
   		default:
   			$status = 'Unknow';
