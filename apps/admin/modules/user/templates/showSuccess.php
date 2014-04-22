@@ -7,7 +7,7 @@
 
 	<div class="content">
 		<div class="page-header">
-			<h1>View <?php print $type?></h1>
+			<h1>View <?php print $type?><?php echo ($type=='Mentor'?' - '.$yoca_user->getMentorId():'')?></h1>
 		</div>
 		
 		<div class="page-container">

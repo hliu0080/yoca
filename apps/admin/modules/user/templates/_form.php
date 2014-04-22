@@ -81,9 +81,6 @@
   					print "</div></div>";
 				} 
 			}
-		
-		
-		
 		?>
       	<div class="form-actions">
       		<?php if($form->getOption('usertype')=='becomeMentee' || $form->getOption('usertype')=='becomeMentor'):?>
