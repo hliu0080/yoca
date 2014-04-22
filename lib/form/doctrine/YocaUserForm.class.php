@@ -117,7 +117,7 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentor_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
-  				$widgets['title'] = new sfWidgetFormInputText();
+  				$widgets['mentor_title'] = new sfWidgetFormInputText();
   				$widgets['industry_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaIndustry', 'table_method'=>'getIndustryForMentor', 'add_empty'=>true));
   				$widgets['industry'] = new sfWidgetFormInputText();
   				$widgets['sub_industry'] = new sfWidgetFormInputText();
@@ -132,7 +132,7 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array_keys(sfConfig::get('app_profile_mentor_work_experience'))
   				));
   				$validators['employer'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
-  				$validators['title'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
+  				$validators['mentor_title'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
   				$validators['industry_id'] = new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry'));
   				$validators['industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false, 'trim' => true));
   				$validators['sub_industry'] = new sfValidatorString(array('max_length' => 45, 'required' => false, 'trim' => true));
@@ -146,7 +146,7 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['school'] = '* School';
   				$labels['work'] = '* Work Experience';
   				$labels['employer'] = '* Current/Recent Employer';
-  				$labels['title'] = '* Title';
+  				$labels['mentor_title'] = '* Title';
   				$labels['industry_id'] = "* Industry You work in";
   				$labels['industry'] = "Other industry if not listed above";
   				$labels['sub_industry'] = "Industry sub-category";
@@ -190,7 +190,7 @@ class YocaUserForm extends BaseYocaUserForm
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat($this->isNew()?'signup[%s]':'edit[%s]');
   	$this->widgetSchema->setHelp('eula', 'We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.');
-  	$this->widgetSchema->setHelp('sub_industry', 'i.e: Trading, SEO, etc.');
+  	$this->widgetSchema->setHelp('sub_industry', 'i.e: Finance - Trading, Marketing - SEO, etc.');
   	
   	$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());
   	$this->widgetSchema->addFormFormatter('custom', $formatter);
@@ -224,6 +224,11 @@ class YocaUserForm extends BaseYocaUserForm
   		$body = "Mentor registration successful for {$this->getObject()->getUsername()}";
   		$mailer = sfContext::getInstance()->getMailer();
   		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
+
+  		//Set mentor_id to be industry initial + number 
+  		$industry = Doctrine_Core::getTable('YocaIndustry')->find($values['industry_id']);
+  		$id = Doctrine_Core::getTable('YocaUser')->nextAvaibleMentorId($industry);
+  		$this->getObject()->setMentorId($id);
   		
   		//Update user type to mentee
   		$this->getObject()->setType('Mentor');

@@ -38,19 +38,19 @@
     	<?php foreach ($events as $event): ?>
 	    <tr>
 		    <td><?php print link_to(date("m/d/Y H:i", strtotime($event['datetime'])), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event['id']))?></td>
-	      	<td><?php echo $event['EventTopic']['name'] ?></td>
+	      	<td><?php echo $event['EventTopic']['id']==8?$event['topic']:$event['EventTopic']['name'] ?></td>
 	      	<td><?php echo $event['YocaIndustry']['name'] ?></td>
 	      	<td><?php echo $event['mentorid'] ?></td>
 	      	<td><?php echo $event['capacity'] . " / " .$event['booked'] ?></td>
 	      	<td><?php echo $event['YocaNeighborhood']['name'] ?></td>
-	      	<td><?php echo $event['EventAddress']['name'] ?></td>
+	      	<td><?php echo $event['EventAddress']['id']==18?$event['address']:$event['EventAddress']['name'] ?></td>
 	      	
 	      	<!-- Status -->
 	      	<td>
 			<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event['id'], $sf_user->getAttribute('userid'), 1)?>
 	      	<?php if($event['status'] == 0):?>
-	      		Pending
-	      	<?php elseif($event->getStatus() == 1):?>
+	      		<span class="label label-warning">Pending</span>
+	      	<?php elseif($event['status']== 1):?>
 	      		<?php if($type == 'upcoming'):?>
 	      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
 	      				Registration Closed

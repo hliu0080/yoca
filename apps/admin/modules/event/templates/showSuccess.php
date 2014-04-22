@@ -35,7 +35,7 @@
 			    </tr>
 			    <tr>
 			    	<th>Topic</th>
-			    	<td><?php echo $event->getEventTopic()->getName() ?></td>
+			    	<td><?php echo $event->getEventTopic()->getId()==8?$event->getTopic():$event->getEventTopic()->getName() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Mentor ID</th>
@@ -59,7 +59,7 @@
 			    </tr>
 			    <tr>
 			      <th>Address</th>
-			      <td><?php echo $event->getEventAddress()->getName() ?></td>
+			      <td><?php echo $event->getEventAddress()->getId()==18?$event->getAddress():$event->getEventAddress()->getName() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Created At</th>

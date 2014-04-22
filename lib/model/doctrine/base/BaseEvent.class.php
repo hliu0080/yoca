@@ -10,15 +10,18 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @property integer $id
  * @property string $mentorid
  * @property integer $industry
- * @property integer $topic
+ * @property integer $topic_id
+ * @property string $topic
  * @property string $capacity
  * @property string $booked
  * @property timestamp $datetime
  * @property integer $neighborhood
- * @property integer $address
+ * @property integer $address_id
+ * @property string $address
  * @property string $status
  * @property timestamp $created_at
  * @property timestamp $updated_at
+ * @property string $eventcol
  * @property EventAddress $EventAddress
  * @property YocaIndustry $YocaIndustry
  * @property YocaNeighborhood $YocaNeighborhood
@@ -28,15 +31,18 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method integer             getId()               Returns the current record's "id" value
  * @method string              getMentorid()         Returns the current record's "mentorid" value
  * @method integer             getIndustry()         Returns the current record's "industry" value
- * @method integer             getTopic()            Returns the current record's "topic" value
+ * @method integer             getTopicId()          Returns the current record's "topic_id" value
+ * @method string              getTopic()            Returns the current record's "topic" value
  * @method string              getCapacity()         Returns the current record's "capacity" value
  * @method string              getBooked()           Returns the current record's "booked" value
  * @method timestamp           getDatetime()         Returns the current record's "datetime" value
  * @method integer             getNeighborhood()     Returns the current record's "neighborhood" value
- * @method integer             getAddress()          Returns the current record's "address" value
+ * @method integer             getAddressId()        Returns the current record's "address_id" value
+ * @method string              getAddress()          Returns the current record's "address" value
  * @method string              getStatus()           Returns the current record's "status" value
  * @method timestamp           getCreatedAt()        Returns the current record's "created_at" value
  * @method timestamp           getUpdatedAt()        Returns the current record's "updated_at" value
+ * @method string              getEventcol()         Returns the current record's "eventcol" value
  * @method EventAddress        getEventAddress()     Returns the current record's "EventAddress" value
  * @method YocaIndustry        getYocaIndustry()     Returns the current record's "YocaIndustry" value
  * @method YocaNeighborhood    getYocaNeighborhood() Returns the current record's "YocaNeighborhood" value
@@ -45,15 +51,18 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method Event               setId()               Sets the current record's "id" value
  * @method Event               setMentorid()         Sets the current record's "mentorid" value
  * @method Event               setIndustry()         Sets the current record's "industry" value
+ * @method Event               setTopicId()          Sets the current record's "topic_id" value
  * @method Event               setTopic()            Sets the current record's "topic" value
  * @method Event               setCapacity()         Sets the current record's "capacity" value
  * @method Event               setBooked()           Sets the current record's "booked" value
  * @method Event               setDatetime()         Sets the current record's "datetime" value
  * @method Event               setNeighborhood()     Sets the current record's "neighborhood" value
+ * @method Event               setAddressId()        Sets the current record's "address_id" value
  * @method Event               setAddress()          Sets the current record's "address" value
  * @method Event               setStatus()           Sets the current record's "status" value
  * @method Event               setCreatedAt()        Sets the current record's "created_at" value
  * @method Event               setUpdatedAt()        Sets the current record's "updated_at" value
+ * @method Event               setEventcol()         Sets the current record's "eventcol" value
  * @method Event               setEventAddress()     Sets the current record's "EventAddress" value
  * @method Event               setYocaIndustry()     Sets the current record's "YocaIndustry" value
  * @method Event               setYocaNeighborhood() Sets the current record's "YocaNeighborhood" value
@@ -96,7 +105,7 @@ abstract class BaseEvent extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 4,
              ));
-        $this->hasColumn('topic', 'integer', 4, array(
+        $this->hasColumn('topic_id', 'integer', 4, array(
              'type' => 'integer',
              'fixed' => 0,
              'unsigned' => false,
@@ -104,6 +113,15 @@ abstract class BaseEvent extends sfDoctrineRecord
              'notnull' => false,
              'autoincrement' => false,
              'length' => 4,
+             ));
+        $this->hasColumn('topic', 'string', 45, array(
+             'type' => 'string',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             'length' => 45,
              ));
         $this->hasColumn('capacity', 'string', 45, array(
              'type' => 'string',
@@ -141,7 +159,7 @@ abstract class BaseEvent extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 4,
              ));
-        $this->hasColumn('address', 'integer', 4, array(
+        $this->hasColumn('address_id', 'integer', 4, array(
              'type' => 'integer',
              'fixed' => 0,
              'unsigned' => false,
@@ -149,6 +167,15 @@ abstract class BaseEvent extends sfDoctrineRecord
              'notnull' => false,
              'autoincrement' => false,
              'length' => 4,
+             ));
+        $this->hasColumn('address', 'string', 45, array(
+             'type' => 'string',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             'length' => 45,
              ));
         $this->hasColumn('status', 'string', 45, array(
              'type' => 'string',
@@ -177,13 +204,22 @@ abstract class BaseEvent extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 25,
              ));
+        $this->hasColumn('eventcol', 'string', 45, array(
+             'type' => 'string',
+             'fixed' => 0,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             'length' => 45,
+             ));
     }
 
     public function setUp()
     {
         parent::setUp();
         $this->hasOne('EventAddress', array(
-             'local' => 'address',
+             'local' => 'address_id',
              'foreign' => 'id'));
 
         $this->hasOne('YocaIndustry', array(
@@ -195,7 +231,7 @@ abstract class BaseEvent extends sfDoctrineRecord
              'foreign' => 'id'));
 
         $this->hasOne('EventTopic', array(
-             'local' => 'topic',
+             'local' => 'topic_id',
              'foreign' => 'id'));
 
         $this->hasMany('Registration', array(

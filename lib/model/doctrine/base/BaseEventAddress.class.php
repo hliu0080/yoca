@@ -52,6 +52,6 @@ abstract class BaseEventAddress extends sfDoctrineRecord
         parent::setUp();
         $this->hasMany('Event', array(
              'local' => 'id',
-             'foreign' => 'address'));
+             'foreign' => 'address_id'));
     }
 }

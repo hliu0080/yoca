@@ -52,6 +52,6 @@ abstract class BaseEventTopic extends sfDoctrineRecord
         parent::setUp();
         $this->hasMany('Event', array(
              'local' => 'id',
-             'foreign' => 'topic'));
+             'foreign' => 'topic_id'));
     }
 }

@@ -53,7 +53,7 @@
 		    	<td><?php print $user->getMajorId()==19?$user->getMajor():Doctrine_Core::getTable('YocaUserMajor')->find($user->getMajorId())?></td>
 	    	<?php elseif($type == 'Member'):?>
 	    		<td><?php print $user->get('education')?></td>
-	    		<td><?php print $user->get('is_active')?'Confirmed':'Pending'?></td>
+	    		<td><?php print $user->get('is_active')?'Confirmed':'<span class="label label-warning">Pending</span>'?></td>
 		    <?php elseif($type == 'Admin'):?>
 		    	<td><?php print $user->get('type')?></td>
 	    	<?php endif?>

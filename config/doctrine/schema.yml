@@ -22,8 +22,15 @@ Event:
       primary: false
       notnull: false
       autoincrement: false
-    topic:
+    topic_id:
       type: integer(4)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
+    topic:
+      type: string(45)
       fixed: false
       unsigned: false
       primary: false
@@ -57,8 +64,15 @@ Event:
       primary: false
       notnull: false
       autoincrement: false
-    address:
+    address_id:
       type: integer(4)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
+    address:
+      type: string(45)
       fixed: false
       unsigned: false
       primary: false
@@ -85,9 +99,16 @@ Event:
       primary: false
       notnull: false
       autoincrement: false
+    eventcol:
+      type: string(45)
+      fixed: false
+      unsigned: false
+      primary: false
+      notnull: false
+      autoincrement: false
   relations:
     EventAddress:
-      local: address
+      local: address_id
       foreign: id
       type: one
     YocaIndustry:
@@ -99,7 +120,7 @@ Event:
       foreign: id
       type: one
     EventTopic:
-      local: topic
+      local: topic_id
       foreign: id
       type: one
     Registration:
@@ -126,7 +147,7 @@ EventAddress:
   relations:
     Event:
       local: id
-      foreign: address
+      foreign: address_id
       type: many
 EventNotify:
   connection: doctrine
@@ -200,7 +221,7 @@ EventTopic:
   relations:
     Event:
       local: id
-      foreign: topic
+      foreign: topic_id
       type: many
 Registration:
   connection: doctrine

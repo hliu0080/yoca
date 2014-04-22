@@ -21,4 +21,22 @@ class YocaUserTable extends Doctrine_Table
     	$user = $this->findOneBy('id', $id, Doctrine::HYDRATE_ARRAY_SHALLOW);
     	return $user['username'];
     }
+    
+    public function nextAvaibleMentorId($industry){
+    	$current_id = $this->createQuery()
+    	->where('type = ? and industry_id = ?', array('Mentor', $industry->getId()))
+    	->count();
+    	
+    	switch($industry->getId()){
+    		case 19: //Art & Design
+    			$init = 'D';
+    			break;
+    		case 21: //Engineering & Research
+    			$init = 'R';
+    			break;
+    		default:
+    			$init = substr($industry->getName(), 0, 1);
+    	}
+    	return strtoupper($init).($current_id+1);
+    }
 }
