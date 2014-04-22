@@ -155,11 +155,20 @@ class userActions extends sfActions
   }
   
   /**
-   * Password reset
+   * Change password
    * @param sfWebRequest $request
    */
-  public function executeResetPass(sfWebRequest $request){
+  public function executeChangePass(sfWebRequest $request){
+  	$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
+  	$this->form = new ChangePasswordForm();
+  }
+  
+  public function executeDoChangePass(sfWebRequest $request){
+  	$this->forward404Unless($request->isMethod(sfRequest::POST));
+  	$this->form = new ChangePasswordForm();
+  	$this->processChangePassForm($request, $this->form);
   	
+  	$this->setTemplate('changePass');
   }
   
 
@@ -277,5 +286,28 @@ class userActions extends sfActions
 	    	throw new Exception(implode(' ', $form->getErrorSchema()->getErrors()));
     	}
     }
+  }
+  
+  protected function processChangePassForm(sfWebRequest $request, sfForm $form){
+  	$form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+  	if ($form->isValid())
+  	{
+  		$yoca_user = Doctrine_Core::getTable('YocaUser')->find(array($this->getUser()->getAttribute('userid')));
+  		if($this->getUser()->verify($this->form->getValue('current_password'), $yoca_user->getPassword())){
+  			if($this->form->getValue('new_password') == $this->form->getValue('current_password')){
+  				$this->getUser()->setFlash('error', 'Cannot set new password to be the same as current password');
+  			}else{
+  				// Do change password here
+  				$passHash = sfContext::getInstance()->getUser()->generateHash($this->form->getValue('new_password'));
+  				$yoca_user->setPassword($passHash);
+  				$yoca_user->save();
+  				
+				$this->getUser()->setFlash('msg', 'Password changed successfully');
+		  		$this->redirect('user/changePass');
+  			}
+  		}else{
+  			$this->getUser()->setFlash('error', 'Current password does not match our record');
+  		}
+  	}
   }
 }

@@ -14,8 +14,8 @@ my_profile:
   params: { module: user, action: edit }
 
 my_account:
-  url: /user/reset_pass
-  params: { module: user, action: resetPass }
+  url: /user/changePass
+  params: { module: user, action: changePass }
   
 become_a_mentee:
   url: /user/becomeMentee

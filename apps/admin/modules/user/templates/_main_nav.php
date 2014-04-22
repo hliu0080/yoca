@@ -77,7 +77,7 @@
 								<ul class="dropdown-menu">
 									<li><a href='<?php print url_for('auth/logout')?>'><span class="awe-signout"></span> Log out</a></li>
 									<li class="divider"></li>
-									<li><a href=''><span class=""></span> Reset Password</a></li>
+									<li><a href='<?php print url_for('my_account')?>'><span class=""></span> Change Password</a></li>
 								</ul>
 							</div>
 						</div>

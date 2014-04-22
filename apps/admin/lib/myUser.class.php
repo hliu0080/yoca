@@ -6,7 +6,7 @@ class myUser extends sfBasicSecurityUser
 		$user = YocaUserTable::getInstance()->findOneBy('username', $username);
 		
 		if($user){
-			if($this->_verify($password, $user->get('password'))){
+			if($this->verify($password, $user->get('password'))){
 				$this->setAuthenticated(true);
 				$this->setAttribute('username', $username);
 				$this->setAttribute('userid', $user->get('id'));
@@ -27,7 +27,7 @@ class myUser extends sfBasicSecurityUser
 		}
 	}
 	
-	protected function _verify($password, $hashedPassword){
+	public function verify($password, $hashedPassword){
 		return crypt($password, $hashedPassword) === $hashedPassword;
 	}
 }
