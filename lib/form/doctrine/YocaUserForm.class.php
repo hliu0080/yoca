@@ -190,7 +190,7 @@ class YocaUserForm extends BaseYocaUserForm
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat($this->isNew()?'signup[%s]':'edit[%s]');
   	$this->widgetSchema->setHelp('eula', 'We strongly recommend you NOT to ask for referrals until you have built a good relationship with the mentor, usually after a few meetings. Also, please dress in business casual to attend our Office Hour events.');
-  	$this->widgetSchema->setHelp('sub_industry', 'i.e: Finance - Trading, Marketing - SEO, etc.');
+  	$this->widgetSchema->setHelp('sub_industry', 'e.g. Finance - Trading, Marketing - SEO, etc.');
   	
   	$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());
   	$this->widgetSchema->addFormFormatter('custom', $formatter);
