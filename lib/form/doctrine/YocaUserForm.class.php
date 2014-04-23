@@ -69,7 +69,7 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array('' => "Choose Work Experience") + sfConfig::get('app_profile_mentee_work_experience')
   				));
   				$widgets['employer'] = new sfWidgetFormInputText();
-  				$widgets['description'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription', 'add_empty'=>true));
+  				$widgets['description_id'] = new sfWidgetFormDoctrineChoice(array('model' => 'YocaUserDescription', 'add_empty'=>true));
   				$widgets['oh_preference'] = new sfWidgetFormChoice(array(
   						'expanded' => true,
   						'renderer_options'=>array('formatter'=>array($this, 'RadioChoiceFormatter')),
@@ -88,7 +88,7 @@ class YocaUserForm extends BaseYocaUserForm
   						'choices' => array_keys(sfConfig::get('app_profile_mentee_work_experience'))
   				));
   				$validators['employer'] = new sfValidatorString(array('max_length' => 45, 'trim' => true));
-  				$validators['description'] = new sfValidatorString(array('max_length' => 45));
+  				$validators['description_id'] = new sfValidatorString(array('max_length' => 45));
   				$validators['oh_preference'] = new sfValidatorChoice(array(
   						'choices' => array_keys(sfConfig::get('app_profile_oh_preference'))
   				));
@@ -106,7 +106,7 @@ class YocaUserForm extends BaseYocaUserForm
   				$labels['oh_preference'] = '* Office Hour Preference';
   				$labels['industry_id'] = '* Industries you are interested in';
   				$labels['industry'] = 'Other industries if not listed above';
-  				$labels['description'] = '* Which of the following category best describes you?';
+  				$labels['description_id'] = '* Which of the following category best describes you?';
   				$labels['expectation_id'] = '* What do you hope to get out of this program?';
   				$labels['expectation'] = 'Other expectations if not listed above';
   				break;

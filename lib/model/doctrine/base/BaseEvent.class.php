@@ -21,10 +21,9 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @property string $status
  * @property timestamp $created_at
  * @property timestamp $updated_at
- * @property string $eventcol
- * @property YocaUser $YocaUser
  * @property EventAddress $EventAddress
  * @property YocaIndustry $YocaIndustry
+ * @property YocaUser $YocaUser
  * @property YocaNeighborhood $YocaNeighborhood
  * @property EventTopic $EventTopic
  * @property Doctrine_Collection $Registration
@@ -43,10 +42,9 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method string              getStatus()           Returns the current record's "status" value
  * @method timestamp           getCreatedAt()        Returns the current record's "created_at" value
  * @method timestamp           getUpdatedAt()        Returns the current record's "updated_at" value
- * @method string              getEventcol()         Returns the current record's "eventcol" value
- * @method YocaUser            getYocaUser()         Returns the current record's "YocaUser" value
  * @method EventAddress        getEventAddress()     Returns the current record's "EventAddress" value
  * @method YocaIndustry        getYocaIndustry()     Returns the current record's "YocaIndustry" value
+ * @method YocaUser            getYocaUser()         Returns the current record's "YocaUser" value
  * @method YocaNeighborhood    getYocaNeighborhood() Returns the current record's "YocaNeighborhood" value
  * @method EventTopic          getEventTopic()       Returns the current record's "EventTopic" value
  * @method Doctrine_Collection getRegistration()     Returns the current record's "Registration" collection
@@ -64,10 +62,9 @@ Doctrine_Manager::getInstance()->bindComponent('Event', 'doctrine');
  * @method Event               setStatus()           Sets the current record's "status" value
  * @method Event               setCreatedAt()        Sets the current record's "created_at" value
  * @method Event               setUpdatedAt()        Sets the current record's "updated_at" value
- * @method Event               setEventcol()         Sets the current record's "eventcol" value
- * @method Event               setYocaUser()         Sets the current record's "YocaUser" value
  * @method Event               setEventAddress()     Sets the current record's "EventAddress" value
  * @method Event               setYocaIndustry()     Sets the current record's "YocaIndustry" value
+ * @method Event               setYocaUser()         Sets the current record's "YocaUser" value
  * @method Event               setYocaNeighborhood() Sets the current record's "YocaNeighborhood" value
  * @method Event               setEventTopic()       Sets the current record's "EventTopic" value
  * @method Event               setRegistration()     Sets the current record's "Registration" collection
@@ -207,30 +204,21 @@ abstract class BaseEvent extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 25,
              ));
-        $this->hasColumn('eventcol', 'string', 45, array(
-             'type' => 'string',
-             'fixed' => 0,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             'length' => 45,
-             ));
     }
 
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('YocaUser', array(
-             'local' => 'mentorid',
-             'foreign' => 'id'));
-
         $this->hasOne('EventAddress', array(
              'local' => 'address_id',
              'foreign' => 'id'));
 
         $this->hasOne('YocaIndustry', array(
              'local' => 'industry',
+             'foreign' => 'id'));
+
+        $this->hasOne('YocaUser', array(
+             'local' => 'mentorid',
              'foreign' => 'id'));
 
         $this->hasOne('YocaNeighborhood', array(

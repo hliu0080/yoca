@@ -9,11 +9,14 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUserDescription', 'doctrine'
  * 
  * @property integer $id
  * @property string $description
+ * @property Doctrine_Collection $YocaUser
  * 
  * @method integer             getId()          Returns the current record's "id" value
  * @method string              getDescription() Returns the current record's "description" value
+ * @method Doctrine_Collection getYocaUser()    Returns the current record's "YocaUser" collection
  * @method YocaUserDescription setId()          Sets the current record's "id" value
  * @method YocaUserDescription setDescription() Sets the current record's "description" value
+ * @method YocaUserDescription setYocaUser()    Sets the current record's "YocaUser" collection
  * 
  * @package    yoca
  * @subpackage model
@@ -47,6 +50,8 @@ abstract class BaseYocaUserDescription extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        
+        $this->hasMany('YocaUser', array(
+             'local' => 'id',
+             'foreign' => 'description_id'));
     }
 }

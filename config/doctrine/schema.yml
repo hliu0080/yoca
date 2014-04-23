@@ -99,24 +99,17 @@ Event:
       primary: false
       notnull: false
       autoincrement: false
-    eventcol:
-      type: string(45)
-      fixed: false
-      unsigned: false
-      primary: false
-      notnull: false
-      autoincrement: false
   relations:
-    YocaUser:
-      local: mentorid
-      foreign: id
-      type: one
     EventAddress:
       local: address_id
       foreign: id
       type: one
     YocaIndustry:
       local: industry
+      foreign: id
+      type: one
+    YocaUser:
+      local: mentorid
       foreign: id
       type: one
     YocaNeighborhood:
@@ -332,6 +325,10 @@ YocaNeighborhood:
       local: id
       foreign: neighborhood
       type: many
+    YocaUser:
+      local: id
+      foreign: neighborhood
+      type: many
 YocaUser:
   connection: doctrine
   tableName: yoca_user
@@ -421,7 +418,7 @@ YocaUser:
       notnull: false
       autoincrement: false
     school_id:
-      type: string(45)
+      type: integer(4)
       fixed: false
       unsigned: false
       primary: false
@@ -435,7 +432,7 @@ YocaUser:
       notnull: false
       autoincrement: false
     major_id:
-      type: string(45)
+      type: integer(4)
       fixed: false
       unsigned: false
       primary: false
@@ -490,8 +487,8 @@ YocaUser:
       primary: false
       notnull: false
       autoincrement: false
-    description:
-      type: string(45)
+    description_id:
+      type: integer(4)
       fixed: false
       unsigned: false
       primary: false
@@ -519,7 +516,7 @@ YocaUser:
       notnull: false
       autoincrement: false
     neighborhood:
-      type: string(45)
+      type: integer(4)
       fixed: false
       unsigned: false
       primary: false
@@ -555,6 +552,22 @@ YocaUser:
       notnull: false
       autoincrement: false
   relations:
+    YocaUserDescription:
+      local: description_id
+      foreign: id
+      type: one
+    YocaUserMajor:
+      local: major_id
+      foreign: id
+      type: one
+    YocaNeighborhood:
+      local: neighborhood
+      foreign: id
+      type: one
+    YocaUserSchool:
+      local: school_id
+      foreign: id
+      type: one
     Event:
       local: id
       foreign: mentorid
@@ -580,6 +593,11 @@ YocaUserDescription:
       primary: false
       notnull: true
       autoincrement: false
+  relations:
+    YocaUser:
+      local: id
+      foreign: description_id
+      type: many
 YocaUserExpectation:
   connection: doctrine
   tableName: yoca_user_expectation
@@ -614,6 +632,11 @@ YocaUserMajor:
       primary: false
       notnull: true
       autoincrement: false
+  relations:
+    YocaUser:
+      local: id
+      foreign: major_id
+      type: many
 YocaUserSchool:
   connection: doctrine
   tableName: yoca_user_school
@@ -631,3 +654,8 @@ YocaUserSchool:
       primary: false
       notnull: true
       autoincrement: false
+  relations:
+    YocaUser:
+      local: id
+      foreign: school_id
+      type: many

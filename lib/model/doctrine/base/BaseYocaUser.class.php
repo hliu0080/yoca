@@ -19,9 +19,9 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUser', 'doctrine');
  * @property string $phone
  * @property string $wechat
  * @property string $education
- * @property string $school_id
+ * @property integer $school_id
  * @property string $school
- * @property string $major_id
+ * @property integer $major_id
  * @property string $major
  * @property string $work
  * @property string $employer
@@ -29,84 +29,96 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUser', 'doctrine');
  * @property string $industry_id
  * @property string $industry
  * @property string $sub_industry
- * @property string $description
+ * @property integer $description_id
  * @property string $expectation_id
  * @property string $expectation
  * @property string $age
- * @property string $neighborhood
+ * @property integer $neighborhood
  * @property string $organization
  * @property string $is_active
  * @property timestamp $created_at
  * @property timestamp $updated_at
+ * @property YocaUserDescription $YocaUserDescription
+ * @property YocaUserMajor $YocaUserMajor
+ * @property YocaNeighborhood $YocaNeighborhood
+ * @property YocaUserSchool $YocaUserSchool
  * @property Doctrine_Collection $Event
  * @property Doctrine_Collection $Registration
  * 
- * @method integer             getId()             Returns the current record's "id" value
- * @method string              getMentorId()       Returns the current record's "mentor_id" value
- * @method string              getMentorTitle()    Returns the current record's "mentor_title" value
- * @method string              getUsername()       Returns the current record's "username" value
- * @method string              getPassword()       Returns the current record's "password" value
- * @method string              getType()           Returns the current record's "type" value
- * @method string              getFirstname()      Returns the current record's "firstname" value
- * @method string              getLastname()       Returns the current record's "lastname" value
- * @method string              getEnglishName()    Returns the current record's "english_name" value
- * @method string              getPhone()          Returns the current record's "phone" value
- * @method string              getWechat()         Returns the current record's "wechat" value
- * @method string              getEducation()      Returns the current record's "education" value
- * @method string              getSchoolId()       Returns the current record's "school_id" value
- * @method string              getSchool()         Returns the current record's "school" value
- * @method string              getMajorId()        Returns the current record's "major_id" value
- * @method string              getMajor()          Returns the current record's "major" value
- * @method string              getWork()           Returns the current record's "work" value
- * @method string              getEmployer()       Returns the current record's "employer" value
- * @method string              getOhPreference()   Returns the current record's "oh_preference" value
- * @method string              getIndustryId()     Returns the current record's "industry_id" value
- * @method string              getIndustry()       Returns the current record's "industry" value
- * @method string              getSubIndustry()    Returns the current record's "sub_industry" value
- * @method string              getDescription()    Returns the current record's "description" value
- * @method string              getExpectationId()  Returns the current record's "expectation_id" value
- * @method string              getExpectation()    Returns the current record's "expectation" value
- * @method string              getAge()            Returns the current record's "age" value
- * @method string              getNeighborhood()   Returns the current record's "neighborhood" value
- * @method string              getOrganization()   Returns the current record's "organization" value
- * @method string              getIsActive()       Returns the current record's "is_active" value
- * @method timestamp           getCreatedAt()      Returns the current record's "created_at" value
- * @method timestamp           getUpdatedAt()      Returns the current record's "updated_at" value
- * @method Doctrine_Collection getEvent()          Returns the current record's "Event" collection
- * @method Doctrine_Collection getRegistration()   Returns the current record's "Registration" collection
- * @method YocaUser            setId()             Sets the current record's "id" value
- * @method YocaUser            setMentorId()       Sets the current record's "mentor_id" value
- * @method YocaUser            setMentorTitle()    Sets the current record's "mentor_title" value
- * @method YocaUser            setUsername()       Sets the current record's "username" value
- * @method YocaUser            setPassword()       Sets the current record's "password" value
- * @method YocaUser            setType()           Sets the current record's "type" value
- * @method YocaUser            setFirstname()      Sets the current record's "firstname" value
- * @method YocaUser            setLastname()       Sets the current record's "lastname" value
- * @method YocaUser            setEnglishName()    Sets the current record's "english_name" value
- * @method YocaUser            setPhone()          Sets the current record's "phone" value
- * @method YocaUser            setWechat()         Sets the current record's "wechat" value
- * @method YocaUser            setEducation()      Sets the current record's "education" value
- * @method YocaUser            setSchoolId()       Sets the current record's "school_id" value
- * @method YocaUser            setSchool()         Sets the current record's "school" value
- * @method YocaUser            setMajorId()        Sets the current record's "major_id" value
- * @method YocaUser            setMajor()          Sets the current record's "major" value
- * @method YocaUser            setWork()           Sets the current record's "work" value
- * @method YocaUser            setEmployer()       Sets the current record's "employer" value
- * @method YocaUser            setOhPreference()   Sets the current record's "oh_preference" value
- * @method YocaUser            setIndustryId()     Sets the current record's "industry_id" value
- * @method YocaUser            setIndustry()       Sets the current record's "industry" value
- * @method YocaUser            setSubIndustry()    Sets the current record's "sub_industry" value
- * @method YocaUser            setDescription()    Sets the current record's "description" value
- * @method YocaUser            setExpectationId()  Sets the current record's "expectation_id" value
- * @method YocaUser            setExpectation()    Sets the current record's "expectation" value
- * @method YocaUser            setAge()            Sets the current record's "age" value
- * @method YocaUser            setNeighborhood()   Sets the current record's "neighborhood" value
- * @method YocaUser            setOrganization()   Sets the current record's "organization" value
- * @method YocaUser            setIsActive()       Sets the current record's "is_active" value
- * @method YocaUser            setCreatedAt()      Sets the current record's "created_at" value
- * @method YocaUser            setUpdatedAt()      Sets the current record's "updated_at" value
- * @method YocaUser            setEvent()          Sets the current record's "Event" collection
- * @method YocaUser            setRegistration()   Sets the current record's "Registration" collection
+ * @method integer             getId()                  Returns the current record's "id" value
+ * @method string              getMentorId()            Returns the current record's "mentor_id" value
+ * @method string              getMentorTitle()         Returns the current record's "mentor_title" value
+ * @method string              getUsername()            Returns the current record's "username" value
+ * @method string              getPassword()            Returns the current record's "password" value
+ * @method string              getType()                Returns the current record's "type" value
+ * @method string              getFirstname()           Returns the current record's "firstname" value
+ * @method string              getLastname()            Returns the current record's "lastname" value
+ * @method string              getEnglishName()         Returns the current record's "english_name" value
+ * @method string              getPhone()               Returns the current record's "phone" value
+ * @method string              getWechat()              Returns the current record's "wechat" value
+ * @method string              getEducation()           Returns the current record's "education" value
+ * @method integer             getSchoolId()            Returns the current record's "school_id" value
+ * @method string              getSchool()              Returns the current record's "school" value
+ * @method integer             getMajorId()             Returns the current record's "major_id" value
+ * @method string              getMajor()               Returns the current record's "major" value
+ * @method string              getWork()                Returns the current record's "work" value
+ * @method string              getEmployer()            Returns the current record's "employer" value
+ * @method string              getOhPreference()        Returns the current record's "oh_preference" value
+ * @method string              getIndustryId()          Returns the current record's "industry_id" value
+ * @method string              getIndustry()            Returns the current record's "industry" value
+ * @method string              getSubIndustry()         Returns the current record's "sub_industry" value
+ * @method integer             getDescriptionId()       Returns the current record's "description_id" value
+ * @method string              getExpectationId()       Returns the current record's "expectation_id" value
+ * @method string              getExpectation()         Returns the current record's "expectation" value
+ * @method string              getAge()                 Returns the current record's "age" value
+ * @method integer             getNeighborhood()        Returns the current record's "neighborhood" value
+ * @method string              getOrganization()        Returns the current record's "organization" value
+ * @method string              getIsActive()            Returns the current record's "is_active" value
+ * @method timestamp           getCreatedAt()           Returns the current record's "created_at" value
+ * @method timestamp           getUpdatedAt()           Returns the current record's "updated_at" value
+ * @method YocaUserDescription getYocaUserDescription() Returns the current record's "YocaUserDescription" value
+ * @method YocaUserMajor       getYocaUserMajor()       Returns the current record's "YocaUserMajor" value
+ * @method YocaNeighborhood    getYocaNeighborhood()    Returns the current record's "YocaNeighborhood" value
+ * @method YocaUserSchool      getYocaUserSchool()      Returns the current record's "YocaUserSchool" value
+ * @method Doctrine_Collection getEvent()               Returns the current record's "Event" collection
+ * @method Doctrine_Collection getRegistration()        Returns the current record's "Registration" collection
+ * @method YocaUser            setId()                  Sets the current record's "id" value
+ * @method YocaUser            setMentorId()            Sets the current record's "mentor_id" value
+ * @method YocaUser            setMentorTitle()         Sets the current record's "mentor_title" value
+ * @method YocaUser            setUsername()            Sets the current record's "username" value
+ * @method YocaUser            setPassword()            Sets the current record's "password" value
+ * @method YocaUser            setType()                Sets the current record's "type" value
+ * @method YocaUser            setFirstname()           Sets the current record's "firstname" value
+ * @method YocaUser            setLastname()            Sets the current record's "lastname" value
+ * @method YocaUser            setEnglishName()         Sets the current record's "english_name" value
+ * @method YocaUser            setPhone()               Sets the current record's "phone" value
+ * @method YocaUser            setWechat()              Sets the current record's "wechat" value
+ * @method YocaUser            setEducation()           Sets the current record's "education" value
+ * @method YocaUser            setSchoolId()            Sets the current record's "school_id" value
+ * @method YocaUser            setSchool()              Sets the current record's "school" value
+ * @method YocaUser            setMajorId()             Sets the current record's "major_id" value
+ * @method YocaUser            setMajor()               Sets the current record's "major" value
+ * @method YocaUser            setWork()                Sets the current record's "work" value
+ * @method YocaUser            setEmployer()            Sets the current record's "employer" value
+ * @method YocaUser            setOhPreference()        Sets the current record's "oh_preference" value
+ * @method YocaUser            setIndustryId()          Sets the current record's "industry_id" value
+ * @method YocaUser            setIndustry()            Sets the current record's "industry" value
+ * @method YocaUser            setSubIndustry()         Sets the current record's "sub_industry" value
+ * @method YocaUser            setDescriptionId()       Sets the current record's "description_id" value
+ * @method YocaUser            setExpectationId()       Sets the current record's "expectation_id" value
+ * @method YocaUser            setExpectation()         Sets the current record's "expectation" value
+ * @method YocaUser            setAge()                 Sets the current record's "age" value
+ * @method YocaUser            setNeighborhood()        Sets the current record's "neighborhood" value
+ * @method YocaUser            setOrganization()        Sets the current record's "organization" value
+ * @method YocaUser            setIsActive()            Sets the current record's "is_active" value
+ * @method YocaUser            setCreatedAt()           Sets the current record's "created_at" value
+ * @method YocaUser            setUpdatedAt()           Sets the current record's "updated_at" value
+ * @method YocaUser            setYocaUserDescription() Sets the current record's "YocaUserDescription" value
+ * @method YocaUser            setYocaUserMajor()       Sets the current record's "YocaUserMajor" value
+ * @method YocaUser            setYocaNeighborhood()    Sets the current record's "YocaNeighborhood" value
+ * @method YocaUser            setYocaUserSchool()      Sets the current record's "YocaUserSchool" value
+ * @method YocaUser            setEvent()               Sets the current record's "Event" collection
+ * @method YocaUser            setRegistration()        Sets the current record's "Registration" collection
  * 
  * @package    yoca
  * @subpackage model
@@ -226,14 +238,14 @@ abstract class BaseYocaUser extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 45,
              ));
-        $this->hasColumn('school_id', 'string', 45, array(
-             'type' => 'string',
+        $this->hasColumn('school_id', 'integer', 4, array(
+             'type' => 'integer',
              'fixed' => 0,
              'unsigned' => false,
              'primary' => false,
              'notnull' => false,
              'autoincrement' => false,
-             'length' => 45,
+             'length' => 4,
              ));
         $this->hasColumn('school', 'string', 45, array(
              'type' => 'string',
@@ -244,14 +256,14 @@ abstract class BaseYocaUser extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 45,
              ));
-        $this->hasColumn('major_id', 'string', 45, array(
-             'type' => 'string',
+        $this->hasColumn('major_id', 'integer', 4, array(
+             'type' => 'integer',
              'fixed' => 0,
              'unsigned' => false,
              'primary' => false,
              'notnull' => false,
              'autoincrement' => false,
-             'length' => 45,
+             'length' => 4,
              ));
         $this->hasColumn('major', 'string', 45, array(
              'type' => 'string',
@@ -316,14 +328,14 @@ abstract class BaseYocaUser extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 45,
              ));
-        $this->hasColumn('description', 'string', 45, array(
-             'type' => 'string',
+        $this->hasColumn('description_id', 'integer', 4, array(
+             'type' => 'integer',
              'fixed' => 0,
              'unsigned' => false,
              'primary' => false,
              'notnull' => false,
              'autoincrement' => false,
-             'length' => 45,
+             'length' => 4,
              ));
         $this->hasColumn('expectation_id', 'string', 45, array(
              'type' => 'string',
@@ -352,14 +364,14 @@ abstract class BaseYocaUser extends sfDoctrineRecord
              'autoincrement' => false,
              'length' => 45,
              ));
-        $this->hasColumn('neighborhood', 'string', 45, array(
-             'type' => 'string',
+        $this->hasColumn('neighborhood', 'integer', 4, array(
+             'type' => 'integer',
              'fixed' => 0,
              'unsigned' => false,
              'primary' => false,
              'notnull' => false,
              'autoincrement' => false,
-             'length' => 45,
+             'length' => 4,
              ));
         $this->hasColumn('organization', 'string', 255, array(
              'type' => 'string',
@@ -403,6 +415,22 @@ abstract class BaseYocaUser extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
+        $this->hasOne('YocaUserDescription', array(
+             'local' => 'description_id',
+             'foreign' => 'id'));
+
+        $this->hasOne('YocaUserMajor', array(
+             'local' => 'major_id',
+             'foreign' => 'id'));
+
+        $this->hasOne('YocaNeighborhood', array(
+             'local' => 'neighborhood',
+             'foreign' => 'id'));
+
+        $this->hasOne('YocaUserSchool', array(
+             'local' => 'school_id',
+             'foreign' => 'id'));
+
         $this->hasMany('Event', array(
              'local' => 'id',
              'foreign' => 'mentorid'));

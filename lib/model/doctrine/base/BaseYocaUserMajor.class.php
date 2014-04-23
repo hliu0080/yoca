@@ -9,11 +9,14 @@ Doctrine_Manager::getInstance()->bindComponent('YocaUserMajor', 'doctrine');
  * 
  * @property integer $id
  * @property string $name
+ * @property Doctrine_Collection $YocaUser
  * 
- * @method integer       getId()   Returns the current record's "id" value
- * @method string        getName() Returns the current record's "name" value
- * @method YocaUserMajor setId()   Sets the current record's "id" value
- * @method YocaUserMajor setName() Sets the current record's "name" value
+ * @method integer             getId()       Returns the current record's "id" value
+ * @method string              getName()     Returns the current record's "name" value
+ * @method Doctrine_Collection getYocaUser() Returns the current record's "YocaUser" collection
+ * @method YocaUserMajor       setId()       Sets the current record's "id" value
+ * @method YocaUserMajor       setName()     Sets the current record's "name" value
+ * @method YocaUserMajor       setYocaUser() Sets the current record's "YocaUser" collection
  * 
  * @package    yoca
  * @subpackage model
@@ -47,6 +50,8 @@ abstract class BaseYocaUserMajor extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        
+        $this->hasMany('YocaUser', array(
+             'local' => 'id',
+             'foreign' => 'major_id'));
     }
 }

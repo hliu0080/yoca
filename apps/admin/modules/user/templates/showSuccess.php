@@ -91,7 +91,7 @@
 					    </tr>
 					    <tr>
 					      	<th>Description</th>
-					      	<td><?php echo Doctrine_Core::getTable('YocaUserDescription')->find($yoca_user->getDescription()) ?></td>
+					      	<td><?php echo Doctrine_Core::getTable('YocaUserDescription')->find($yoca_user->getDescriptionId()) ?></td>
 					    </tr>
 					    <tr>
 					      	<th>Expectation</th>
