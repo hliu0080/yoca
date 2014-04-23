@@ -6,7 +6,7 @@
 <!-- 				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="awe-user"></span></button> -->
 <!-- 				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="awe-chevron-down"></span></button> -->
 
-<!-- 				<a class="brand" href="/">Walking Pixels Wuxia Bootstrap admin template</a> -->
+				<a class="brand" href="/"><img class="logo" src="/img/yoca/square-logo-rounded.png" /></a>
 
 				<div class="nav-collapse">
 				

@@ -8,8 +8,7 @@
 	<?php //include_partial('sec_nav', array('sections' => $sections))?>
 
 	<div class="hero-unit blow">
-		<h1>Welcome to YOCA dashboard</h1>
-		<p>[Brief introdution to this site...]</p>
+		<h1>Welcome to YOCA Member</h1>
 	</div>
 
 	<div class="content">
@@ -23,9 +22,6 @@
 					</ul>
 				</nav>
 			</div>
-		
 		</div>
-	
 	</div>
-	
 </div>

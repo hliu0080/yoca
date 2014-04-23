@@ -12,6 +12,12 @@
 	background-image: none !important;
 }
 
+img.logo{
+	width:33px !important;
+	height:33px !important;
+	margin-left: 30px;
+}
+
 .footer{
 	width:504px !important;	
 }
