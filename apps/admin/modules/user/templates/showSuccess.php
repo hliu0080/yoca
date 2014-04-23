@@ -66,7 +66,7 @@
 					    </tr>
 					    <tr>
 					    	<th>Work Experience</th>
-					    	<td><?php echo sfConfig::get('app_profile_mentee_work_experience')[$yoca_user->getWork()] ?></td>
+					    	<td><?php $workExp = sfConfig::get('app_profile_mentee_work_experience'); echo $workExp[$yoca_user->getWork()] ?></td>
 					    </tr>
 					    <tr>
 				      		<th>Employe</th>
@@ -87,7 +87,7 @@
 				    	</tr>
 					    <tr>
 					      	<th>Office Hour Preference</th>
-					      	<td><?php echo sfConfig::get('app_profile_oh_preference')[$yoca_user->getOhPreference()] ?></td>
+					      	<td><?php $oh = sfConfig::get('app_profile_oh_preference'); echo $oh[$yoca_user->getOhPreference()] ?></td>
 					    </tr>
 					    <tr>
 					      	<th>Description</th>
@@ -109,7 +109,7 @@
 					<?php elseif($type == 'Mentor'):?>
 						<tr>
 					    	<th>Work Experience</th>
-							<td><?php echo sfConfig::get('app_profile_mentor_work_experience')[$yoca_user->getWork()] ?></td>
+							<td><?php $workExp = sfConfig::get('app_profile_mentor_work_experience'); echo $workExp[$yoca_user->getWork()] ?></td>
 						</tr>
 						<tr>
 					      	<th>Employer</th>
@@ -121,7 +121,7 @@
 				    	</tr>
 					    <tr>
 					      	<th>Age</th>
-					      	<td><?php echo sfConfig::get('app_profile_age')[$yoca_user->getAge()] ?></td>
+					      	<td><?php $age = sfConfig::get('app_profile_age'); echo $age[$yoca_user->getAge()] ?></td>
 					    </tr>
 					    <tr>
 					      	<th>Neighborhood</th>
