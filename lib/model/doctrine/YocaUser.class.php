@@ -47,13 +47,9 @@ class YocaUser extends BaseYocaUser
 				}
 			}
 			if(!is_null($this->getMajor()) && strlen($this->getMajor())==0){
-				$this->setMajor($this->getMajor());
-			}else{
 				$this->setMajor(null);
 			}
 			if(!is_null($this->getOhPreference()) && strlen($this->getOhPreference())==0){
-				$this->setOhPreference($this->getOhPreference());
-			}else{
 				$this->setOhPreference(null);
 			}
 			if(!is_null($this->getIndustryId())){
@@ -63,9 +59,7 @@ class YocaUser extends BaseYocaUser
 					$this->setIndustryId(is_array($this->getIndustryId())?implode(',', $this->getIndustryId()):$this->getIndustryId());
 				}
 			}
-			if(!is_null($this->getIndustry()) && $this->getIndustry()){
-				$this->setIndustry($this->getIndustry());
-			}else{
+			if(!is_null($this->getIndustry()) && strlen($this->getIndustry())==0){
 				$this->setIndustry(null);
 			}
 			if(!is_null($this->getExpectationId())){
@@ -75,29 +69,19 @@ class YocaUser extends BaseYocaUser
 					$this->setExpectationId(is_array($this->getExpectationId())?implode(',', $this->getExpectationId()):$this->getExpectationId());
 				}
 			}
-			if(!is_null($this->getExpectation()) && strlen($this->getExpectation())){
-				$this->setExpectation($this->getExpectation());
-			}else{
+			if(!is_null($this->getExpectation()) && strlen($this->getExpectation())==0){
 				$this->setExpectation(null);
 			}
-			if(!is_null($this->getDescription()) && strlen($this->getDescription())){
-				$this->setDescription($this->getDescription());
-			}else{
-				$this->setDescription(null);
+			if(!is_null($this->getDescriptionId()) && strlen($this->getDescriptionId())==0){
+				$this->setDescriptionId(null);
 			}
-			if(!is_null($this->getAge()) && strlen($this->getAge())){
-				$this->setAge($this->getAge());
-			}else{
+			if(!is_null($this->getAge()) && strlen($this->getAge())==0){
 				$this->setAge(null);
 			}
-			if(!is_null($this->getNeighborhood()) && strlen($this->getNeighborhood())){
-				$this->setNeighborhood($this->getNeighborhood());
-			}else{
+			if(!is_null($this->getNeighborhood()) && strlen($this->getNeighborhood())==0){
 				$this->setNeighborhood(null);
 			}
-			if(!is_null($this->getOrganization()) && strlen($this->getOrganization())){
-				$this->setOrganization($this->getOrganization());
-			}else{
+			if(!is_null($this->getOrganization()) && strlen($this->getOrganization())==0){
 				$this->setOrganization(null);
 			}	
 		}

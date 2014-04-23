@@ -54,8 +54,11 @@ class EventNotifyTable extends Doctrine_Table
     	}
     	
     	$mailer = sfContext::getInstance()->getMailer();
-    	$body = "Event $eventId just becomes available again. Please register.";
-    	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $menteeUsernames, "Event $eventId is available now!", $body);
+    	$body = "Event $eventId just becomes available again. Please register.\n\n";
+    	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+    	$body .= "Yours,\n";
+    	$body .= "YOCA Team";
+    	$mailer->composeAndSend(sfConfig::get('app_email_service'), $menteeUsernames, "Event $eventId is available now!", $body);
     }
     
     /**

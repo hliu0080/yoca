@@ -205,14 +205,22 @@ class YocaUserForm extends BaseYocaUserForm
   	$values = $this->getValues();
   	if($this->isNew()){
 	  	//Send confirmation email
-	  	$body = "Member registeration successful for {$values['username']}";
+	  	$body = "Member registeration successful for {$values['username']}.\n\n";
+	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+	  	$body .= "Yours,\n";
+	  	$body .= "YOCA Team";
+	  	
 	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $values['username'], 'Greetings from YOCA!', $body);
+	  	$mailer->composeAndSend(sfConfig::get('app_email_service'), $values['username'], 'Greetings from YOCA!', $body);
   	}elseif($this->getOption('usertype') == 'becomeMentee'){
   		//Send confirmation email if user type is member
-  		$body = "Mentee registration successful for {$this->getObject()->getUsername()}";
+  		$body = "Mentee registration successful for {$this->getObject()->getUsername()}.\n\n";
+  		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+  		$body .= "Yours,\n";
+  		$body .= "YOCA Team";
+  		
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
+  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
   		
   		//Update user type to mentee
   		$this->getObject()->setType('Mentee');
@@ -221,13 +229,17 @@ class YocaUserForm extends BaseYocaUserForm
   		sfContext::getInstance()->getUser()->setAttribute('usertype', 'Mentee');
   	}elseif($this->getOption('usertype') == 'becomeMentor'){
   		//Send confirmation email if user type is member
-  		$body = "Mentor registration successful for {$this->getObject()->getUsername()}";
+  		$body = "Mentor registration successful for {$this->getObject()->getUsername()}.\n\n";
+  		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+  		$body .= "Yours,\n";
+  		$body .= "YOCA Team";
+  		
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
+  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
 
   		//Set mentor_id to be industry initial + number 
   		$industry = Doctrine_Core::getTable('YocaIndustry')->find($values['industry_id']);
-  		$id = Doctrine_Core::getTable('YocaUser')->nextAvaibleMentorId($industry);
+  		$id = Doctrine_Core::getTable('YocaUser')->nextAvailableMentorId($industry);
   		$this->getObject()->setMentorId($id);
   		
   		//Update user type to mentee

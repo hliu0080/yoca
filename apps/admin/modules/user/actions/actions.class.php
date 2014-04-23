@@ -114,9 +114,12 @@ class userActions extends sfActions
   	 
   	if($is_active){
 	  	//Send confirmation email to mentor
-	  	$body = "Mentor confirmed for {$this->yoca_user->getUsername()}";
+	  	$body = "Mentor confirmed for {$this->yoca_user->getUsername()}\n\n";
+	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+	  	$body .= "Yours,\n";
+	  	$body .= "YOCA Team";
 	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $this->yoca_user->getUsername(), 'Mentor Confirmed', $body);
+	  	$mailer->composeAndSend(sfConfig::get('app_email_service'), $this->yoca_user->getUsername(), 'Mentor Confirmed', $body);
   	}
   	 
   	$type = $request->getParameter('type');
@@ -225,7 +228,7 @@ class userActions extends sfActions
   }
   
   public function executeMenteeConfirm(sfWebRequest $request){
-  	
+  	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }
   
   /**
@@ -250,7 +253,7 @@ class userActions extends sfActions
   }
   
   public function executeMentorConfirm(sfWebRequest $request){
-  	 
+  	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }
   
 

@@ -30,7 +30,7 @@ class eventActions extends sfActions
   }
   
   public function executePending(sfWebRequest $request){
-  	
+  	$this->getUser()->setAttribute('cur_page', 'mentorship_program');
   }
   
   /**
@@ -142,10 +142,13 @@ class eventActions extends sfActions
 	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
 	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
-	  	$body .= "Created At: ".$event->getCreatedAt();
+	  	$body .= "Created At: ".$event->getCreatedAt()."\n\n";
+	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+	  	$body .= "Yours,\n";
+	  	$body .= "YOCA Team";
 
 	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_mail_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been confirmed', $body);
+	  	$mailer->composeAndSend(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been confirmed', $body);
 	  	
 	  	$this->getUser()->setFlash('confirm', 'Confirm successful.');
   	}
@@ -175,12 +178,15 @@ class eventActions extends sfActions
 	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
 	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
 	  	$body .= "Created At: ".$event->getCreatedAt();
-  		$mailer = sfContext::getInstance()->getMailer();
-  		
+	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+	  	$body .= "Yours,\n";
+	  	$body .= "YOCA Team";
+	  	
+	  	$mailer = sfContext::getInstance()->getMailer();
   		if(count($usernameArray)){
-	  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $usernameArray, 'Your YOCA event has been cancelled', $body);
+	  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $usernameArray, 'Your YOCA event has been cancelled', $body);
   		}
-		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been cancelled', $body);
+		$mailer->composeAndSend(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been cancelled', $body);
 
   		//Set registration status to 3 - cancelled by system
   		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
@@ -205,8 +211,12 @@ class eventActions extends sfActions
 	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
 	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
 	  	$body .= "Created At: ".$event->getCreatedAt();
+	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+	  	$body .= "Yours,\n";
+	  	$body .= "YOCA Team";
+	  	
   		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_mail_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been deleted', $body);
+  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been deleted', $body);
   		
   		$this->getUser()->setFlash('delete', 'Delete successful.');
   	}
@@ -388,8 +398,8 @@ class eventActions extends sfActions
     
     if ($form->isValid())
     {
-    	$datetimeArr = $form->isNew()?$request->getPostParameter('newEvent')['datetime']:$request->getPostParameter('updateEvent')['datetime'];
-    	$datetime = $datetimeArr['year']."-".sprintf("%02s", $datetimeArr['month'])."-".sprintf("%02s", $datetimeArr['day'])." ".sprintf("%02s", $datetimeArr['hour']).":".($datetimeArr['minute']==0?"00":"30").":00";
+    	$values = $form->isNew()?$request->getPostParameter('newEvent'):$request->getPostParameter('updateEvent');
+    	$datetime = $values['datetime']['year']."-".sprintf("%02s", $values['datetime']['month'])."-".sprintf("%02s", $values['datetime']['day'])." ".sprintf("%02s", $values['datetime']['hour']).":".($values['datetime']['minute']==0?"00":"30").":00";
 
     	$event = $form->save();
     	$event->setDatetime(date($datetime));

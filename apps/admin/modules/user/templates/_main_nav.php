@@ -59,7 +59,7 @@
 										</ul>
 									</li>
 								<?php else:?>
-									<li><a href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>"><?php print $s?></a></li>
+									<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active"':''?>><a href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>"><?php print $s?></a></li>
 								<?php endif?>
 							<?php endforeach;?>
 						</ul>

@@ -22,7 +22,7 @@ class YocaUserTable extends Doctrine_Table
     	return $user['username'];
     }
     
-    public function nextAvaibleMentorId($industry){
+    public function nextAvailableMentorId($industry){
     	$current_id = $this->createQuery()
     	->where('type = ? and industry_id = ?', array('Mentor', $industry->getId()))
     	->count();

@@ -3,8 +3,9 @@
 
 # default values
 all:
-  mail:
-    service: noreply@yocausa.org
+  email:
+    service: no-reply@yocausa.org
+    contact: member@yocausa.org
   const:
     record_num:             10
     reg_cap:                2

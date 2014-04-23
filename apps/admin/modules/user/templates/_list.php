@@ -43,7 +43,7 @@
 	    	<td><?php if(strlen($user->get('lastname'))>0 && strlen($user->get('firstname'))>0) print $user->get('lastname').", ".$user->get('firstname')?></td>
 	    	<?php if($type == 'Mentor'):?>
 		    	<td><?php print $user->get('education')?></td>
-		    	<td><?php print sfConfig::get('app_profile_mentor_work_experience')[$user->get('work')]?></td>
+		    	<td><?php $workExp = sfConfig::get('app_profile_mentor_work_experience'); print $workExp[$user->get('work')]?></td>
 		    	<td><?php print $user->get('employer')?></td>
 		    	<td><?php print $user->get('is_active')?'Confirmed':'<span class="label label-warning">Pending</span>'?></td>
 		    	<td><?php print Doctrine_Core::getTable('YocaIndustry')->find($user->get('industry_id'))?></td>
