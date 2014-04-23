@@ -52,16 +52,21 @@ class YocaUser extends BaseYocaUser
 			if(!is_null($this->getOhPreference()) && strlen($this->getOhPreference())==0){
 				$this->setOhPreference(null);
 			}
-			if(!is_null($this->getIndustryId())){
-				if(strlen($this->getIndustryId())==0){
-					$this->setIndustryId(null);
-				}else{
-					$this->setIndustryId(is_array($this->getIndustryId())?implode(',', $this->getIndustryId()):$this->getIndustryId());
-				}
-			}
+			
+			
+			$this->setIndustryId(is_array($this->getIndustryId())?implode(',', $this->getIndustryId()):$this->getIndustryId());
+			
+// 			if(!is_null($this->getIndustryId())){
+// 				if(strlen($this->getIndustryId())==0){
+// 					$this->setIndustryId(null);
+// 				}else{
+// 				}
+// 			}
 			if(!is_null($this->getIndustry()) && strlen($this->getIndustry())==0){
 				$this->setIndustry(null);
 			}
+			
+			
 			if(!is_null($this->getExpectationId())){
 				if(strlen($this->getExpectationId())==0){
 					$this->setExpectationId(null);

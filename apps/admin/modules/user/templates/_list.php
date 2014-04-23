@@ -12,10 +12,10 @@
 <table class="table table-striped table-bordered" id="<?php print strtolower($type).'_usertable'?>">
   <thead>
     <tr>
-      <th>ID</th>
       <th>Username</th>
       <th>Name</th>
       <?php if($type == 'Mentor'):?>
+      	<th>Mentor ID</th>
 	  	<th>Education</th>
 	  	<th>Work Experience</th>
       	<th>Employer</th>
@@ -38,10 +38,10 @@
   	<?php if($total):?>
     	<?php foreach ($users as $user): ?>
 	    <tr>
-	    	<td><a href="<?php print url_for('@show_user?id='.$user->get('id').'&type='.$type.'&page='.$page.'&keyword='.$keyword)?>"><?php print $user->get('id')?></a></td>
-	    	<td><?php print $user->get('username')?></td>
+	    	<td><a href="<?php print url_for('@show_user?id='.$user->get('id').'&type='.$type.'&page='.$page.'&keyword='.$keyword)?>"><?php print $user->get('username')?></a></td>
 	    	<td><?php if(strlen($user->get('lastname'))>0 && strlen($user->get('firstname'))>0) print $user->get('lastname').", ".$user->get('firstname')?></td>
 	    	<?php if($type == 'Mentor'):?>
+	    		<td><?php print $user->get('mentor_id')?></td>
 		    	<td><?php print $user->get('education')?></td>
 		    	<td><?php $workExp = sfConfig::get('app_profile_mentor_work_experience'); print $workExp[$user->get('work')]?></td>
 		    	<td><?php print $user->get('employer')?></td>
