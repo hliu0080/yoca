@@ -225,7 +225,7 @@ class eventActions extends sfActions
   	$type = $request->getParameter('type');
   	$page = $request->getParameter('page');
   	$keyword = $request->getParameter('keyword');
-  	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
+	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
   }
   
   /**

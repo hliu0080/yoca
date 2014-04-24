@@ -26,10 +26,6 @@
 			<table class="table table-bordered detail_table">
 			  <tbody>
 			    <tr>
-			      <th>ID</th>
-			      <td><?php echo $event->getId() ?></td>
-			    </tr>
-			    <tr>
 			      <th>Industry</th>
 			      <td><?php echo $event->getYocaIndustry()->getName() ?></td>
 			    </tr>

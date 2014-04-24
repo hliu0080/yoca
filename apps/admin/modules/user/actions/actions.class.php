@@ -70,7 +70,7 @@ class userActions extends sfActions
   	->createQuery('a')
   	->where("type = ?", $this->type);
   	if($this->keyword){
-  		$query->addWhere('username like ? or id like ? or mentor_id like ? or firstname like ? or lastname like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
+  		$query->addWhere('username like ? or mentor_id like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%'));
   	}
   	 
   	$this->total = $query->count();

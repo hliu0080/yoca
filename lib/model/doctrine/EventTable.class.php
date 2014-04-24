@@ -35,7 +35,7 @@ class EventTable extends Doctrine_Table
     	return self::getInstance()->createQuery('e')
     	->leftJoin('e.YocaIndustry i')
     	->leftJoin('e.Registration r')
-    	->where('r.mentee_id = ?', $menteeId)
+    	->where('r.mentee_id = ? and r.status = ?', array($menteeId, 1))
     	->execute();
     }
     

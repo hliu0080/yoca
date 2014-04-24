@@ -10,7 +10,7 @@
 <div class="pull-right">
 	<form style="background: none !important" action="<?php print url_for('search_events')?>" method="post">
 		<div class="controls">
-			<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" placeholder="ID, Industry, Mentor ID"/>
+			<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" placeholder="Mentor ID, Industry"/>
 			<a href="<?php print url_for('@manage_events?type='.$type)?>" class="search_remove"><span class="awe-remove"></span></a>
 			<input type="hidden" value="<?php print $type?>" name="type" />
 			<input class="btn btn-flat" type="submit" value="Search" />
@@ -37,19 +37,22 @@
   <tbody>
   	<?php if($total):?>
     	<?php foreach ($events as $event): ?>
+		<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event['id'], $sf_user->getAttribute('userid'), 1)?>
 	    <tr>
-		    <td><?php print link_to(date("m/d/Y H:i", strtotime($event['datetime'])), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event['id']))?></td>
+	    	<?php if($type=='my' || $sf_user->getAttribute('usertype')=='Admin' || count($reg)>0):?>
+		    	<td><?php print link_to(date("m/d/Y H:i", strtotime($event['datetime'])), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event['id']))?></td>
+		    <?php else:?>
+		    	<td><?php print date("m/d/Y H:i", strtotime($event['datetime']))?></td>
+		    <?php endif?>
 	      	<td><?php echo $event['EventTopic']['id']==8?$event['topic']:$event['EventTopic']['name'] ?></td>
 	      	<td><?php echo $event['YocaIndustry']['name'] ?></td>
 	      	<td><?php echo $event['YocaUser']['mentor_id']?></td>
 <!-- 	      	<td><?php //echo link_to($event['YocaUser']['mentor_id'], 'show_user', array('type'=>'Mentor', 'id'=>$event['mentorid'])) ?></td> -->
 	      	<td><?php echo $event['booked'] . " / " .$event['capacity'] ?></td>
 	      	<td><?php echo $event['YocaNeighborhood']['name'] ?></td>
-<!-- 	      	<td><?php //echo $event['EventAddress']['id']==18?$event['address']:$event['EventAddress']['name'] ?></td> -->
 	      	
 	      	<!-- Status -->
 	      	<td>
-			<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event['id'], $sf_user->getAttribute('userid'), 1)?>
 	      	<?php if($event['status'] == 0):?>
 	      		<span class="label label-warning">Pending</span>
 	      	<?php elseif($event['status']== 1):?>
@@ -83,7 +86,7 @@
 						Complete
 	      			<?php endif?>
 	      		<?php endif?>
-	      	<?php elseif($event->getStatus() == 2):?>
+	      	<?php elseif($event['status'] == 2):?>
 	      		Cancelled
 	      	<?php endif?>
 	      	</td>
@@ -91,12 +94,12 @@
 	      	<!-- Actions -->
 	      	<td class="toolbar">
 	      		<div class="btn-group">
-		      		<?php print link_to('View', 'show_event', array('id'=>$event['id'], 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
 			      	<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
 			      		<?php if($type == 'upcoming' || $type == 'my'):?>
 				      		<?php if($event->getStatus() == 1):?>
 				      			<?php if(strtotime($event->getDatetime()) > time()+60*60*24):?>
 					      			<?php if(count($reg) > 0):?>
+							      		<?php print link_to('View', 'show_event', array('id'=>$event['id'], 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
 					      				<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
 					      			<?php elseif($event['capacity']>$event['booked'] && $sf_user->getAttribute('userregcounter')<sfConfig::get('app_const_reg_cap')):?>
 					      				<?php print link_to('Register', 'register_event', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>
@@ -117,6 +120,7 @@
 			      	<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
 			      	
 			      	<?php elseif($sf_user->getAttribute('usertype') == 'Admin'):?>
+			      		<?php print link_to('View', 'show_event', array('id'=>$event['id'], 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('class'=>'btn btn-small'))?>
 			      		<?php if($type == 'pending'):?>
 			      			<?php if(strtotime($event['datetime']) > time()+60*60*24):?>
 			      				<?php print link_to('Confirm', 'set_event_status', array('id'=>$event['id'], 'status'=>1, 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-small'))?>

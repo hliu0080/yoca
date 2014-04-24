@@ -1,7 +1,7 @@
 <div class="pull-right">
 	<form style="background: none !important" action="<?php print url_for('search_users')?>" method="post">
 		<div class="controls">
-			<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" placeholder="ID, Username, Name"/>
+			<input class="input-medium search-query" type="text" name="keyword" value="<?php print $keyword?>" placeholder="Mentor ID, Username"/>
 			<a href="<?php print url_for('@manage_users?type='.$type)?>" class="search_remove"><span class="awe-remove"></span></a>
 			<input type="hidden" value="<?php print $type?>" name="type" />
 			<input class="btn btn-flat" type="submit" value="Search" />
@@ -17,10 +17,10 @@
       <?php if($type == 'Mentor'):?>
       	<th>Mentor ID</th>
 	  	<th>Education</th>
-	  	<th>Work Experience</th>
-      	<th>Employer</th>
-      	<th>Status</th>
       	<th>Industry</th>
+      	<th>Employer</th>
+	  	<th>Work Experience</th>
+      	<th>Status</th>
       <?php elseif($type == 'Mentee'):?>
       	<th>Education</th>
       	<th>School</th>
@@ -43,10 +43,10 @@
 	    	<?php if($type == 'Mentor'):?>
 	    		<td><?php print $user->get('mentor_id')?></td>
 		    	<td><?php print $user->get('education')?></td>
-		    	<td><?php $workExp = sfConfig::get('app_profile_mentor_work_experience'); print $workExp[$user->get('work')]?></td>
-		    	<td><?php print $user->get('employer')?></td>
-		    	<td><?php print $user->get('is_active')?'Confirmed':'<span class="label label-warning">Pending</span>'?></td>
 		    	<td><?php print Doctrine_Core::getTable('YocaIndustry')->find($user->get('industry_id'))?></td>
+		    	<td><?php print $user->get('employer')?></td>
+		    	<td><?php $workExp = sfConfig::get('app_profile_mentor_work_experience'); print $workExp[$user->get('work')]?></td>
+		    	<td><?php print $user->get('is_active')?'Confirmed':'<span class="label label-warning">Pending</span>'?></td>
 	    	<?php elseif($type == 'Mentee'):?>
 	    		<td><?php print $user->get('education')?></td>
 		    	<td><?php print $user->getSchoolId()==25?$user->getSchool():Doctrine_Core::getTable('YocaUserSchool')->find($user->getSchoolId())?></td>

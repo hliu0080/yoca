@@ -20,73 +20,45 @@ class YocaUser extends BaseYocaUser
 			$this->setPassword($passHash);
 			$this->setCreatedAt(date("Y-m-d H:i:s"));
 		}else{
-			if(!is_null($this->getEnglishName()) && strlen($this->getEnglishName())==0){
+			if(strlen($this->getEnglishName()) === 0){
 				$this->setEnglishName(null);
 			}
-			if(!is_null($this->getPhone()) && strlen($this->getPhone())==0){
+			
+			if(strlen($this->getPhone()) === 0){
 				$this->setPhone(null);
 			}
-			if(!is_null($this->getWechat()) && strlen($this->getWechat())==0){
+			
+			if(strlen($this->getWechat()) === 0){
 				$this->setWechat(null);
 			}
-			if(!is_null($this->getSchoolId())){
-				if(strlen($this->getSchoolId())==0){
-					$this->setSchoolId(null);
-				}else{
-					$this->setSchoolId(is_array($this->getSchoolId())?implode(',', $this->getSchoolId()):$this->getSchoolId());
-				}
-			}
-			if(!is_null($this->getSchool()) && strlen($this->getSchool())==0){
+			
+			if(strlen($this->getSchool()) === 0){
 				$this->setSchool(null);
 			}
-			if(!is_null($this->getMajorId())){
-				if(strlen($this->getMajorId())==0){
-					$this->setMajorId(null);
-				}else{
-					$this->setMajorId(is_array($this->getMajorId())?implode(',', $this->getMajorId()):$this->getMajorId());
-				}
-			}
-			if(!is_null($this->getMajor()) && strlen($this->getMajor())==0){
+			
+			if(strlen($this->getMajor()) === 0){
 				$this->setMajor(null);
 			}
-			if(!is_null($this->getOhPreference()) && strlen($this->getOhPreference())==0){
-				$this->setOhPreference(null);
-			}
-			
 			
 			$this->setIndustryId(is_array($this->getIndustryId())?implode(',', $this->getIndustryId()):$this->getIndustryId());
-			
-// 			if(!is_null($this->getIndustryId())){
-// 				if(strlen($this->getIndustryId())==0){
-// 					$this->setIndustryId(null);
-// 				}else{
-// 				}
-// 			}
-			if(!is_null($this->getIndustry()) && strlen($this->getIndustry())==0){
+			if(strlen($this->getIndustry()) === 0){
 				$this->setIndustry(null);
 			}
 			
-			
-			if(!is_null($this->getExpectationId())){
-				if(strlen($this->getExpectationId())==0){
-					$this->setExpectationId(null);
-				}else{
-					$this->setExpectationId(is_array($this->getExpectationId())?implode(',', $this->getExpectationId()):$this->getExpectationId());
-				}
-			}
-			if(!is_null($this->getExpectation()) && strlen($this->getExpectation())==0){
+			$this->setExpectationId(is_array($this->getExpectationId())?implode(',', $this->getExpectationId()):$this->getExpectationId());
+			if(strlen($this->getExpectation()) === 0){
 				$this->setExpectation(null);
 			}
-			if(!is_null($this->getDescriptionId()) && strlen($this->getDescriptionId())==0){
-				$this->setDescriptionId(null);
-			}
-			if(!is_null($this->getAge()) && strlen($this->getAge())==0){
+			
+			if(strlen($this->getAge()) === 0){
 				$this->setAge(null);
 			}
-			if(!is_null($this->getNeighborhood()) && strlen($this->getNeighborhood())==0){
+			
+			if(strlen($this->getNeighborhood()) === 0){
 				$this->setNeighborhood(null);
 			}
-			if(!is_null($this->getOrganization()) && strlen($this->getOrganization())==0){
+			
+			if(strlen($this->getOrganization()) === 0){
 				$this->setOrganization(null);
 			}	
 		}

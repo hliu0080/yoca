@@ -125,8 +125,13 @@ class registerActions extends sfActions
   		}
   		
   		$this->getUser()->setFlash('cancel', 'Cancel successful.');
-  		$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
-  		
+  		if($type=='my' && $this->getUser()->getAttribute('usertype')=='Mentee'){
+  			$this->redirect('@mentee_manage_event');
+  		}elseif($type=='my' && $this->getUser()->getAttribute('usertype')=='Mentor'){
+  			$this->redirect('@mentor_manage_event');
+  		}else{
+  			$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
+  		}
   }
 	
 	
