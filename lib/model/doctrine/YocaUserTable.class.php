@@ -34,6 +34,9 @@ class YocaUserTable extends Doctrine_Table
     		case 21: //Engineering & Research
     			$init = 'R';
     			break;
+    		case 25: //Information Technology
+    			$init = 'T';
+    			break;
     		default:
     			$init = substr($industry->getName(), 0, 1);
     	}

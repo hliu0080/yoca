@@ -7,7 +7,7 @@ all:
     service: no-reply@yocausa.org
     contact: member@yocausa.org
   const:
-    record_num:             10
+    record_num:             15
     reg_cap:                2
   dashboard:
     member:                 [ Mentorship Program, My Profile ]
