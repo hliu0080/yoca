@@ -44,6 +44,9 @@ class YocaUser extends BaseYocaUser
 			if(strlen($this->getIndustry()) === 0){
 				$this->setIndustry(null);
 			}
+			if(strlen($this->getSubIndustry()) === 0){
+				$this->setSubIndustry(null);
+			}
 			
 			$this->setExpectationId(is_array($this->getExpectationId())?implode(',', $this->getExpectationId()):$this->getExpectationId());
 			if(strlen($this->getExpectation()) === 0){
