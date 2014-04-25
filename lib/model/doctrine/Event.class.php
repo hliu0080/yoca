@@ -20,6 +20,14 @@ class Event extends BaseEvent
 			$this->setCreatedAt(date("Y-m-d H:i:s"));
 		}
 		
+		if(strlen($this->getTopic()) === 0){
+			$this->setTopic(null);
+		}
+		
+		if(strlen($this->getAddress()) === 0){
+			$this->setAddress(null);
+		}
+		
 		parent::save($con);
 	}
 }

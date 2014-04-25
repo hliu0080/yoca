@@ -45,6 +45,12 @@ class RegistrationTable extends Doctrine_Table
 		->execute();
 	}
 	
+	/**
+	 * Get registrations for a event with specified status
+	 * @param unknown $eventId
+	 * @param unknown $status
+	 * @return Ambigous <Doctrine_Collection, mixed, PDOStatement, Doctrine_Adapter_Statement, Doctrine_Connection_Statement, unknown, number>
+	 */
 	public function getRegsForEvent($eventId, $status){
 		return $this->createQuery('r')
 		->where('r.event_id = ? and r.status = ?', array($eventId, $status))
@@ -52,6 +58,11 @@ class RegistrationTable extends Doctrine_Table
 		->execute();
 	}
 	
+	/**
+	 * Set status of a registration
+	 * @param unknown $regIdArray
+	 * @param unknown $status
+	 */
 	public function setRegStatus($regIdArray, $status){
 		$this->createQuery('r')
 		->update()

@@ -46,19 +46,32 @@ class EventNotifyTable extends Doctrine_Table
     public function notify($eventId){
     	$notifies = $this->getNotify($eventId, array('signedup'));
     	
-    	$menteeUsernames = array();
-    	foreach($notifies as $notify){
-    		$menteeUsernames[] = $notify->getMenteeUsername();
-    		$notify->setStatus('notified');
-    		$notify->save();
+    	if(count($notifies)){
+	    	$menteeUsernames = array();
+	    	foreach($notifies as $notify){
+	    		$menteeUsernames[] = $notify->getMenteeUsername();
+	    		$notify->setStatus('notified');
+	    		$notify->save();
+	    	}
+	    	
+	    	$event = Doctrine_Core::getTable('Event')->findEvent($eventId);
+	    	$mentor = $event->getYocaUser();
+	    	
+	    	$mailer = sfContext::getInstance()->getMailer();
+	    	$body = "Good news! This office hour just became available again. Please login to http://member.yocausa.org and register before somebody else does!\n\n";
+	    	$body .= "Mentor ID: {$mentor->getMentorId()}\n";
+	    	$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
+	    	$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+	    	$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
+	    	$body .= "Event Capacity: ".$event->getCapacity()."\n";
+	    	$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+	    	$body .= "Event Time: ".$event->getDatetime()."\n";
+	    	$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n\n";
+	    	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+	    	$body .= "Yours,\n";
+	    	$body .= "YOCA Team";
+	    	$mailer->composeAndSend(sfConfig::get('app_email_service'), $menteeUsernames, "The YOCA Office Hour You Wanted To Attend Is Available Now!", $body);
     	}
-    	
-    	$mailer = sfContext::getInstance()->getMailer();
-    	$body = "Event $eventId just becomes available again. Please register.\n\n";
-    	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
-    	$body .= "Yours,\n";
-    	$body .= "YOCA Team";
-    	$mailer->composeAndSend(sfConfig::get('app_email_service'), $menteeUsernames, "Event $eventId is available now!", $body);
     }
     
     /**

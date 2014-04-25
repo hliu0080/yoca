@@ -18,7 +18,7 @@ class EventForm extends BaseEventForm
   		'topic' => new sfWidgetFormInputText(), 
   		'capacity' => new sfWidgetFormInputText(),
   		'datetime' => new sfWidgetFormDateTime(array(
-  				'date' => array('years' => array('2014' => '2014'), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
+  				'date' => array('years' => array('2014' => '2014'), 'months' => array('05' => '05'), 'days' => range('1', '31'), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
   				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false, 'format_without_seconds'=>'%hour% : %minute%'),
   				'with_time' => true
   		)),
@@ -60,6 +60,10 @@ class EventForm extends BaseEventForm
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat($this->isNew()?'newEvent[%s]':'updateEvent[%s]');
   	$this->widgetSchema->setHelp('datetime', 'Format: Month / Day / Year, Hour (24hr) : Minute');
+  	$this->widgetSchema->setHelp('capacity', 'Maximum number of attendees');
+  	$this->widgetSchema->setHelp('neighborhood', 'Where the event will be hosted');
+  	$this->widgetSchema->setHelp('address_id', 'Location details only viewable to registered mentees');
+  	$this->widgetSchema->setHelp('address', 'Location details only viewable to registered mentee');
   	
   	$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());
   	$this->widgetSchema->addFormFormatter('custom', $formatter);

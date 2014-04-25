@@ -32,35 +32,55 @@ class registerActions extends sfActions
 		$reg->setCreatedAt(date("Y-m-d H:i:s"));
 		$reg->save();
 		
-		$mentee = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
-		$mentor = Doctrine_Core::getTable('YocaUser')->find($event->getMentorId());
-		
-		//send email confirmation to mentee
-		$body = "Event ID: {$request->getParameter('eventId')}\n";
-		$body .= "Username: {$mentee->getUsername()}\n";
-		$body .= "Event Detail: {$event->getIndustry()}, {$event->getMentorId()}, {$event->getCapacity()}, {$event->getBooked()}, {$event->getDatetime()}, {$event->getNeighborhood()}, {$event->getAddress()}\n\n";
-		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
-		$body .= "Yours,\n";
-		$body .= "YOCA Team";
-		$mailer = sfContext::getInstance()->getMailer();
-		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentee->getUsername(), "Office Hour Registration Confirmed", $body);
-		
-		//send email confirmation to mentor
-		$body = "Event ID: {$request->getParameter('eventId')}\n";
-		$body .= "Username: {$mentor->getUsername()}\n";
-		$body .= "Event Detail: {$event->getIndustry()}, {$event->getMentorId()}, {$event->getCapacity()}, {$event->getBooked()}, {$event->getDatetime()}, {$event->getNeighborhood()}, {$event->getAddress()}\n";
-		$body .= "Mentee Detail: {$mentee->getFirstName()} {$mentee->getLastName()}, {$mentee->getEducation()}, {$mentee->getSchool()}, {$mentee->getMajor()}, {$mentee->getWork()}, {$mentee->getEmployer()}, {$mentee->getExpectation()}\n\n";
-		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
-		$body .= "Yours,\n";
-		$body .= "YOCA Team";
-		$mailer = sfContext::getInstance()->getMailer();
-		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentor->getUsername(), "Mentee registered for your upcoming office hour", $body);
-		
 		//udpate booked for this event
 		$event->setBooked($event->getBooked()+1);
 		$event->save();
 		
-	  	$this->getUser()->setFlash('register', 'Register successful.');
+		$mentee = Doctrine_Core::getTable('YocaUser')->find($this->getUser()->getAttribute('userid'));
+		$mentor = Doctrine_Core::getTable('YocaUser')->find($event->getMentorId());
+		
+		//send email confirmation to mentee
+		$mailer = sfContext::getInstance()->getMailer();
+		
+		$body = "Mentee: {$mentee->getLastName()}, {$mentee->getFirstName()}\n";
+		$body .= "Mentor ID: {$mentor->getMentorId()}\n";
+		$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
+		$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+		$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
+		$body .= "Event Capacity: ".$event->getCapacity()."\n";
+		$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+		$body .= "Event Time: ".$event->getDatetime()."\n";
+		$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+		$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
+		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+		$body .= "Yours,\n";
+		$body .= "YOCA Team";
+		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentee->getUsername(), "YOCA Office Hour Registration Confirmed", $body);
+		
+		//send email confirmation to mentor
+// 		$body = "Mentee: {$mentee->getLastName()}, {$mentee->getFirstName()}\n";
+// 		$body .= "School Attended/Attending: ".($mentee->getSchoolId()==25?$mentee->getSchool():Doctrine_Core::getTable('YocaUserSchool')->find($mentee->getSchoolId()))."\n";
+// 		$body .= "Major: ".($mentee->getMajorId()==19?$mentee->getMajor():Doctrine_Core::getTable('YocaUserMajor')->find($mentee->getMajorId()))."\n";
+// 		$body .= "Degree: {$mentee->getEducation()}\n";
+// 		$workExp = sfConfig::get('app_profile_mentee_work_experience');
+// 		$body .= "Work Experience: {$workExp[$yoca_user->getWork()]}\n";
+// 		$body .= "Employer: {$mentee->getEmployer()}\n";
+		
+// 		$body .= "Mentor ID: {$mentor->getMentorId()}\n";
+// 		$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
+// 		$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+// 		$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
+// 		$body .= "Event Capacity: ".$event->getCapacity()."\n";
+// 		$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+// 		$body .= "Event Time: ".$event->getDatetime()."\n";
+// 		$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+// 		$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
+// 		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+// 		$body .= "Yours,\n";
+// 		$body .= "YOCA Team";
+		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentor->getUsername(), "Mentee Registered For Your Upcoming Office Hour", $body);
+		
+	  	$this->getUser()->setFlash('register', 'Registration successful.');
 	  	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
 	}
 	
@@ -89,28 +109,42 @@ class registerActions extends sfActions
 	   		}
 	  		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 2);
 	  		
+	  		$mentee = Doctrine_Core::getTable('YocaUser')->find($reg[0]['mentee_id']);
+			$mentor = Doctrine_Core::getTable('YocaUser')->find($event->getMentorId());
+
 	  		//send comfirmation emails to mentee and mentor
 	  		$mailer = sfContext::getInstance()->getMailer();
-	  		$mentee = Doctrine_Core::getTable('YocaUser')->find($reg[0]['mentee_id']);
-	  		$body = "Event ID: $eventId\n";
-	  		$body .= "Username: {$mentee->getUsername()}\n";
-	  		$body .= "Event Detail: {$event->getIndustry()}, {$event->getMentorId()}, {$event->getCapacity()}, {$event->getBooked()}, {$event->getDatetime()}, {$event->getNeighborhood()}, {$event->getAddress()}\n\n";
-	  		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
-	  		$body .= "Yours,\n";
-	  		$body .= "YOCA Team";
-	  		$mailer = sfContext::getInstance()->getMailer();
-	  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentee->getUsername(), "Office Hour Registration Cancelled", $body);
 	  		
-			$mentor = Doctrine_Core::getTable('YocaUser')->find($event->getMentorId());
-	  		$body = "Event ID: $eventId\n";
-	  		$body .= "Username: {$mentor->getUsername()}\n";
-	  		$body .= "Event Detail: {$event->getIndustry()}, {$event->getMentorId()}, {$event->getCapacity()}, {$event->getBooked()}, {$event->getDatetime()}, {$event->getNeighborhood()}, {$event->getAddress()}\n";
-	  		$body .= "Mentee Detail: {$mentee->getFirstName()} {$mentee->getLastName()}, {$mentee->getEducation()}, {$mentee->getSchool()}, {$mentee->getMajor()}, {$mentee->getWork()}, {$mentee->getEmployer()}, {$mentee->getExpectation()}\n\n";
+			$body = "Mentee: {$mentee->getLastName()}, {$mentee->getFirstName()}\n";
+			$body .= "Mentor ID: {$mentor->getMentorId()}\n";
+			$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
+			$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+			$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
+			$body .= "Event Capacity: ".$event->getCapacity()."\n";
+			$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+			$body .= "Event Time: ".$event->getDatetime()."\n";
+			$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+			$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
 	  		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 	  		$body .= "Yours,\n";
 	  		$body .= "YOCA Team";
-	  		$mailer = sfContext::getInstance()->getMailer();
-	  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentor->getUsername(), "Mentee cancelled your upcoming office hour", $body);
+	  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentee->getUsername(), "YOCA Office Hour Registration Cancelled", $body);
+	  		
+// 	  		$body = "Mentee: {$mentee->getLastName()}, {$mentee->getFirstName()}\n";
+// 			$body .= "Mentor ID: {$mentor->getMentorId()}\n";
+// 			$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
+// 			$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+// 			$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
+// 			$body .= "Event Capacity: ".$event->getCapacity()."\n";
+// 			$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+// 			$body .= "Event Time: ".$event->getDatetime()."\n";
+// 			$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+// 			$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
+// 	  		$body .= "Mentee Detail: {$mentee->getFirstName()} {$mentee->getLastName()}, {$mentee->getEducation()}, {$mentee->getSchool()}, {$mentee->getMajor()}, {$mentee->getWork()}, {$mentee->getEmployer()}, {$mentee->getExpectation()}\n\n";
+// 	  		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+// 	  		$body .= "Yours,\n";
+// 	  		$body .= "YOCA Team";
+	  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $mentor->getUsername(), "Mentee Cancelled Your Upcoming Office Hour", $body);
 	  		
 	  		//notify signedup users
 	  		Doctrine_Core::getTable('EventNotify')->notify($eventId);
