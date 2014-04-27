@@ -177,7 +177,7 @@ class eventActions extends sfActions
 	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
 	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
-	  	$body .= "Created At: ".$event->getCreatedAt();
+	  	$body .= "Created At: ".$event->getCreatedAt()."\n\n";
 	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 	  	$body .= "Yours,\n";
 	  	$body .= "YOCA Team";
@@ -210,7 +210,7 @@ class eventActions extends sfActions
 	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
 	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
-	  	$body .= "Created At: ".$event->getCreatedAt();
+	  	$body .= "Created At: ".$event->getCreatedAt()."\n\n";
 	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 	  	$body .= "Yours,\n";
 	  	$body .= "YOCA Team";
