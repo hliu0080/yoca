@@ -26,16 +26,28 @@
 			<table class="table table-bordered detail_table">
 			  <tbody>
 			    <tr>
-			      <th>Industry</th>
-			      <td><?php echo $event->getYocaIndustry()->getName() ?></td>
-			    </tr>
-			    <tr>
 			    	<th>Topic</th>
 			    	<td><?php echo $event->getEventTopic()->getId()==8?$event->getTopic():$event->getEventTopic()->getName() ?></td>
 			    </tr>
 			    <tr>
+			      <th>Industry</th>
+			      <td><?php echo $event->getYocaIndustry()->getName() ?></td>
+			    </tr>
+				<tr>
+			      <th>Industry Sub-category</th>
+			      <td><?php echo $event->getYocaUser()->getSubIndustry() ?></td>
+			    </tr>
+			    <tr>
 			      <th>Mentor</th>
 			      <td><?php echo $event->getYocaUser()->getMentorId() ?></td>
+			    </tr>
+				<tr>
+			      <th>Title</th>
+			      <td><?php echo $event->getYocaUser()->getMentorTitle() ?></td>
+			    </tr>
+			    <tr>
+			      <th>Company</th>
+			      <td><?php echo $event->getYocaUser()->getEmployer() ?></td>
 			    </tr>
 			    <tr>
 			      <th>Capacity</th>

@@ -58,7 +58,7 @@ class EventNotifyTable extends Doctrine_Table
 	    	$mentor = $event->getYocaUser();
 	    	
 	    	$mailer = sfContext::getInstance()->getMailer();
-	    	$body = "Good news! This office hour just became available again. Please login to http://member.yocausa.org and register before somebody else does!\n\n";
+	    	$body = "Good news! This office hour just became available again. Please login to http://member.yocausa.org and register before someone else does!\n\n";
 	    	$body .= "Mentor ID: {$mentor->getMentorId()}\n";
 	    	$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
 	    	$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";

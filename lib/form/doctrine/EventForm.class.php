@@ -18,7 +18,7 @@ class EventForm extends BaseEventForm
   		'topic' => new sfWidgetFormInputText(), 
   		'capacity' => new sfWidgetFormInputText(),
   		'datetime' => new sfWidgetFormDateTime(array(
-  				'date' => array('years' => array('2014' => '2014'), 'months' => array('05' => '05'), 'days' => array_combine(range(1,31), range(1,31)), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
+  				'date' => array('years' => array('2014' => '2014'), 'months' => array('05' => 'May'), 'days' => array_combine(range(1,31), range(1,31)), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
   				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false, 'format_without_seconds'=>'%hour% : %minute%'),
   				'with_time' => true
   		)),
@@ -30,7 +30,7 @@ class EventForm extends BaseEventForm
   		'industry' => new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry')),
   		'topic_id' => new sfValidatorDoctrineChoice(array('model' => 'EventTopic')),
   		'topic' => new sfValidatorString(array('max_length' => 45, 'required'=>false)),
-  		'capacity' => new sfValidatorInteger(),
+  		'capacity' => new sfValidatorInteger(array('min' => 3), array('min' => 'Sorry, you must host event for minimum 3 mentees')),
   		'datetime' => new sfValidatorDate(array(
   				'min' => mktime(0, 0, 0, date('m'), date('d'), date('y')),
   		)),
@@ -55,7 +55,7 @@ class EventForm extends BaseEventForm
   		'industry' => $this->getOption('industry'),
   		'capacity' => 5,
   		'neighborhood' => $this->getOption('neighborhood'),
-  		'datetime' => date('m/d/Y'),
+  		'datetime' => date('m/01/Y'),
   	));
   	$this->widgetSchema->setLabels($labels);
   	$this->widgetSchema->setNameFormat($this->isNew()?'newEvent[%s]':'updateEvent[%s]');
