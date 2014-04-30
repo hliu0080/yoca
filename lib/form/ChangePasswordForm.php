@@ -11,9 +11,15 @@ class ChangePasswordForm extends sfForm{
 		$this->widgetSchema->setNameFormat('changePass[%s]');
 	
 		$this->setValidators(array(
-				'current_password' => new sfValidatorString(array('required' => true, 'trim' => true)),
-				'new_password' => new sfValidatorString(array('required' => true, 'trim' => true)),
-				'new_password_again' => new sfValidatorString(array('required' => true, 'trim' => true))
+				'current_password' => new sfValidatorString(),
+				'new_password' => new sfValidatorAnd(array(
+						new sfValidatorString(array('min_length' => 8), array('min_length' => 'At least 8 characters.')),
+						new sfValidatorRegex(array('pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/'), array('invalid' => 'Must contain required characters.')),
+				)),
+				'new_password_again' => new sfValidatorAnd(array(
+						new sfValidatorString(array('min_length' => 8), array('min_length' => 'At least 8 characters.')),
+						new sfValidatorRegex(array('pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/'), array('invalid' => 'Must contain required characters.')),
+				))
 		));
 		
 		$this->validatorSchema->setPostValidator(
@@ -31,6 +37,9 @@ class ChangePasswordForm extends sfForm{
 				'new_password' => '* New Password',
 				'new_password_again' => '* Confirm New Password',
 		));
+		
+		$this->widgetSchema->setHelp('new_password', 'Password must be at least 8 characters and contain uppercase letters, lowercase letters, numbers and special characters (i.e. @, #, $, %, ^, &, +, =)');
+		$this->widgetSchema->setHelp('new_password_again', 'Password must be at least 8 characters and contain uppercase letters, lowercase letters, numbers and special characters (i.e. @, #, $, %, ^, &, +, =)');
 		
 		$formatter = new sfWidgetFormSchemaFormatterCustom($this->getWidgetSchema());
 		$this->widgetSchema->addFormFormatter('custom', $formatter);

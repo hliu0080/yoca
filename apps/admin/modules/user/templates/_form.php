@@ -48,6 +48,7 @@
 			<?php print $form['password']->renderLabel()?>
 			<div class="controls">
 				<?php print $form['password']->render(array('class'=>'input-xlarge'))?>
+				<?php print $form['password']->renderHelp()?>
 			</div>
 		</div>
 		<div class="control-group">

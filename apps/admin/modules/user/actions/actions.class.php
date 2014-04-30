@@ -148,7 +148,7 @@ class userActions extends sfActions
     try{
     	$this->processForm($request, $this->form);
     }catch(Exception $e){
-    	$this->getUser()->setFlash('error', $e->getMessage());
+    	$this->getUser()->setFlash('error', $e->getMessage(), false);
     }
     $this->setTemplate('new');
   }
