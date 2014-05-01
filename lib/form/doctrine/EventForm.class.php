@@ -30,7 +30,7 @@ class EventForm extends BaseEventForm
   		'industry' => new sfValidatorDoctrineChoice(array('model' => 'YocaIndustry')),
   		'topic_id' => new sfValidatorDoctrineChoice(array('model' => 'EventTopic')),
   		'topic' => new sfValidatorString(array('max_length' => 45, 'required'=>false)),
-  		'capacity' => new sfValidatorInteger(array('min' => 3), array('min' => 'Sorry, you must host event for minimum 3 mentees')),
+  		'capacity' => new sfValidatorInteger(array('min' => 3), array('min' => 'Sorry, you must host events for minimum 3 mentees')),
   		'datetime' => new sfValidatorDate(array(
   				'min' => mktime(0, 0, 0, date('m'), date('d'), date('y')),
   		)),

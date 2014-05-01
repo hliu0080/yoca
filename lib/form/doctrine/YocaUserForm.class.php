@@ -217,7 +217,7 @@ class YocaUserForm extends BaseYocaUserForm
   	$values = $this->getValues();
   	if($this->isNew()){
 	  	//Send confirmation email
-	  	$body = "Member registeration successful for {$values['username']}.\n\n";
+	  	$body = "Member registeration successful for ".strtolower($values['username'])."\n\n";
 	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 	  	$body .= "Yours,\n";
 	  	$body .= "YOCA Team";

@@ -17,6 +17,7 @@ class YocaUser extends BaseYocaUser
 		{
 			$passHash = sfContext::getInstance()->getUser()->generateHash($this->getPassword());
 			
+			$this->setUsername(strtolower($this->getUsername()));
 			$this->setPassword($passHash);
 			$this->setCreatedAt(date("Y-m-d H:i:s"));
 		}else{
