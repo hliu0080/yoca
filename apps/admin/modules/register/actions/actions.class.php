@@ -32,7 +32,7 @@ class registerActions extends sfActions
 		$reg->setCreatedAt(date("Y-m-d H:i:s"));
 		$reg->save();
 		
-		//udpate booked for this event
+		//update booked for this event
 		$event->setBooked($event->getBooked()+1);
 		$event->save();
 		
@@ -52,6 +52,11 @@ class registerActions extends sfActions
 		$body .= "Event Time: ".$event->getDatetime()."\n";
 		$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 		$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
+		
+		$body .= "Follow-up survey:\n";
+		$body .= "Please fill out this survey within 24 hours following the completion of the event. All of your responses will be kept strictly anonymous for our internal reviews.\n";
+		$body .= "https://docs.google.com/forms/d/15ogqNH2-1KLwiSOtd7M56j4FeisR9kiMUFL2DNfqGv0/viewform​\n\n";
+		
 		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 		$body .= "Yours,\n";
 		$body .= "YOCA Team";
