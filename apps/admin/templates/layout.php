@@ -61,7 +61,7 @@
 		<nav>
 			<ul>
 				<li>&copy; 2013 Young Overseas Chinese Association, a 501c3 nonprofit organization.</li>
-				<li><a href="mailto:support@yocausa.org">Support</a></li>
+				<li><a href="mailto:<?php echo sfConfig::get('app_email_support')?>">Support</a></li>
 			</ul>
 		</nav>
 	</footer>

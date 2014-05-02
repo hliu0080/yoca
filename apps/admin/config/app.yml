@@ -6,6 +6,7 @@ all:
   email:
     service: no-reply@yocausa.org
     contact: member@yocausa.org
+    support: support@yocausa.org
   const:
     record_num:             15
     reg_cap:                2
