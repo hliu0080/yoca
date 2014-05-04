@@ -82,7 +82,7 @@
 			      <!-- TODO: -->
 			      <!-- 0 - pending, 1 - confirmed, 2 - cancelled, 3 - deleted -->
 			      <td>
-			      	<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
+			      	<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeEventRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 			      	<?php if($event->getStatus() == 0):?>
 			      		Pending
 			      	<?php elseif($event->getStatus() == 1):?>
@@ -142,7 +142,7 @@
 			      		<?php endif?>
 					<?php elseif($sf_user->getAttribute('usertype') == 'Mentee'):?>
 						<?php if($type == 'upcoming' || $type == 'my'):?>
-							<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
+							<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeEventRegs($event->getId(), $sf_user->getAttribute('userid'), 1)?>
 							<?php if(strtotime($event->getDatetime())>time()+60*60*24 && $event->getStatus()==1):?>
 					      		<?php if(count($reg) > 0):?>
 					      			<?php print link_to('Cancel', 'cancel_register', array('eventId'=>$event->getId(), 'type'=>$type, 'page'=>$page, 'keyword'=>$keyword), array('confirm' => 'Are you sure?', 'class'=>'btn btn-wuxia btn-danger'))?>

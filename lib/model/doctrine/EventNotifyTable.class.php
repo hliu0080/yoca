@@ -57,7 +57,6 @@ class EventNotifyTable extends Doctrine_Table
 	    	$event = Doctrine_Core::getTable('Event')->findEvent($eventId);
 	    	$mentor = $event->getYocaUser();
 	    	
-	    	$mailer = sfContext::getInstance()->getMailer();
 	    	$body = "Good news! This office hour just became available again. Please login to http://member.yocausa.org and register before someone else does!\n\n";
 	    	$body .= "Mentor ID: {$mentor->getMentorId()}\n";
 	    	$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
@@ -70,7 +69,11 @@ class EventNotifyTable extends Doctrine_Table
 	    	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 	    	$body .= "Yours,\n";
 	    	$body .= "YOCA Team";
-	    	$mailer->composeAndSend(sfConfig::get('app_email_service'), $menteeUsernames, "The YOCA Office Hour You Wanted To Attend Is Available Now!", $body);
+	    	
+	    	$message = $this->getMailer()
+	    		->compose(sfConfig::get('app_email_service'), $menteeUsernames, "The YOCA Office Hour You Wanted To Attend Is Available Now!", $body)
+	    		->setBcc(sfConfig::get('app_email_dev'));
+	    	$this->getMailer()->send();
     	}
     }
     

@@ -18,7 +18,7 @@ class EventForm extends BaseEventForm
   		'topic' => new sfWidgetFormInputText(), 
   		'capacity' => new sfWidgetFormInputText(),
   		'datetime' => new sfWidgetFormDateTime(array(
-  				'date' => array('years' => array('2014' => '2014'), 'months' => array('05' => 'May'), 'days' => array_combine(range(1,31), range(1,31)), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
+  				'date' => array('years' => array('2014' => '2014'), 'months' => array('05' => '05'), 'days' => array_combine(range(1,31), range(1,31)), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
   				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false, 'format_without_seconds'=>'%hour% : %minute%'),
   				'with_time' => true
   		)),
@@ -32,7 +32,10 @@ class EventForm extends BaseEventForm
   		'topic' => new sfValidatorString(array('max_length' => 45, 'required'=>false)),
   		'capacity' => new sfValidatorInteger(array('min' => 3), array('min' => 'You must host events for minimum 3 mentees')),
   		'datetime' => new sfValidatorDate(array(
-  				'min' => mktime(0, 0, 0, date('m'), date('d'), date('y')),
+  				'min' => mktime(0, 0, 0, date('m'), date('j'), date('y')),
+  				'date_format_range_error' => 'm/d/Y',
+  			), array(
+  				'min' => "Event date must be after %min%."
   		)),
   		'neighborhood' => new sfValidatorDoctrineChoice(array('model' => 'YocaNeighborhood')),
   		'address_id' => new sfValidatorDoctrineChoice(array('model' => 'EventAddress')),

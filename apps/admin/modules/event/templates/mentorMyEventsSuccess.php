@@ -1,7 +1,7 @@
 <?php include_partial('main_nav', array('sections' => $sections))?>
 
 <div class="container" role="main">
-	
+
 	<!-- TODO: -->
 	<?php //include_partial('sec_nav', array('sections' => $sections))?>
 

@@ -23,9 +23,12 @@ class RegistrationTable extends Doctrine_Table
      * @param unknown $menteeId
      * @param unknown $status
      */
-	public function getMenteeRegs($eventId, $menteeId, $status){
+	public function getMenteeEventRegs($eventId, $menteeId, $status){
+		if(!is_array($status)){
+			$status = (array)$status;
+		}
 		return $this->createQuery('r')
-		->where('r.mentee_id = ? and r.event_id = ? and r.status = ?', array($menteeId, $eventId, $status))
+		->where('r.mentee_id = ? and r.event_id = ? and r.status in ?', array($menteeId, $eventId, $status))
 		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
 		->execute();
 	}
@@ -51,7 +54,7 @@ class RegistrationTable extends Doctrine_Table
 	 * @param unknown $status
 	 * @return Ambigous <Doctrine_Collection, mixed, PDOStatement, Doctrine_Adapter_Statement, Doctrine_Connection_Statement, unknown, number>
 	 */
-	public function getRegsForEvent($eventId, $status){
+	public function getEventRegs($eventId, $status){
 		return $this->createQuery('r')
 		->where('r.event_id = ? and r.status = ?', array($eventId, $status))
 		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)

@@ -36,7 +36,7 @@
   <tbody>
   	<?php if($total):?>
     	<?php foreach ($events as $event): ?>
-		<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeRegs($event['id'], $sf_user->getAttribute('userid'), 1)?>
+		<?php $reg = Doctrine_Core::getTable('Registration')->getMenteeEventRegs($event['id'], $sf_user->getAttribute('userid'), 1)?>
 	    <tr>
 	    	<?php if($type=='my' || $sf_user->getAttribute('usertype')=='Admin' || count($reg)>0):?>
 		    	<td><?php print link_to(date("m/d/Y H:i", strtotime($event['datetime'])), 'show_event', array('type'=>$type, 'page'=>$page, 'keyword'=>$keyword, 'id'=>$event['id']))?></td>

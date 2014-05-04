@@ -156,7 +156,7 @@ class eventActions extends sfActions
   	//Cancel event
   	if($status == 2){
   		//Get all registrations for this event
-  		$regs = Doctrine_Core::getTable('Registration')->getRegsForEvent($id, 1);
+  		$regs = Doctrine_Core::getTable('Registration')->getEventRegs($id, 1);
   		
   		$regIdArray = $usernameArray = array();
   		foreach($regs as $reg){
