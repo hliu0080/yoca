@@ -17,6 +17,10 @@ class EventTable extends Doctrine_Table
         return Doctrine_Core::getTable('Event');
     }
     
+    /**
+     * Find all events for a mentor
+     * @param unknown $mentorId
+     */
     public function findMentorEvents($mentorId){
     	return self::getInstance()->createQuery('e')
     	->leftJoin('e.EventTopic t')
@@ -31,6 +35,10 @@ class EventTable extends Doctrine_Table
     	->execute();
     }
     
+    /**
+     * Find all events for a mentee
+     * @param unknown $menteeId
+     */
     public function findMenteeEvents($menteeId){
     	return self::getInstance()->createQuery('e')
     	->leftJoin('e.YocaIndustry i')
@@ -39,6 +47,11 @@ class EventTable extends Doctrine_Table
     	->execute();
     }
     
+    /**
+     * Find event by id
+     * @param unknown $id
+     * @return Ambigous <mixed, boolean, Doctrine_Record, Doctrine_Collection, PDOStatement, Doctrine_Adapter_Statement, Doctrine_Connection_Statement, unknown, number>
+     */
     public function findEvent($id){
     	return self::getInstance()->createQuery('e')
     	->leftJoin('e.EventTopic t')
@@ -48,5 +61,17 @@ class EventTable extends Doctrine_Table
     	->leftJoin('e.YocaUser u')
     	->where('e.id = ?', $id)
     	->fetchOne();
+    }
+    
+    /**
+     * Find event happening in particular hours
+     * @param unknown $hours
+     */
+    public function findUpcomingEvents($hours){
+    	return self::getInstance()->createQuery('e')
+    	->where('e.datetime < ?', date('Y-m-d H:i:s', time()+$hours*3600))
+    	->addWhere('e.status = 1')
+    	->setHydrationMode(Doctrine::HYDRATE_ARRAY)
+    	->execute();
     }
 }
