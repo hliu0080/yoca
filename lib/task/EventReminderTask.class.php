@@ -58,23 +58,32 @@ class EventReminderTask extends sfBaseTask{
 					$body .= "Yours,\n";
 					$body .= "YOCA Team";
 					
-					$message = $this->getMailer()
-					->compose(sfConfig::get('app_email_service'), $mentor->getUsername(), "YOCA Office Hour Cancelled", $body)
-					->setBcc(sfConfig::get('app_email_dev'));
-					$ret = $this->getMailer()->send($message);
-					if(!$ret){
-						$this->log("Failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
-					}
+// 					$message = $this->getMailer()
+// 					->compose(sfConfig::get('app_email_service'), $mentor->getUsername(), "YOCA Office Hour Cancelled", $body)
+// 					->setBcc(sfConfig::get('app_email_dev'));
+// 					$ret = $this->getMailer()->send($message);
+// 					if(!$ret){
+// 						$this->log("Failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
+// 					}
 				}
 									
 				//mark event as status 2
 				$this->log("Set event status to 2");
-				if(!(bool)$options['dryrun']){
-					$event->setStatus(2);
-					$event->save();
-				}
+// 				if(!(bool)$options['dryrun']){
+// 					$event->setStatus(2);
+// 					$event->save();
+// 				}
 			}else{
-				
+				//get mentee usernames
+				$regs = Doctrine_Core::getTable('Registration')->getEventRegs($event->getId(), 1);
+		  		$regIdArray = $usernameArray = array();
+		  		foreach($regs as $reg){
+		  			$regIdArray[] = $reg['id'];
+		
+			  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg['mentee_id']);
+			  		$usernameArray[] = $username;
+		  		}
+		  		
 				//send reminder to mentor
 				$this->log("Send reminder to ".$mentor->getUsername());
 				if(!(bool)$options['dryrun']){
@@ -88,7 +97,7 @@ class EventReminderTask extends sfBaseTask{
 					$body .= "Event Time: ".$event->getDatetime()."\n";
 					$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 					$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
-					$body .= "Mentee: \n\n";
+// 					$body .= "Mentee: \n\n";
 					$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
 					$body .= "Yours,\n";
 					$body .= "YOCA Team";
@@ -105,9 +114,32 @@ class EventReminderTask extends sfBaseTask{
 				}
 				
 				//send reminder to mentee
-				$this->log("Send reminder to ");
+				$this->log("Send reminder to ".implode(',', $usernameArray));
 				if(!(bool)$options['dryrun']){
-				
+					$body = "This is a reminder for your office hour at {$event->getDatetime()}.\n\n";
+					$body .= "Mentor ID: {$mentor->getMentorId()}\n";
+					$body .= "Mentor: {$mentor->getLastName()}, {$mentor->getFirstName()}\n";
+					$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+					$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
+					$body .= "Event Capacity: ".$event->getCapacity()."\n";
+					$body .= "Booked: ".$event->getBooked()."\n";
+					$body .= "Event Time: ".$event->getDatetime()."\n";
+					$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+					$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
+// 					$body .= "Mentee: \n\n";
+					$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+					$body .= "Yours,\n";
+					$body .= "YOCA Team";
+						
+					var_dump($body);
+					
+// 					$message = $this->getMailer()
+// 					->compose(sfConfig::get('app_email_service'), $usernameArray, "YOCA Office Hour Reminder", $body)
+// 					->setBcc(sfConfig::get('app_email_dev'));
+// 					$ret = $this->getMailer()->send($message);
+// 					if(!$ret){
+// 						$this->log("Failed sending email to mentees {$mentor->getUsername()}", sfLogger::DEBUG);
+// 					}
 				}
 			}
 		}
