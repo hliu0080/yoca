@@ -69,9 +69,15 @@ class EventTable extends Doctrine_Table
      */
     public function findUpcomingEvents($hours){
     	return self::getInstance()->createQuery('e')
+    	->leftJoin('e.EventTopic t')
+    	->leftJoin('e.YocaIndustry i')
+    	->leftJoin('e.YocaNeighborhood n')
+    	->leftJoin('e.EventAddress a')
+    	->leftJoin('e.YocaUser u')
+    	->select('e.*, t.name, i.name, n.name, a.name, u.mentor_id')
     	->where('e.datetime < ?', date('Y-m-d H:i:s', time()+$hours*3600))
     	->addWhere('e.status = 1')
-    	->setHydrationMode(Doctrine::HYDRATE_ARRAY)
+    	->orderBy('e.datetime')
     	->execute();
     }
 }

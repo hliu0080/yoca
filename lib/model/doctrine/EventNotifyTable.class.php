@@ -63,7 +63,7 @@ class EventNotifyTable extends Doctrine_Table
 	    	$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
 	    	$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
 	    	$body .= "Event Capacity: ".$event->getCapacity()."\n";
-	    	$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+	    	$body .= "Booked: ".$event->getBooked()."\n";
 	    	$body .= "Event Time: ".$event->getDatetime()."\n";
 	    	$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n\n";
 	    	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";

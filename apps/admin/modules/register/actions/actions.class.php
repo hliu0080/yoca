@@ -57,7 +57,7 @@ class registerActions extends sfActions
 		$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
 		$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
 		$body .= "Event Capacity: ".$event->getCapacity()."\n";
-		$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+		$body .= "Booked: ".$event->getBooked()."\n";
 		$body .= "Event Time: ".$event->getDatetime()."\n";
 		$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 		$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
@@ -137,7 +137,7 @@ class registerActions extends sfActions
 		$body .= "Event Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
 		$body .= "Event Industry: ".$event->getYocaIndustry()->getName()."\n";
 		$body .= "Event Capacity: ".$event->getCapacity()."\n";
-		$body .= "Booked Up Till Now: ".$event->getBooked()."\n";
+		$body .= "Booked: ".$event->getBooked()."\n";
 		$body .= "Event Time: ".$event->getDatetime()."\n";
 		$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 		$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
