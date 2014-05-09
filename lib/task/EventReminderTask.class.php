@@ -23,6 +23,11 @@ class EventReminderTask extends sfBaseTask{
 	public function execute($arguments = array(), $options = array()){
 		$starttime = date('U');
 		
+		$file_logger = new sfFileLogger($this->dispatcher, array(
+			"file" => $this->configuration->getRootDir()."/log/EventReminder.log"
+		));
+		$this->dispatcher->connect("command.log", array($file_logger, "listenToLogEvent"));
+		
 		$this->log ( "======= Start =======" );
 		
 		$databaseManager = new sfDatabaseManager($this->configuration);
@@ -34,7 +39,7 @@ class EventReminderTask extends sfBaseTask{
 		//for each event, if nobody no books, send cancellation to mentor; otherwise, send reminder to both mentor and mentees
 		foreach($events as $event){
 			$mentor = $event->getYocaUser();
-			$this->log("\nEvent id: ".$event->getId());
+			$this->log("Event id: ".$event->getId());
 			$this->log("Time: ".$event->getDatetime());
 			$this->log("Mentor: ".$mentor->getMentorId()." - ".$mentor->getUsername());
 			$this->log("Booked: ".$event->getBooked());
@@ -132,11 +137,11 @@ class EventReminderTask extends sfBaseTask{
 					$body .= "YOCA Team";
 						
 					$message = $this->getMailer()
-					->compose(sfConfig::get('app_email_service'), $usernameArray, "YOCA Office Hour Reminder", $body)
+					->compose(sfConfig::get('app_email_service'), array_keys($usernameArray), "YOCA Office Hour Reminder", $body)
 					->setBcc(sfConfig::get('app_email_dev'));
 					$ret = $this->getMailer()->send($message);
 					if(!$ret){
-						$this->log("Failed sending email to mentees {$mentor->getUsername()}", sfLogger::DEBUG);
+						$this->log("Failed sending email to mentees", sfLogger::DEBUG);
 					}
 				}
 			}
