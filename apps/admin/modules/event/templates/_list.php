@@ -70,23 +70,20 @@
       					<?php endif?>
 	      			<?php endif?>
 	      		<?php elseif($type == 'past'):?>
-	      			<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-	      				<!-- TODO: -->
-	      				<?php print ("registered && not finished")?"Pending Survey":"Finished"?>
-	      			<?php else:?>
-		      			Closed
-	      			<?php endif?>
+		      		Closed
 	      		<?php elseif($type == 'my'):?>
 	      			<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
 	      				<?php if(strtotime($event['datetime']) > time()):?>
 		      				Registered
-		      			<?php elseif('registration status pending survey'):?>
-		      				Pending Survey
 		      			<?php else:?>
-							Completed
+							Closed
 		      			<?php endif?>		
 	      			<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
-	      				Confirmed
+	      				<?php if(strtotime($event['datetime']) > time()):?>
+		      				Confirmed
+		      			<?php else:?>
+							Closed
+		      			<?php endif?>
 	      			<?php endif?>
 	      		<?php endif?>
 	      	<?php elseif($event['status'] == 2):?>
@@ -116,7 +113,7 @@
 			      		<?php elseif($type == 'past'):?>
 			      			<?php if($event['status'] == 1):?>
 			      				<?php if(count($reg) > 0 && "pending survey"):?>
-			      					Survey
+			      					Pending Survey
 			      				<?php endif?>
 			      			<?php endif?>
 			      		<?php endif?>

@@ -89,6 +89,8 @@
 			      		<?php if($type == 'upcoming' || $type == 'my'):?>
 			      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
 			      				Registration Closed
+			      			<?php elseif(strtotime($event->getDatetime()) < time()):?>
+			      				Closed
 			      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
 			      				Available
 		      					<?php if(count($reg)>0):?>
@@ -101,12 +103,7 @@
 		      					<?php endif?>
 			      			<?php endif?>
 			      		<?php elseif($type == 'past'):?>
-			      			<?php if($sf_user->getAttribute('usertype' == 'Mentee')):?>
-			      				<!-- TODO: -->
-			      				<?php print ("registered && not finished")?"Pending Survey":"Finished"?>
-			      			<?php else:?>
-				      			Closed
-			      			<?php endif?>
+				      		Closed
 			      		<?php endif?>
 			      	<?php elseif($event->getStatus() == 2):?>
 			      		Cancelled

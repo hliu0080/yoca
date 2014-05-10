@@ -36,7 +36,7 @@ class EventReminderTask extends sfBaseTask{
 		$events = Doctrine_Core::getTable('Event')->findUpcomingEvents($options['hours']);
 		$this->log(count($events) . (count($events)>1?" events":" event")." found for next {$options['hours']} hours");
 		
-		//for each event, if nobody no books, send cancellation to mentor; otherwise, send reminder to both mentor and mentees
+		//for each event, if no books, send cancellation to mentor; otherwise, send reminder to both mentor and mentees
 		foreach($events as $event){
 			$mentor = $event->getYocaUser();
 			$this->log("Event id: ".$event->getId());
