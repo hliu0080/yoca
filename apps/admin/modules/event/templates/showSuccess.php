@@ -87,10 +87,10 @@
 			      		Pending
 			      	<?php elseif($event->getStatus() == 1):?>
 			      		<?php if($type == 'upcoming' || $type == 'my'):?>
-			      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
-			      				Registration Closed
-			      			<?php elseif(strtotime($event->getDatetime()) < time()):?>
+			      			<?php if(strtotime($event->getDatetime()) < time()):?>
 			      				Closed
+			      			<?php elseif(strtotime($event->getDatetime()) < time()+60*60*24):?>
+			      				Registration Closed
 			      			<?php elseif($event->getCapacity() > $event->getBooked()):?>
 			      				Available
 		      					<?php if(count($reg)>0):?>
@@ -112,6 +112,28 @@
 			    </tr>
 			  </tbody>
 			</table>
+			
+			<?php if(isset($registrations) && !is_null($registrations) && count($registrations)>0):?>
+			<table class="table table-bordered">
+				<thead>
+					<tr><th>Mentee</th><th>Email</th><th>School</th><th>Major</th><th>Work Experience</th><th>Registered At</th></tr>
+				</thead>
+				<tbody>
+					<?php foreach($registrations as $registration):?>
+						<?php if($registration->getStatus() == 1):?>
+						<tr>
+							<td><?php echo $registration->getYocaUser()->getLastname().", ".$registration->getYocaUser()->getFirstname()?></td>
+							<td><?php echo $registration->getYocaUser()->getUsername()?></td>
+							<td><?php echo $registration->getYocaUser()->getSchoolId()==25?$registration->getYocaUser()->getSchool():$registration->getYocaUser()->getYocaUserSchool()->getName()?></td>
+							<td><?php echo $registration->getYocaUser()->getMajorId()==19?$registration->getYocaUser()->getMajor():$registration->getYocaUser()->getYocaUserMajor()->getName()?></td>
+							<td><?php $workExp = sfConfig::get('app_profile_mentee_work_experience'); print $workExp[$registration->getYocaUser()->getWork()]?></td>
+							<td><?php echo $registration->getCreatedAt()?></td>
+						</tr>
+						<?php endif?>
+					<?php endforeach?>
+				</tbody>
+			</table>
+			<?php endif?>
 
 			<div class="row">
 				<div class="span6">

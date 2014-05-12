@@ -55,7 +55,7 @@
 	      	<?php if($event['status'] == 0):?>
 	      		<span class="label label-warning">Pending</span>
 	      	<?php elseif($event['status'] == 1):?>
-	      		<?php if($type == 'upcoming'):?>
+	      		<?php if($type == 'upcoming' || $type == 'my'):?>
 	      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
 	      				Registration Closed
 	      			<?php elseif($event['capacity'] > $event['booked']):?>
@@ -71,20 +71,6 @@
 	      			<?php endif?>
 	      		<?php elseif($type == 'past'):?>
 		      		Closed
-	      		<?php elseif($type == 'my'):?>
-	      			<?php if($sf_user->getAttribute('usertype') == 'Mentee'):?>
-	      				<?php if(strtotime($event['datetime']) > time()):?>
-		      				Registered
-		      			<?php else:?>
-							Closed
-		      			<?php endif?>		
-	      			<?php elseif($sf_user->getAttribute('usertype') == 'Mentor'):?>
-	      				<?php if(strtotime($event['datetime']) > time()):?>
-		      				Confirmed
-		      			<?php else:?>
-							Closed
-		      			<?php endif?>
-	      			<?php endif?>
 	      		<?php endif?>
 	      	<?php elseif($event['status'] == 2):?>
 	      		Cancelled

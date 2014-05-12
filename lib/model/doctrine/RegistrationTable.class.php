@@ -57,7 +57,7 @@ class RegistrationTable extends Doctrine_Table
 	public function getEventRegs($eventId, $status){
 		return $this->createQuery('r')
 		->where('r.event_id = ? and r.status = ?', array($eventId, $status))
-		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
+// 		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
 		->execute();
 	}
 	

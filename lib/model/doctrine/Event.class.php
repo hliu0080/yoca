@@ -30,4 +30,23 @@ class Event extends BaseEvent
 		
 		parent::save($con);
 	}
+	
+	/**
+	 * Check if mentee has access to the event
+	 * @param unknown $menteeId
+	 * @param unknown $eventId
+	 * @param string $registrations
+	 * @return boolean
+	 */
+	public function validateMentee($menteeId, $registrations = null){
+		if(is_null($registrations)){
+			$registrations = Doctrine_Core::getTable('Registration')->getEventRegs($this->getId(), 1);
+		}
+		foreach($registrations as $registration){
+			if($registration->getMenteeId() == $menteeId){
+				return true;
+			}
+		}
+		return false;
+	}
 }

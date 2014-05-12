@@ -160,9 +160,9 @@ class eventActions extends sfActions
   		
   		$regIdArray = $usernameArray = array();
   		foreach($regs as $reg){
-  			$regIdArray[] = $reg['id'];
+  			$regIdArray[] = $reg->getId();
 
-	  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg['mentee_id']);
+	  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg->getMenteeId());
 	  		$usernameArray[] = $username;
   		}
   		
@@ -287,6 +287,16 @@ class eventActions extends sfActions
   	
     $this->event = Doctrine_Core::getTable('Event')->find($request->getParameter('id'));
     $this->forward404Unless($this->event);
+    
+    $registrations = Doctrine_Core::getTable('Registration')->findByEventId($request->getParameter('id'));
+    
+    //show registered mentees if user is Admin or Mentor of this event, or
+    if($this->getUser()->getAttribute('usertype')=='Admin' || ($this->getUser()->getAttribute('userid')==$this->event->getMentorId())){
+	    $this->registrations = $registrations;
+    }elseif(!$this->event->validateMentee($this->getUser()->getAttribute('userid'), $registrations)){
+	    //redirect 404 if user is Mentee && didn't register for event
+    	$this->forward404();
+    }
   }
 
   /**

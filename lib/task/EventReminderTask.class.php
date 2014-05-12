@@ -82,9 +82,9 @@ class EventReminderTask extends sfBaseTask{
 				$regs = Doctrine_Core::getTable('Registration')->getEventRegs($event->getId(), 1);
 		  		$regIdArray = $usernameArray = array();
 		  		foreach($regs as $reg){
-		  			$regIdArray[] = $reg['id'];
+		  			$regIdArray[] = $reg->getId();
 		
-			  		$username = Doctrine_Core::getTable('YocaUser')->find($reg['mentee_id']);
+			  		$username = Doctrine_Core::getTable('YocaUser')->find($reg->getMenteeId());
 			  		$usernameArray[$username->getUsername()] = $username->getLastname().", ".$username->getFirstname();
 		  		}
 		  		

@@ -168,7 +168,9 @@ class registerActions extends sfActions
   		}
 	  		
   		//notify signedup users
-  		Doctrine_Core::getTable('EventNotify')->notify($eventId);
+  		if($event->getBooked() == ($event->getCapacity()-1)){
+	  		Doctrine_Core::getTable('EventNotify')->notify($eventId);
+  		}
 	  		
   		//mark current userregcounter to -1
   		$counter = $this->getUser()->getAttribute('userregcounter');

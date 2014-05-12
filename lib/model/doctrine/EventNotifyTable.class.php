@@ -46,14 +46,17 @@ class EventNotifyTable extends Doctrine_Table
     public function notify($eventId){
     	$notifies = $this->getNotify($eventId, array('signedup'));
     	
-    	if(count($notifies)){
+    	$clientIp = $request->getRemoteAddress();
+    	sfContext::getInstance()->getLogger()->log("Event Cancel[$clientIp]: ".count($notifies)." mentees signed up for notification", sfLogger::DEBUG);
+    	
+    	if(count($notifies) >0){
 	    	$menteeUsernames = array();
 	    	foreach($notifies as $notify){
 	    		$menteeUsernames[] = $notify->getMenteeUsername();
 	    		$notify->setStatus('notified');
 	    		$notify->save();
 	    	}
-	    	
+	    		
 	    	$event = Doctrine_Core::getTable('Event')->findEvent($eventId);
 	    	$mentor = $event->getYocaUser();
 	    	
@@ -70,10 +73,15 @@ class EventNotifyTable extends Doctrine_Table
 	    	$body .= "Yours,\n";
 	    	$body .= "YOCA Team";
 	    	
-	    	$message = $this->getMailer()
+	    	$message = sfContext::getInstance()->getMailer()
 	    		->compose(sfConfig::get('app_email_service'), $menteeUsernames, "The YOCA Office Hour You Wanted To Attend Is Available Now!", $body)
 	    		->setBcc(sfConfig::get('app_email_dev'));
-	    	$this->getMailer()->send();
+	    	$ret = sfContext::getInstance()->getMailer()->send($message);
+	    	if($ret){
+	    		sfContext::getInstance()->getLogger()->log("Event Cancel[$clientIp]: sent email to mentee ".implode(', ', $menteeUsernames), sfLogger::DEBUG);
+	    	}else{
+	    		sfContext::getInstance()->getLogger()->log("Event Cancel[$clientIp]: failed sending email to mentee ".implode(', ', $menteeUsernames), sfLogger::DEBUG);
+	    	}
     	}
     }
     
