@@ -18,6 +18,11 @@ img.logo{
 	margin-left: 30px;
 }
 
+img.profile_logo{
+	width:33px;
+	height:33px;
+}
+
 .footer{
 	width:504px !important;	
 }

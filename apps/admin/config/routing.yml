@@ -104,6 +104,10 @@ cancel_register:
   param: { module: register, action: cancel, type: upcoming, page: 1, keyword: '' }
   requirements:
     eventId: \d+
+    
+view_logs:
+  url: /log
+  params: { module: log, action: index }
 
 # default rules
 homepage:

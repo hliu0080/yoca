@@ -15,7 +15,7 @@ all:
     member:                 [ Mentorship Program, My Profile ]
     mentee:                 [ Mentorship Program, My Profile ]
     mentor:                 [ Mentorship Program, My Profile ]
-    admin:                  [ Manage Users, Manage Events, My Profile ]
+    admin:                  [ Manage Users, Manage Events, View Logs, My Profile ]
   profile:
     age:                    { 1: "Younger than 18", 2: "18-24", 3: "25-34", 4: "35-44", 5: "45-54", 6: "55 or above" }
     education:              { Bachelor: Bachelor, Master: Master, MBA/EMBA: MBA/EMBA, PhD/JD/LLM/MD: PhD/JD/LLM/MD }

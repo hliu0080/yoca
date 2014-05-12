@@ -68,7 +68,7 @@
 					<!-- User navigation -->
 					<nav class="user">
 						<div class="user-info pull-right">
-<!-- 							<img src="http://placekitten.com/35/35" alt="User avatar"> -->
+							<img src="/img/yoca/anonymous.jpg" class="profile_logo" alt="Yes, it's Heisenberg.">
 							<div class="btn-group">
 								<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 									<div><strong><?php print $sf_user->getAttribute('username')?></strong><?php print $sf_user->getAttribute('usertype')?></div>
