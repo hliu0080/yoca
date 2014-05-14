@@ -9,7 +9,7 @@ class EventReminderTask extends sfBaseTask{
 	public function configure(){
 		$this->namespace = 'yoca';
 		$this->name = 'event_reminder';
-		$this->briefDescription = 'Send out event email reminder 24 hours ahead of time, send out Register Cancellation to mentor if no one booked';
+		$this->briefDescription = 'Send event reminder 24 hours ahead of time, or cancel event and send out cancellation to mentor if no one booked';
 		
 		$this->addOptions(array(
 			new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'admin'),
@@ -132,12 +132,17 @@ class EventReminderTask extends sfBaseTask{
 					$body .= "Event Time: ".$event->getDatetime()."\n";
 					$body .= "Event Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
 					$body .= "Event Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n\n";
-					$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
-					$body .= "Yours,\n";
-					$body .= "YOCA Team";
+					
+					$survey = "Follow-up survey:\n";
+					$survey .= "Please fill out this survey within 24 hours following the completion of the event. All of your responses will be kept strictly anonymous for our internal reviews. ";
+					$survey .= "https://docs.google.com/forms/d/15ogqNH2-1KLwiSOtd7M56j4FeisR9kiMUFL2DNfqGv0/viewform\n\n";
 						
+					$footer = "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+					$footer .= "Yours,\n";
+					$footer .= "YOCA Team";
+					
 					$message = $this->getMailer()
-					->compose(sfConfig::get('app_email_service'), array_keys($usernameArray), "YOCA Office Hour Reminder", $body)
+					->compose(sfConfig::get('app_email_service'), array_keys($usernameArray), "YOCA Office Hour Reminder", $body.$survey.$footer)
 					->setBcc(sfConfig::get('app_email_dev'));
 					$ret = $this->getMailer()->send($message);
 					if(!$ret){
