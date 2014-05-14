@@ -68,7 +68,9 @@
 					<!-- User navigation -->
 					<nav class="user">
 						<div class="user-info pull-right">
+						<?php if($sf_user->getAttribute('usertype') == 'Admin'):?>
 							<img src="/img/yoca/anonymous.jpg" class="profile_logo" alt="Yes, it's Heisenberg.">
+						<?php endif?>
 							<div class="btn-group">
 								<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 									<div><strong><?php print $sf_user->getAttribute('username')?></strong><?php print $sf_user->getAttribute('usertype')?></div>

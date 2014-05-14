@@ -18,15 +18,15 @@ class registerActions extends sfActions
 	  	$clientIp = $request->getRemoteAddress();
 	  	
 	  	//check if current userregcounter is smaller than cap
-	  	$this->getLogger()->log("Event Register[$clientIp]: === START EVENT REGISTER ===", sfLogger::DEBUG);
+	  	$this->getLogger()->log("Register[$clientIp]: ===== START CREATE REGISTRATION =====", sfLogger::DEBUG);
 	  	$counter = $this->getUser()->getAttribute('userregcounter');
-	  	$this->getLogger()->log("Event Register[$clientIp]: current userregcounter is $counter", sfLogger::DEBUG);
+	  	$this->getLogger()->log("Register[$clientIp]: current userregcounter is $counter", sfLogger::DEBUG);
 	  	$this->forward404If($counter >= sfConfig::get('app_const_reg_cap'));
 	  	
 		//check if event full
 		$event = Doctrine_Core::getTable('Event')->find($request->getParameter('eventId'));
-		$this->getLogger()->log("Event Register[$clientIp]: event id is {$event->getId()}", sfLogger::DEBUG);
-		$this->getLogger()->log("Event Register[$clientIp]: current event capacity is {$event->getBooked()}/{$event->getCapacity()}", sfLogger::DEBUG);
+		$this->getLogger()->log("Register[$clientIp]: event id is {$event->getId()}", sfLogger::DEBUG);
+		$this->getLogger()->log("Register[$clientIp]: current event capacity is {$event->getBooked()}/{$event->getCapacity()}", sfLogger::DEBUG);
 		$this->forward404Unless($event && $event->getCapacity()>$event->getBooked());
 		
 		//insert registration record
@@ -36,16 +36,16 @@ class registerActions extends sfActions
 		$reg->setStatus(1);
 		$reg->setCreatedAt(date("Y-m-d H:i:s"));
 		$reg->save();
-		$this->getLogger()->log("Event Register[$clientIp]: reg created with id {$reg->getId()}", sfLogger::DEBUG);
+		$this->getLogger()->log("Register[$clientIp]: reg created with id {$reg->getId()}", sfLogger::DEBUG);
 		
 		//update booked for this event
 		$event->setBooked($event->getBooked()+1);
 		$event->save();
-		$this->getLogger()->log("Event Register[$clientIp]: new event capacity is {$event->getBooked()}/{$event->getCapacity()}", sfLogger::DEBUG);
+		$this->getLogger()->log("Register[$clientIp]: new event capacity is {$event->getBooked()}/{$event->getCapacity()}", sfLogger::DEBUG);
 		
 		//bump up userregcounter
 	  	$this->getUser()->setAttribute('userregcounter', $counter+1);
-	  	$this->getLogger()->log("Event Register[$clientIp]: new userregcounter is {$this->getUser()->getAttribute('userregcounter')}", sfLogger::DEBUG);
+	  	$this->getLogger()->log("Register[$clientIp]: new userregcounter is {$this->getUser()->getAttribute('userregcounter')}", sfLogger::DEBUG);
 	  	
 		//prepare email
 		$mentee = $reg->getYocaUser();
@@ -76,9 +76,9 @@ class registerActions extends sfActions
 			->setBcc(sfConfig::get('app_email_dev'));
 		$ret = sfContext::getInstance()->getMailer()->send($message);
 		if($ret){
-			$this->getLogger()->log("Event Register[$clientIp]: sent email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
+			$this->getLogger()->log("Register[$clientIp]: sent email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
 		}else{
-			$this->getLogger()->log("Event Register[$clientIp]: failed sending email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
+			$this->getLogger()->log("Register[$clientIp]: failed sending email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
 		} 
 		
 		//send email confirmation to mentor
@@ -87,11 +87,11 @@ class registerActions extends sfActions
 			->setBcc(sfConfig::get('app_email_dev'));
 		$ret = sfContext::getInstance()->getMailer()->send($message);
 		if($ret){
-			$this->getLogger()->log("Event Register[$clientIp]: sent email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
+			$this->getLogger()->log("Register[$clientIp]: sent email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
 		}else{
-			$this->getLogger()->log("Event Register[$clientIp]: failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
+			$this->getLogger()->log("Register[$clientIp]: failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
 		}
-		$this->getLogger()->log("Event Register[$clientIp]: === END EVENT REGISTER ===", sfLogger::DEBUG);
+		$this->getLogger()->log("Register[$clientIp]: ===== END CREATE REGISTRATION =====", sfLogger::DEBUG);
 		
 	  	$this->getUser()->setFlash('register', 'Registration successful.');
 	  	$this->redirect("event/list?type=$type&page=$page&keyword=$keyword");
@@ -111,21 +111,21 @@ class registerActions extends sfActions
   		
   		$event = Doctrine_Core::getTable('Event')->find($eventId);
   		$this->forward404Unless($event); //event not found
-  		$this->getLogger()->log("Event Cancel[$clientIp]: === START EVENT CANCEL ===", sfLogger::DEBUG);
-  		$this->getLogger()->log("Event Cancel[$clientIp]: event id is {$event->getId()}", sfLogger::DEBUG);
+  		$this->getLogger()->log("Register Cancel[$clientIp]: ===== START CANEL REGISTRATION =====", sfLogger::DEBUG);
+  		$this->getLogger()->log("Register Cancel[$clientIp]: event id is {$event->getId()}", sfLogger::DEBUG);
   		
   		//get regId from eventId and userid, mark registration status to 2
   		$reg = Doctrine_Core::getTable('Registration')->getMenteeEventRegs($eventId, $this->getUser()->getAttribute('userid'), 1);
   		$this->forward404Unless($reg); //reg not found
-  		$this->getLogger()->log("Event Cancel[$clientIp]: reg id is {$reg[0]['id']}", sfLogger::DEBUG);
+  		$this->getLogger()->log("Register Cancel[$clientIp]: reg id is {$reg[0]['id']}", sfLogger::DEBUG);
   		Doctrine_Core::getTable('Registration')->setRegStatus($reg[0]['id'], 2);
-  		$this->getLogger()->log("Event Cancel[$clientIp]: set reg status to 2", sfLogger::DEBUG);
+  		$this->getLogger()->log("Register Cancel[$clientIp]: set reg status to 2", sfLogger::DEBUG);
   		
   		//mark booked to booked-1 for event
-		$this->getLogger()->log("Event Cancel[$clientIp]: current event booked is {$event->getBooked()}", sfLogger::DEBUG);
+		$this->getLogger()->log("Register Cancel[$clientIp]: current event booked is {$event->getBooked()}", sfLogger::DEBUG);
 		$event->setBooked($event->getBooked()-1);
 		$event->save();
-		$this->getLogger()->log("Event Cancel[$clientIp]: new event booked is {$event->getBooked()}", sfLogger::DEBUG);
+		$this->getLogger()->log("Register Cancel[$clientIp]: new event booked is {$event->getBooked()}", sfLogger::DEBUG);
 	  		
   		$mentee = Doctrine_Core::getTable('YocaUser')->find($reg[0]['mentee_id']);
 		$mentor = $event->getYocaUser();
@@ -151,9 +151,9 @@ class registerActions extends sfActions
   			->setBcc(sfConfig::get('app_email_dev'));
   		$ret = $this->getMailer()->send($message);
   		if($ret){
-  			$this->getLogger()->log("Event Cancel[$clientIp]: sent email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
+  			$this->getLogger()->log("Register Cancel[$clientIp]: sent email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
   		}else{
-  			$this->getLogger()->log("Event Cancel[$clientIp]: failed sending email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
+  			$this->getLogger()->log("Register Cancel[$clientIp]: failed sending email to mentee {$mentee->getUsername()}", sfLogger::DEBUG);
   		}
   		
   		//send confirmation email to mentor
@@ -162,9 +162,9 @@ class registerActions extends sfActions
   			->setBcc(sfConfig::get('app_email_dev'));
   		$ret = $this->getMailer()->send($message);
   		if($ret){
-  			$this->getLogger()->log("Event Cancel[$clientIp]: sent email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
+  			$this->getLogger()->log("Register Cancel[$clientIp]: sent email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
   		}else{
-  			$this->getLogger()->log("Event Cancel[$clientIp]: failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
+  			$this->getLogger()->log("Register Cancel[$clientIp]: failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
   		}
 	  		
   		//notify signedup users
@@ -174,12 +174,12 @@ class registerActions extends sfActions
 	  		
   		//mark current userregcounter to -1
   		$counter = $this->getUser()->getAttribute('userregcounter');
-  		$this->getLogger()->log("Event Cancel[$clientIp]: current userregcounter is $counter", sfLogger::DEBUG);
+  		$this->getLogger()->log("Register Cancel[$clientIp]: current userregcounter is $counter", sfLogger::DEBUG);
   		if($counter > 0){
   			$this->getUser()->setAttribute('userregcounter', $counter-1);
-  			$this->getLogger()->log("Event Cancel[$clientIp]: new userregcounter is {$this->getUser()->getAttribute('userregcounter')}", sfLogger::DEBUG);
+  			$this->getLogger()->log("Register Cancel[$clientIp]: new userregcounter is {$this->getUser()->getAttribute('userregcounter')}", sfLogger::DEBUG);
   		}
-  		$this->getLogger()->log("Event Cancel[$clientIp]: === END EVENT CANCEL ===", sfLogger::DEBUG);
+  		$this->getLogger()->log("Register Cancel[$clientIp]: ===== END CANCEL REGISTRATION =====", sfLogger::DEBUG);
   		
   		$this->getUser()->setFlash('cancel', 'Cancel successful.');
   		if($type=='my' && $this->getUser()->getAttribute('usertype')=='Mentee'){

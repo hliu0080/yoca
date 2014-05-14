@@ -9,7 +9,7 @@ class EventReminderTask extends sfBaseTask{
 	public function configure(){
 		$this->namespace = 'yoca';
 		$this->name = 'event_reminder';
-		$this->briefDescription = 'Send out event email reminder 24 hours ahead of time, send out event cancellation to mentor if no one booked';
+		$this->briefDescription = 'Send out event email reminder 24 hours ahead of time, send out Register Cancellation to mentor if no one booked';
 		
 		$this->addOptions(array(
 			new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'admin'),
@@ -28,7 +28,7 @@ class EventReminderTask extends sfBaseTask{
 		));
 		$this->dispatcher->connect("command.log", array($file_logger, "listenToLogEvent"));
 		
-		$this->log ( "======= Start =======" );
+		$this->log ( "===== Start =====" );
 		
 		$databaseManager = new sfDatabaseManager($this->configuration);
 		$connection = $databaseManager->getDatabase(isset($options['connection']) ? $options['connection'] : null)->getConnection();
@@ -147,7 +147,7 @@ class EventReminderTask extends sfBaseTask{
 			}
 		}
 		
-		$this->log ( "======= End =======" );
+		$this->log ( "===== End =====" );
 		
 		$endtime = date('U');
 		$seconds = $endtime - $starttime;

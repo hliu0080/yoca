@@ -56,7 +56,7 @@
 	      		<span class="label label-warning">Pending</span>
 	      	<?php elseif($event['status'] == 1):?>
 	      		<?php if($type == 'upcoming' || $type == 'my'):?>
-	      			<?php if(strtotime($event->getDatetime()) < time()+60*60*24):?>
+	      			<?php if(strtotime($event['datetime']) < time()+60*60*24):?>
 	      				Registration Closed
 	      			<?php elseif($event['capacity'] > $event['booked']):?>
 	      				Available

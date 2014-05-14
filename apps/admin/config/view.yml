@@ -14,7 +14,7 @@ default:
     robots:       index, follow
     viewport:     width=device-width, initial-scale=1.0
 
-  stylesheets:    [yoca.css?v=1]
+  stylesheets:    [yoca.css?v=2]
 
   javascripts:    [libs/modernizr.js, libs/selectivizr.js, navigation.js, bootstrap/bootstrap.js, plugins/dataTables/jquery.datatables.min.js]
 

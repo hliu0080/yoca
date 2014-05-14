@@ -47,7 +47,7 @@ class EventNotifyTable extends Doctrine_Table
     	$notifies = $this->getNotify($eventId, array('signedup'));
     	
     	$clientIp = $request->getRemoteAddress();
-    	sfContext::getInstance()->getLogger()->log("Event Cancel[$clientIp]: ".count($notifies)." mentees signed up for notification", sfLogger::DEBUG);
+    	sfContext::getInstance()->getLogger()->log("Register Cancel[$clientIp]: ".count($notifies)." mentees signed up for notification", sfLogger::DEBUG);
     	
     	if(count($notifies) >0){
 	    	$menteeUsernames = array();
@@ -78,9 +78,9 @@ class EventNotifyTable extends Doctrine_Table
 	    		->setBcc(sfConfig::get('app_email_dev'));
 	    	$ret = sfContext::getInstance()->getMailer()->send($message);
 	    	if($ret){
-	    		sfContext::getInstance()->getLogger()->log("Event Cancel[$clientIp]: sent email to mentee ".implode(', ', $menteeUsernames), sfLogger::DEBUG);
+	    		sfContext::getInstance()->getLogger()->log("Register Cancel[$clientIp]: sent email to mentee ".implode(', ', $menteeUsernames), sfLogger::DEBUG);
 	    	}else{
-	    		sfContext::getInstance()->getLogger()->log("Event Cancel[$clientIp]: failed sending email to mentee ".implode(', ', $menteeUsernames), sfLogger::DEBUG);
+	    		sfContext::getInstance()->getLogger()->log("Register Cancel[$clientIp]: failed sending email to mentee ".implode(', ', $menteeUsernames), sfLogger::DEBUG);
 	    	}
     	}
     }

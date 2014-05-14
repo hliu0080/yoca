@@ -74,7 +74,6 @@ class eventActions extends sfActions
 //   	}else{
 	  	$this->fetchEvents();
 //   	}
-  	
   	 
   	if($this->getUser()->getAttribute('usertype') == 'Admin'){
   		$this->getUser()->setAttribute('cur_page', 'manage_events');
@@ -126,12 +125,16 @@ class eventActions extends sfActions
   	$id = $request->getParameter('id');
   	$this->forward404If(is_null($status) || is_null($id));
   	
+  	$clientIp = $request->getRemoteAddress();
+  	
   	$event = Doctrine_Core::getTable('Event')->findEvent($id);
   	$event->set('status', $status);
   	$event->save();
   	
   	//Confirm event
   	if($status == 1){
+  		$this->getLogger()->log("Confirm Event[$clientIp]: ===== START CONFIRM EVENT =====", sfLogger::DEBUG);
+  		
 	  	//Send confirmation email to mentor
 	  	$body = "Event Confirmed\n\n";
 	  	$body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
@@ -147,58 +150,92 @@ class eventActions extends sfActions
 	  	$body .= "Yours,\n";
 	  	$body .= "YOCA Team";
 
-	  	$mailer = sfContext::getInstance()->getMailer();
-	  	$mailer->composeAndSend(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been confirmed', $body);
+	  	$message = $this->getMailer()
+	  	->compose(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been confirmed', $body)
+	  	->setBcc(sfConfig::get('app_email_dev'));
+	  	$ret = $this->getMailer()->send($message);
+	  	if($ret){
+	  		$this->getLogger()->log("Confirm Event[$clientIp]: sent email to mentor ".$event->getYocaUser()->getUsername(), sfLogger::DEBUG);
+	  	}else{
+	  		$this->getLogger()->log("Confirm Event[$clientIp]: failed sending email to mentor ".$event->getYocaUser()->getUsername(), sfLogger::DEBUG);
+	  	}
 	  	
+	  	$this->getLogger()->log("Confirm Event[$clientIp]: ===== END CONFIRM EVENT =====", sfLogger::DEBUG);
 	  	$this->getUser()->setFlash('confirm', 'Confirm successful.');
   	}
   	
   	//Cancel event
   	if($status == 2){
-  		//Get all registrations for this event
-  		$regs = Doctrine_Core::getTable('Registration')->getEventRegs($id, 1);
+  		$this->getLogger()->log("Cancel Event[$clientIp]: ===== START CANCEL EVENT =====", sfLogger::DEBUG);
   		
-  		$regIdArray = $usernameArray = array();
-  		foreach($regs as $reg){
-  			$regIdArray[] = $reg->getId();
-
-	  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg->getMenteeId());
-	  		$usernameArray[] = $username;
-  		}
-  		
-  		//Send email to registered mentees, and mentor
+  		//Prepare email
   		$body = "We are sorry. The upcoming YOCA event has been cancelled.\n\n";
   		$body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
-	  	$body .= "Industry: ".$event->getYocaIndustry()->getName()."\n";
-	  	$body .= "Mentor: ".$event->getYocaUser()->getMentorId()."\n";
-	  	$body .= "Capacity: ".$event->getCapacity()."\n";
-	  	$body .= "Booked: ".$event->getBooked()."\n";
-	  	$body .= "Time: ".$event->getDatetime()."\n";
-	  	$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
-	  	$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
-	  	$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
-	  	$body .= "Created At: ".$event->getCreatedAt()."\n\n";
-	  	$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
-	  	$body .= "Yours,\n";
-	  	$body .= "YOCA Team";
-	  	
-	  	$mailer = sfContext::getInstance()->getMailer();
-  		if(count($usernameArray)){
-	  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $usernameArray, 'Your YOCA event has been cancelled', $body);
+  		$body .= "Industry: ".$event->getYocaIndustry()->getName()."\n";
+  		$body .= "Mentor: ".$event->getYocaUser()->getMentorId()."\n";
+  		$body .= "Capacity: ".$event->getCapacity()."\n";
+  		$body .= "Booked: ".$event->getBooked()."\n";
+  		$body .= "Time: ".$event->getDatetime()."\n";
+  		$body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+  		$body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
+  		$body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
+  		$body .= "Created At: ".$event->getCreatedAt()."\n\n";
+  		$body .= "Please do not reply to this automated email. Contact ".sfConfig::get('app_email_contact')." if you need any help. If you believe you received this email by mistake, please contact ".sfConfig::get('app_email_contact').".\n\n";
+  		$body .= "Yours,\n";
+  		$body .= "YOCA Team";
+  		
+  		//Send email to mentor
+  		$message = $this->getMailer()
+  		->compose(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), "YOCA event has been cancelled", $body)
+  		->setBcc(sfConfig::get('app_email_dev'));
+  		$ret = $this->getMailer()->send($message);
+  		if($ret){
+  			$this->getLogger()->log("Cancel Event[$clientIp]: sent email to mentor {$event->getYocaUser()->getUsername()}", sfLogger::DEBUG);
+  		}else{
+  			$this->getLogger()->log("Cancel Event[$clientIp]: failed sending email to mentor {$event->getYocaUser()->getUsername()}", sfLogger::DEBUG);
   		}
-		$mailer->composeAndSend(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been cancelled', $body);
-
-  		//Set registration status to 3 - cancelled by system
-  		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
   		
-  		//mark event notify records status to "cancelled"
-  		Doctrine_Core::getTable('EventNotify')->cancel($id);
+  		//Send emails to registered mentees and cancel notification signup, if any
+  		$regs = Doctrine_Core::getTable('Registration')->getEventRegs($id, 1);
   		
+  		$this->getLogger()->log("Cancel Event[$clientIp]: ".count($regs)." registrations found", sfLogger::DEBUG);
+  		
+  		if(!is_null($regs) && count($regs)>0){
+	  		$regIdArray = $usernameArray = array();
+	  		foreach($regs as $reg){
+	  			$regIdArray[] = $reg->getId();
+	
+		  		$username = Doctrine_Core::getTable('YocaUser')->getUsernameById($reg->getMenteeId());
+		  		$usernameArray[] = $username;
+	  		}
+	  		
+		  	if(count($usernameArray)){
+			  	$message = $this->getMailer()
+			  		->compose(sfConfig::get('app_email_service'), $usernameArray, "YOCA event has been cancelled", $body)
+			  		->setBcc(sfConfig::get('app_email_dev'));
+			  	$ret = $this->getMailer()->send($message);
+			  	if($ret){
+			  		$this->getLogger()->log("Cancel Event[$clientIp]: sent email to mentees ".implode(", ", $usernameArray), sfLogger::DEBUG);
+			  	}else{
+			  		$this->getLogger()->log("Cancel Event[$clientIp]: failed sending email to mentees ".implode(", ", $usernameArray), sfLogger::DEBUG);
+			  	}
+			  	
+		  		//Set registration status to 3 - cancelled by system
+		  		Doctrine_Core::getTable('Registration')->setRegStatus($regIdArray, 3);
+		  	}
+		  	
+	  		//mark event notify records status to "cancelled"
+	  		Doctrine_Core::getTable('EventNotify')->cancel($id);
+  		}
+  		
+  		$this->getLogger()->log("Cancel Event[$clientIp]: ===== END CREATE REGISTRATION =====", sfLogger::DEBUG);
   		$this->getUser()->setFlash('cancel', 'Cancel successful.');
   	}
   	
   	//Delete event
   	if($status == 3){
+  		$this->getLogger()->log("Delete Event[$clientIp]: ===== START DELETE EVENT =====", sfLogger::DEBUG);
+  		
   		//Send cancellation email to mentor
   		$body = "Event Deleted\n\n";
   		$body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
@@ -215,9 +252,17 @@ class eventActions extends sfActions
 	  	$body .= "Yours,\n";
 	  	$body .= "YOCA Team";
 	  	
-  		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been deleted', $body);
+	  	$message = $this->getMailer()
+	  		->compose(sfConfig::get('app_email_service'), $event->getYocaUser()->getUsername(), 'Your YOCA event has been deleted', $body)
+	  		->setBcc(sfConfig::get('app_email_dev'));
+	  	$ret = $this->getMailer()->send($message);
+	  	if($ret){
+	  		$this->getLogger()->log("Delete Event[$clientIp]: sent email to mentor ".$event->getYocaUser()->getUsername(), sfLogger::DEBUG);
+	  	}else{
+	  		$this->getLogger()->log("Delete Event[$clientIp]: failed sending email to mentor ".$event->getYocaUser()->getUsername(), sfLogger::DEBUG);
+	  	}
   		
+  		$this->getLogger()->log("Delete Event[$clientIp]: ===== END DELETE EVENT =====", sfLogger::DEBUG);
   		$this->getUser()->setFlash('delete', 'Delete successful.');
   	}
 
@@ -288,7 +333,7 @@ class eventActions extends sfActions
     $this->event = Doctrine_Core::getTable('Event')->find($request->getParameter('id'));
     $this->forward404Unless($this->event);
     
-    $registrations = Doctrine_Core::getTable('Registration')->findByEventId($request->getParameter('id'));
+    $registrations = Doctrine_Core::getTable('Registration')->getEventRegs($request->getParameter('id'), 1);
     
     //show registered mentees if user is Admin or Mentor of this event, or
     if($this->getUser()->getAttribute('usertype')=='Admin' || ($this->getUser()->getAttribute('userid')==$this->event->getMentorId())){

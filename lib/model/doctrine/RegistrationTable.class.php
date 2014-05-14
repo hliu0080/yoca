@@ -57,7 +57,6 @@ class RegistrationTable extends Doctrine_Table
 	public function getEventRegs($eventId, $status){
 		return $this->createQuery('r')
 		->where('r.event_id = ? and r.status = ?', array($eventId, $status))
-// 		->setHydrationMode(Doctrine::HYDRATE_ARRAY_SHALLOW)
 		->execute();
 	}
 	
@@ -67,10 +66,12 @@ class RegistrationTable extends Doctrine_Table
 	 * @param unknown $status
 	 */
 	public function setRegStatus($regIdArray, $status){
-		$this->createQuery('r')
-		->update()
-		->set('r.status', $status)
-		->whereIn('r.id', $regIdArray)
-		->execute();
+		if(!is_null($regIdArray) && count($regIdArray)>0){
+			$this->createQuery('r')
+			->update()
+			->set('r.status', $status)
+			->whereIn('r.id', $regIdArray)
+			->execute();
+		}
 	}
 }
