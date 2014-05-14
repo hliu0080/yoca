@@ -21,14 +21,13 @@ class EventReminderTask extends sfBaseTask{
 	}
 	
 	public function execute($arguments = array(), $options = array()){
+		$this->log ( "===== Start =====" );
 		$starttime = date('U');
 		
 		$file_logger = new sfFileLogger($this->dispatcher, array(
 			"file" => $this->configuration->getRootDir()."/log/EventReminder.log"
 		));
 		$this->dispatcher->connect("command.log", array($file_logger, "listenToLogEvent"));
-		
-		$this->log ( "===== Start =====" );
 		
 		$databaseManager = new sfDatabaseManager($this->configuration);
 		$connection = $databaseManager->getDatabase(isset($options['connection']) ? $options['connection'] : null)->getConnection();
@@ -120,7 +119,7 @@ class EventReminderTask extends sfBaseTask{
 				}
 				
 				//send reminder to mentee
-				$this->log("Send reminder to ".implode(',', array_keys($usernameArray)));
+				$this->log("Send reminder to ".implode(', ', array_keys($usernameArray)));
 				if(!(bool)$options['dryrun']){
 					$body = "This is a reminder for your office hour at {$event->getDatetime()}.\n\n";
 					$body .= "Mentor ID: {$mentor->getMentorId()}\n";
@@ -152,8 +151,6 @@ class EventReminderTask extends sfBaseTask{
 			}
 		}
 		
-		$this->log ( "===== End =====" );
-		
 		$endtime = date('U');
 		$seconds = $endtime - $starttime;
 		$hours = floor($seconds / (60 * 60));
@@ -162,5 +159,7 @@ class EventReminderTask extends sfBaseTask{
 		$divisor_for_seconds = $divisor_for_minutes % 60;
 		$seconds = ceil($divisor_for_seconds);
 		$this->log("Time taken: ". $hours."hr ".$minutes."min ".$seconds."s");
+		$this->log ( "===== End =====" );
+		
 	}
 }

@@ -105,9 +105,13 @@ cancel_register:
   requirements:
     eventId: \d+
     
-view_logs:
-  url: /log
-  params: { module: log, action: index }
+view_activity_log:
+  url: /log/activities
+  params: { module: log, action: activities }
+
+view_reminder_log:
+  url: /log/reminders
+  params: { module: log, action:reminders }
 
 # default rules
 homepage:

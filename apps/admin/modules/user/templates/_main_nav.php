@@ -58,6 +58,17 @@
 											<li><a href="<?php print url_for('@manage_users?type=Admin')?>">Manage Admins</a></li>
 										</ul>
 									</li>
+								<?php elseif(preg_replace('/\s+/', "_", strtolower($s)) == 'view_logs'):?>
+									<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active dropdown"':'class="dropdown"'?>>
+										<a class="dropdown-toggle" data-toggle="dropdown" href="">
+											<div><?php print $s?></div>
+											<span class="caret"></span>
+										</a>
+										<ul class="dropdown-menu pull-right">
+											<li><a href="<?php print url_for('@view_activity_log')?>">General Activities</a></li>
+											<li><a href="<?php print url_for('@view_reminder_log')?>">Event Reminders</a></li>
+										</ul>
+									</li>
 								<?php else:?>
 									<li <?php print $sf_user->getAttribute('cur_page')==preg_replace('/\s+/', "_", strtolower($s))?'class="active"':''?>><a href="<?php print url_for(preg_replace('/\s+/', "_", strtolower($s)))?>"><?php print $s?></a></li>
 								<?php endif?>
@@ -68,7 +79,9 @@
 					<!-- User navigation -->
 					<nav class="user">
 						<div class="user-info pull-right">
-							<img src="/img/yoca/anonymous.jpg" class="profile_logo" alt="Admin">
+							<?php if($sf_user->getAttribute('usertype') == "Admin"):?>
+								<img src="/img/yoca/anonymous.jpg" class="profile_logo" alt="Admin">
+							<?php endif?>
 							<div class="btn-group">
 								<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 									<div><strong><?php print $sf_user->getAttribute('username')?></strong><?php print $sf_user->getAttribute('usertype')?></div>
