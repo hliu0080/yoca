@@ -21,13 +21,13 @@ class EventReminderTask extends sfBaseTask{
 	}
 	
 	public function execute($arguments = array(), $options = array()){
-		$this->log ( "===== Start =====" );
 		$starttime = date('U');
 		
 		$file_logger = new sfFileLogger($this->dispatcher, array(
 			"file" => $this->configuration->getRootDir()."/log/EventReminder.log"
 		));
 		$this->dispatcher->connect("command.log", array($file_logger, "listenToLogEvent"));
+		$this->log ( "===== Start =====" );
 		
 		$databaseManager = new sfDatabaseManager($this->configuration);
 		$connection = $databaseManager->getDatabase(isset($options['connection']) ? $options['connection'] : null)->getConnection();
