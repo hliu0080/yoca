@@ -57,7 +57,7 @@ class EventForm extends BaseEventForm
   	$this->setDefaults(array(
   		'industry' => $this->getOption('industry'),
   		'capacity' => 5,
-  		'neighborhood' => $this->getOption('neighborhood'),
+//   		'neighborhood' => $this->getOption('neighborhood'),
   		'datetime' => date('m/01/Y'),
   	));
   	$this->widgetSchema->setLabels($labels);
