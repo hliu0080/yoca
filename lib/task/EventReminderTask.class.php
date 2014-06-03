@@ -33,7 +33,7 @@ class EventReminderTask extends sfBaseTask{
 		$connection = $databaseManager->getDatabase(isset($options['connection']) ? $options['connection'] : null)->getConnection();
 		
 		$events = Doctrine_Core::getTable('Event')->findUpcomingEvents($options['hours']);
-		$this->log(count($events) . (count($events)>1?" events":" event")." found for next {$options['hours']} hours");
+		$this->log(count($events) . (count($events)>1?" events":" event")." found for the next {$options['hours']} hours");
 		
 		//for each event, if no books, send cancellation to mentor; otherwise, send reminder to both mentor and mentees
 		foreach($events as $event){
@@ -45,7 +45,7 @@ class EventReminderTask extends sfBaseTask{
 			
 			if($event->getBooked() == 0){
 				//send cancellation to mentor
-				$this->log("Send cancellation to ".$mentor->getUsername());
+				$this->log("Send cancellation to mentor ".$mentor->getUsername());
 				if(!(bool)$options['dryrun']){
 					$body = "Your following office hour has been cancelled due to lack of registration.\n\n";
 					$body .= "Mentor ID: {$mentor->getMentorId()}\n";
@@ -63,7 +63,7 @@ class EventReminderTask extends sfBaseTask{
 					
 					$message = $this->getMailer()
 					->compose(sfConfig::get('app_email_service'), $mentor->getUsername(), "YOCA Office Hour Cancelled", $body)
-					->setBcc(sfConfig::get('app_email_dev'));
+					->setBcc(sfConfig::get('app_email_contact'));
 					$ret = $this->getMailer()->send($message);
 					if(!$ret){
 						$this->log("Failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
@@ -88,7 +88,7 @@ class EventReminderTask extends sfBaseTask{
 		  		}
 		  		
 				//send reminder to mentor
-				$this->log("Send reminder to ".$mentor->getUsername());
+				$this->log("Send reminder to mentor ".$mentor->getUsername());
 				if(!(bool)$options['dryrun']){
 					$body = "This is a reminder for your office hour at {$event->getDatetime()}.\n\n";
 					$body .= "Mentor ID: {$mentor->getMentorId()}\n";
@@ -111,7 +111,7 @@ class EventReminderTask extends sfBaseTask{
 					
 					$message = $this->getMailer()
 					->compose(sfConfig::get('app_email_service'), $mentor->getUsername(), "YOCA Office Hour Reminder", $body)
-					->setBcc(sfConfig::get('app_email_dev'));
+					->setBcc(sfConfig::get('app_email_contact'));
 					$ret = $this->getMailer()->send($message);
 					if(!$ret){
 						$this->log("Failed sending email to mentor {$mentor->getUsername()}", sfLogger::DEBUG);
@@ -119,7 +119,7 @@ class EventReminderTask extends sfBaseTask{
 				}
 				
 				//send reminder to mentee
-				$this->log("Send reminder to ".implode(', ', array_keys($usernameArray)));
+				$this->log("Send reminder to mentees ".implode(', ', array_keys($usernameArray)));
 				if(!(bool)$options['dryrun']){
 					$body = "This is a reminder for your office hour at {$event->getDatetime()}.\n\n";
 					$body .= "Mentor ID: {$mentor->getMentorId()}\n";
@@ -142,7 +142,7 @@ class EventReminderTask extends sfBaseTask{
 					
 					$message = $this->getMailer()
 					->compose(sfConfig::get('app_email_service'), array_keys($usernameArray), "YOCA Office Hour Reminder", $body.$survey.$footer)
-					->setBcc(sfConfig::get('app_email_dev'));
+					->setBcc(sfConfig::get('app_email_contact'));
 					$ret = $this->getMailer()->send($message);
 					if(!$ret){
 						$this->log("Failed sending email to mentees", sfLogger::DEBUG);
