@@ -246,13 +246,27 @@ class YocaUserForm extends BaseYocaUserForm
   		$body .= "Yours,\n";
   		$body .= "YOCA Team";
   		
-  		$mailer = sfContext::getInstance()->getMailer();
-  		$mailer->composeAndSend(sfConfig::get('app_email_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
+//   		$mailer = sfContext::getInstance()->getMailer();
+//   		$mailer->composeAndSend(sfConfig::get('app_email_service'), $this->getObject()->getUsername(), "Welcome to YOCA Mentorship Program", $body);
+  		
+  		$message = sfContext::getInstance()->getMailer()
+  		->compose(sfConfig::get('app_email_service'), $this->getObject()->getUsername(), 'Welcome to YOCA Mentorship Program', $body)
+  		->setBcc(sfConfig::get('app_email_contact'));
+  		
+  		sfContext::getInstance()->getLogger()->log("===== START MENTOR REGISGER =====", sfLogger::DEBUG);
+  		$ret = sfContext::getInstance()->getMailer()->send($message);
+  		if($ret){
+  			sfContext::getInstance()->getLogger()->log("Mentor Registered[$clientIp]: sent email to mentor ".$this->getObject()->getUsername(), sfLogger::DEBUG);
+  		}else{
+  			sfContext::getInstance()->getLogger()->log("Mentor Registered[$clientIp]: failed sending email to mentor ".$this->getObject()->getUsername(), sfLogger::DEBUG);
+  		}
 
   		//Set mentor_id to be industry initial + number 
   		$industry = Doctrine_Core::getTable('YocaIndustry')->find($values['industry_id']);
   		$id = Doctrine_Core::getTable('YocaUser')->nextAvailableMentorId($industry);
   		$this->getObject()->setMentorId($id);
+  		sfContext::getInstance()->getLogger()->log("Mentor Registered[$clientIp]: mentor Id $id", sfLogger::DEBUG);
+  		sfContext::getInstance()->getLogger()->log("===== END MENTOR REGISTER =====", sfLogger::DEBUG);
   		
   		//Update user type to mentee
   		$this->getObject()->setType('Mentor');
