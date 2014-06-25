@@ -68,7 +68,9 @@ class userActions extends sfActions
   protected function fetchUsers(){
   	$query = Doctrine_Core::getTable('YocaUser')
   	->createQuery('a')
-  	->where("type = ?", $this->type);
+  	->where("type = ?", $this->type)
+  	->addWhere('is_active != 2')
+  	->orderBy('created_at desc');
   	if($this->keyword){
   		$query->addWhere('username like ? or mentor_id like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%'));
   	}

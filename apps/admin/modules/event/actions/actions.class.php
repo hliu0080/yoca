@@ -88,12 +88,15 @@ class eventActions extends sfActions
   	if($this->type == 'pending'){
   		$status = array(0);
   		$cond = ">";
+  		$order = 'asc';
   	}elseif($this->type == 'upcoming'){
   		$status = array(1, 2);
   		$cond = ">";
+  		$order = 'asc';
   	}elseif($this->type == 'past'){
   		$status = array(1, 2);
   		$cond = "<";
+  		$order = 'desc';
   	}else{
   		$this->forward404();
   	}
@@ -103,7 +106,7 @@ class eventActions extends sfActions
   	->leftJoin('e.YocaUser u')
   	->whereIn('status', $status)
   	->andWhere("datetime $cond ?", date('Y-m-d H:i:s'))
-  	->orderBy('datetime asc');
+  	->orderBy("datetime $order");
   	if($this->keyword){
   		$query->addWhere('industry like ? or mentorid like ? or neighborhood like ? or address like ?', array('%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%', '%'.$this->keyword.'%'));
   	}
