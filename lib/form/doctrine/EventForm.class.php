@@ -18,7 +18,7 @@ class EventForm extends BaseEventForm
   		'topic' => new sfWidgetFormInputText(), 
   		'capacity' => new sfWidgetFormInputText(),
   		'datetime' => new sfWidgetFormDateTime(array(
-  				'date' => array('years' => array('2014' => '2014'), 'months' => array('09' => '09'), 'days' => array_combine(range(1,30), range(1,30)), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
+  				'date' => array('years' => array('2014' => '2014'), 'months' => array('10' => '10'), 'days' => array_combine(range(1,31), range(1,31)), 'can_be_empty' => false, 'format'=>'%month% / %day% / %year%'),
   				'time' => array('minutes' => array('00', '30'), 'can_be_empty' => false, 'format_without_seconds'=>'%hour% : %minute%'),
   				'with_time' => true
   		)),
