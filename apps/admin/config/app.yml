@@ -8,6 +8,7 @@ all:
     contact: member@yocausa.org
     support: support@yocausa.org
     dev:     dev@yocausa.org
+    jchen:   xchen.joyce@gmail.com
   const:
     record_num:             15
     reg_cap:                2

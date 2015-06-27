@@ -462,7 +462,25 @@ class eventActions extends sfActions
     	$event = $form->save();
     	$event->setDatetime(date($datetime));
     	$event->save();
-    	
+
+        //Send notification email to Joyce Chen
+        $body = "New event has been created\n\n";
+        $body .= "Topic: " .($event->getTopicId()==8?$event->getTopic():$event->getEventTopic()->getName())."\n";
+        $body .= "Industry: ".$event->getYocaIndustry()->getName()."\n";
+        $body .= "Mentor: ".$event->getYocaUser()->getMentorId()."\n";
+        $body .= "Capacity: ".$event->getCapacity()."\n";
+        $body .= "Time: ".$event->getDatetime()."\n";
+        $body .= "Neighborhood: ".$event->getYocaNeighborhood()->getName()."\n";
+        $body .= "Address: ".($event->getAddressId()==18?$event->getAddress():$event->getEventAddress()->getName())."\n";
+        $body .= "Status: ".$this->getEventStatus($event->get('status'))."\n";
+        $body .= "Created At: ".$event->getCreatedAt()."\n\n";
+        $body .= "Yours,\n";
+        $body .= "YOCA Team";
+        $message = $this->getMailer()
+            ->compose(sfConfig::get('app_email_service'), sfConfig::get('app_email_jchen'), 'New YOCA Event Created', $body)
+            ->setBcc(sfConfig::get('app_email_dev'));
+        $this->getMailer()->send($message);
+
     	if($form->isNew()){
 	    	$this->redirect('@mentor_manage_event');
     	}
