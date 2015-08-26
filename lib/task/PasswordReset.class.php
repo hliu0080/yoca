@@ -6,5 +6,5 @@ function generateHash($password) {
 	}
 }
 
-print generateHash('crystalzhan2013');
-print "\n";
+print("plain password: " . $argv[1] . PHP_EOL);
+print("encrypted password: " . generateHash($argv[1]) . PHP_EOL);
