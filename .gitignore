@@ -5,6 +5,7 @@
 *.settings
 .project
 .buildpath
+.idea
 
 # Cache and log folders
 /cache
